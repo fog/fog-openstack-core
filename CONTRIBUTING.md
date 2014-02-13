@@ -5,18 +5,18 @@ New contributors are always welcome, when it doubt please ask questions. We stri
 ### Coding
 
 * Pick a task:
-  * Offer feedback on open [pull requests](https://github.com/fog-openstack-tng/fog-openstack-tng/pulls).
-  * Review open [issues](https://github.com/fog-openstack-tng/fog-openstack-tng/issues) for things to help on.
-  * [Create an issue](https://github.com/fog-openstack-tng/fog-openstack-tng/issues/new) to start a discussion on additions or features.
+  * Offer feedback on open [pull requests](https://github.com/fog-openstack-tng/fog_openstack_tng/pulls).
+  * Review open [issues](https://github.com/fog-openstack-tng/fog_openstack_tng/issues) for things to help on.
+  * [Create an issue](https://github.com/fog-openstack-tng/fog_openstack_tng/issues/new) to start a discussion on additions or features.
 * Fork the project, add your changes and tests to cover them in a topic branch.
-* Commit your changes and rebase against `fog-openstack-tng/fog-openstack-tng` to ensure everything is up to date.
-* [Submit a pull request](https://github.com/fog-openstack-tng/fog-openstack-tng/compare/)
+* Commit your changes and rebase against `fog-openstack-tng/fog_openstack_tng` to ensure everything is up to date.
+* [Submit a pull request](https://github.com/fog-openstack-tng/fog_openstack_tng/compare/)
 
 ### Non-Coding
 
-* Offer feedback on open [issues](https://github.com/fog-openstack-tng/fog-openstack-tng/issues).
-* Write and help edit [documentation](https://github.com/fog-openstack-tng/fog-openstack-tng.github.com).
-* Translate [documentation](https://github.com/fog-openstack-tng/fog-openstack-tng.github.com) in to other languages.
+* Offer feedback on open [issues](https://github.com/fog-openstack-tng/fog_openstack_tng/issues).
+* Write and help edit [documentation](https://github.com/fog-openstack-tng/fog_openstack_tng.github.com).
+* Translate [documentation](https://github.com/fog-openstack-tng/fog_openstack_tng.github.com) in to other languages.
 * Organize or volunteer at events.
 * [Donate](https://www.gittip.com/geemus/)
 * Discuss other ideas for contribution with [geemus](mailto:geemus+fog@gmail.com).
