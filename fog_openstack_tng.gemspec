@@ -30,6 +30,9 @@ Gem::Specification.new do |spec|
   ## those that are only needed during development
   spec.add_development_dependency('rake')
   spec.add_development_dependency('minitest')
+  spec.add_development_dependency('vcr')
+  spec.add_development_dependency('minitest-vcr')
+  spec.add_development_dependency('webmock','<1.16')
   # spec.add_development_dependency('yard')
   # spec.add_development_dependency('thor')
   # spec.add_development_dependency('pry')
