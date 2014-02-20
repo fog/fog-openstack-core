@@ -1,4 +1,4 @@
-require 'fog/openstack/core'
+require 'fog_openstack_tng/client'
 
 module Fog
   module Identity
@@ -11,7 +11,7 @@ module Fog
                   :current_user, :current_tenant,
                   :openstack_endpoint_type
 
-      model_path 'fog/openstack/models/identity'
+      model_path 'fog_openstack_tng/models/identity'
       model       :tenant
       collection  :tenants
       model       :user
@@ -21,7 +21,7 @@ module Fog
       model       :ec2_credential
       collection  :ec2_credentials
 
-      request_path 'fog/openstack/requests/identity'
+      request_path 'fog_openstack_tng/requests/identity'
 
       request :check_token
       request :validate_token
