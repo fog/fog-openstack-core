@@ -1,5 +1,5 @@
-require 'fog-core'
-require_relative 'identity/identity'
+require 'multi_json'
+require 'fog/core'
 require_relative 'identity/authenticator'
 
 module Fog
@@ -15,7 +15,8 @@ module Fog
             data = nil
             message = nil
           else
-            data = Fog::JSON.decode(error.response.body)
+            # data = Fog::JSON.decode(error.response.body)
+            data = MultiJson.decode(error.response.body)
             message = data['message']
             if message.nil? and !data.values.first.nil?
               message = data.values.first['message']
@@ -56,10 +57,8 @@ module Fog
     def self.authenticate(options, connection_options = {})
       case options[:openstack_auth_uri].path
       when /v1(\.\d+)?/
-        # authenticate_v1(options, connection_options)
         Fog::OpenStack::Authenticator.adapter = :authenticator_v1
       else
-        # authenticate_v2(options, connection_options)
         Fog::OpenStack::Authenticator.adapter = :authenticator_v2
       end
       Fog::OpenStack::Authenticator.adapter.authenticate(options, connection_options)

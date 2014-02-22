@@ -1,4 +1,4 @@
-require 'fog_openstack_tng/client'
+require 'fog_openstack_tng/core'
 
 module Fog
   module Identity

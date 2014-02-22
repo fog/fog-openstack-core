@@ -1,4 +1,4 @@
-require 'fog-core'
+require 'fog/core'
 
 module Fog
   module OpenStack
@@ -13,14 +13,14 @@ module Fog
         @adapter
       end
 
-      def adapter(adapter_name)
+      def adapter=(adapter_name)
         case adapter_name
-          when Symbol, String
-            require "adapters/#{adapter_name}"
-            @adapter = Fog::OpenStack::Authentication::Adapters.const_get("#{adapter_name.to_s.capitalize}")
-          else
-            raise "Missing OpenStack authentication adapter named: #{adapter_name}"
-          end
+        when Symbol, String
+          require_relative "./adapters/#{adapter_name}"
+          c = adapter_name.to_s.split('_').collect!{ |w| w.capitalize }.join
+          @adapter = Fog::OpenStack::Authentication::Adapters.const_get(c)
+        else
+          raise "Missing OpenStack authentication adapter named: #{adapter_name}"
         end
       end
 

@@ -4,8 +4,9 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "fog-openstack-tng"
+  spec.name          = "fog_openstack_tng"
   spec.version       = FogOpenStack::VERSION
+  spec.platform      = Gem::Platform::RUBY
   spec.authors       = ["Evan Light", "Kyle Rames", "Chris Johnson", "Mike Hagedorn"]
   spec.email         = ["evan@tripledogdare.net", "kyle.rames@rackspace.com", "wchrisjohnson@gmail.com", "mike.hagedorn@hp.com"]
   spec.summary       = %q{Next generation openstack provider.}
@@ -19,6 +20,8 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency('fog-core')
+  spec.add_dependency('faraday')
+  spec.add_dependency('multi_json')
   # spec.add_dependency('builder')
   # spec.add_dependency('excon', '~>0.31.0')
   # spec.add_dependency('formatador', '~>0.2.0')
