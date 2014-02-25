@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
 
         def validate_token(token_id, tenant_id)
@@ -11,13 +11,10 @@ module Fog
           )
         end
 
-      end
+      end # Real
 
       class Mock
-
-
-
-      end
-    end
-  end
-end
+      end # Mock
+    end # OpenStackCommon
+  end # Identity
+end # Fog

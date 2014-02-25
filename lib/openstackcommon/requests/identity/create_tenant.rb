@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
         def create_tenant(attributes)
           request(

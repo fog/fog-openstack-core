@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
         def list_users(tenant_id = nil)
           path = tenant_id ? "tenants/#{tenant_id}/users" : 'users'
@@ -21,14 +21,14 @@ module Fog
               |user| user['tenantId'] == tenant_id
             }
           end
-                         
-          
+
+
           Excon::Response.new(
             :body   => { 'users' => users },
             :status => 200
           )
         end
       end # class Mock
-    end # class OpenStack
+    end # class OpenStackCommon
   end # module Identity
 end # module Fog

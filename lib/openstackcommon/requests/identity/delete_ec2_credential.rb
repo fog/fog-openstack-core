@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
 
         ##
@@ -27,7 +27,7 @@ module Fog
 
       class Mock
         def delete_ec2_credential(user_id, access)
-          raise Fog::Identity::OpenStack::NotFound unless
+          raise Fog::Identity::OpenStackCommon::NotFound unless
             self.data[:ec2_credentials][user_id][access]
 
           self.data[:ec2_credentials][user_id].delete access
@@ -38,7 +38,7 @@ module Fog
         rescue
         end
       end
-    end
-  end
-end
+    end # OpenStackCommon
+  end # Identity
+end # Fog
 

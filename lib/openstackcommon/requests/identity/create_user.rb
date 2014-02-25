@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
 
         def create_user(name, password, email, tenantId=nil, enabled=true)
@@ -42,6 +42,6 @@ module Fog
         end
 
       end
-    end
-  end
-end
+    end # OpenStackCommon
+  end # Identity
+end # Fog

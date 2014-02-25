@@ -62,15 +62,28 @@ module Fog
       request :get_ec2_credential
       request :list_ec2_credentials
 
+      # minimal requirement
+      class Mock
+      end
+
       class Real
         attr_reader :current_user
         attr_reader :current_tenant
         attr_reader :unscoped_token
 
         def initialize(options={})
+          puts "===== Fog::Identity::OpenStackCommon -> initialize ====="
+          puts "OPTIONS:"
+          puts options.to_yaml
+          puts " "
+
           @openstack_auth_token = options[:openstack_auth_token]
+          puts "openstack_auth_token:"
+          puts @openstack_auth_token
+          puts " "
 
           unless @openstack_auth_token
+            puts "Inside 'unless @openstack_auth_token'"
             missing_credentials = Array.new
             @openstack_api_key  = options[:openstack_api_key]
             @openstack_username = options[:openstack_username]
@@ -81,28 +94,52 @@ module Fog
           end
 
           @openstack_tenant   = options[:openstack_tenant]
+          puts "@openstack_tenant: #{@openstack_tenant}"
+
           @openstack_auth_uri = URI.parse(options[:openstack_auth_url])
+          puts "@openstack_auth_uri: #{@openstack_auth_uri}"
+
           @openstack_management_url       = options[:openstack_management_url]
+          puts "@openstack_management_url: #{@openstack_management_url}"
+
           @openstack_must_reauthenticate  = false
+          puts "@openstack_must_reauthenticate: #{@openstack_must_reauthenticate}"
+
           @openstack_service_type = options[:openstack_service_type] || ['identity']
+          puts "@openstack_service_type: #{@openstack_service_type}"
+
           @openstack_service_name = options[:openstack_service_name]
+          puts "@openstack_service_name: #{@openstack_service_name}"
 
           @connection_options = options[:connection_options] || {}
+          puts "@connection_options: #{@connection_options}"
 
           @openstack_current_user_id = options[:openstack_current_user_id]
+          puts "@openstack_current_user_id: #{@openstack_current_user_id}"
 
           @openstack_endpoint_type = options[:openstack_endpoint_type] || 'adminURL'
+          puts "@openstack_endpoint_type: #{@openstack_endpoint_type}"
 
           @current_user = options[:current_user]
+          puts "@current_user: #{@current_user}"
+
           @current_tenant = options[:current_tenant]
+          puts "@current_tenant: #{@current_tenant}"
 
           authenticate
 
           @persistent = options[:persistent] || false
-          @connection = Fog::Connection.new("#{@scheme}://#{@host}:#{@port}", @persistent, @connection_options)
+          puts "@persistent: #{@persistent}"
+
+          c = Fog::Core::Connection.new("#{@scheme}://#{@host}:#{@port}", @persistent, @connection_options)
+          puts "@connection: #{c.to_yaml}"
+
+          @connection = c
+          @connection
         end
 
         def credentials
+          puts "===== Fog::Identity::OpenStackCommon -> credentials ====="
           { :provider                   => 'openstack',
             :openstack_auth_url         => @openstack_auth_uri.to_s,
             :openstack_auth_token       => @auth_token,
@@ -113,10 +150,12 @@ module Fog
         end
 
         def reload
+          puts "===== Fog::Identity::OpenStackCommon -> reload ====="
           @connection.reset
         end
 
         def request(params)
+          puts "===== Fog::Identity::OpenStackCommon -> request ====="
           retried = false
           begin
             response = @connection.request(params.merge({
@@ -137,7 +176,7 @@ module Fog
           rescue Excon::Errors::HTTPStatusError => error
             raise case error
             when Excon::Errors::NotFound
-              Fog::Identity::OpenStack::NotFound.slurp(error)
+              Fog::Identity::OpenStackCommon::NotFound.slurp(error)
             else
               error
             end
@@ -151,6 +190,7 @@ module Fog
         private
 
         def authenticate
+          puts "===== Fog::Identity::OpenStackCommon -> authenticate ====="
           if !@openstack_management_url || @openstack_must_reauthenticate
             options = {
               :openstack_api_key  => @openstack_api_key,

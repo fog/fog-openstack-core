@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
 
         ##
@@ -39,6 +39,6 @@ module Fog
           response
         end
       end
-    end
-  end
-end
+    end # OpenStackCommon
+  end # Identity
+end # Fog

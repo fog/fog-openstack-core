@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
         def add_user_to_tenant(tenant_id, user_id, role_id)
           request(
@@ -31,4 +31,4 @@ module Fog
       end # class Mock
     end # class OpenStack
   end # module Identity
-end
+end # Fog

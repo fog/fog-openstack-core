@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
 
         def get_tenants_by_id(tenant_id)
@@ -18,6 +18,6 @@ module Fog
 
 
       end
-    end
-  end
-end
+    end # OpenStackCommon
+  end # Identity
+end # Fog

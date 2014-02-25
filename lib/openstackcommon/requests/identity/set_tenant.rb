@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
 
       class Real
         def set_tenant(tenant)
@@ -16,6 +16,6 @@ module Fog
         end
       end
 
-    end # class OpenStack
+    end # class OpenStackCommon
   end # module Identity
 end # module Fog

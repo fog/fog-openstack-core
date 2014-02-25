@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
 
         def get_user_by_name(name)
@@ -26,6 +26,6 @@ module Fog
         end
 
       end
-    end
-  end
-end
+    end # OpenStackCommon
+  end # Identity
+end # Fog

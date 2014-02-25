@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
         def list_roles_for_user_on_tenant(tenant_id, user_id)
           request(

@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
         def create_role(name)
           data = {
@@ -32,6 +32,6 @@ module Fog
         end
 
       end
-    end
-  end
-end
+    end # OpenStackCommon
+  end # Identity
+end # Fog

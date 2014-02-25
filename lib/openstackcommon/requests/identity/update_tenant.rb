@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
         def update_tenant(id, attributes)
           request(
@@ -9,7 +9,7 @@ module Fog
             :path    => "tenants/#{id}",
             :body    => Fog::JSON.encode({ 'tenant' => attributes })
           )
-        end # def create_tenant
+        end # def update_tenant
       end # class Real
 
       class Mock
@@ -21,7 +21,7 @@ module Fog
             'tenant' => attributes
           }
           response
-        end # def create_tenant
+        end # def update_tenant
       end # class Mock
     end # class OpenStack
   end # module Identity

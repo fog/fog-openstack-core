@@ -3,9 +3,9 @@ require 'openstackcommon/models/identity/ec2_credential'
 
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Ec2Credentials < Fog::Collection
-        model Fog::Identity::OpenStack::Ec2Credential
+        model Fog::Identity::OpenStackCommon::Ec2Credential
 
         attribute :user
 
@@ -42,7 +42,7 @@ module Fog
             body = response.body['credential']
             body = body.merge 'service' => service
 
-            ec2_credential = Fog::Identity::OpenStack::EC2Credential.new(body)
+            ec2_credential = Fog::Identity::OpenStackCommon::EC2Credential.new(body)
           end
 
           ec2_credential

@@ -18,7 +18,7 @@ module Fog
         when Symbol, String
           require_relative "./adapters/#{adapter_name}"
           c = adapter_name.to_s.split('_').collect!{ |w| w.capitalize }.join
-          @adapter = Fog::OpenStack::Authentication::Adapters.const_get(c)
+          @adapter = Fog::OpenStackCommon::Authentication::Adapters.const_get(c)
         else
           raise "Missing OpenStack authentication adapter named: #{adapter_name}"
         end

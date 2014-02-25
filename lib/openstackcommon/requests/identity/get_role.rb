@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
         def get_role(id)
           request(
@@ -19,7 +19,7 @@ module Fog
             response.body = { 'role' => data }
             response
           else
-            raise Fog::Identity::OpenStack::NotFound
+            raise Fog::Identity::OpenStackCommon::NotFound
           end
         end
       end # class Mock

@@ -9,7 +9,7 @@ module Fog
           extend self
 
           def authenticate(options, connection_options = {})
-            puts "===== Fog::OpenStack::Authentication::Adapters::AuthenticatorV2.authenticate ====="
+            puts "===== Fog::OpenStackCommon::Authentication::Adapters::AuthenticatorV2.authenticate ====="
 
             puts "OPTIONS:"
             puts options.to_yaml

@@ -3,9 +3,9 @@ require 'openstackcommon/models/identity/role'
 
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Roles < Fog::Collection
-        model Fog::Identity::OpenStack::Role
+        model Fog::Identity::OpenStackCommon::Role
 
         def all
           load(service.list_roles.body['roles'])

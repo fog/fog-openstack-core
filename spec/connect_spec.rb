@@ -26,9 +26,8 @@ describe "connect" do
     @result = Fog::Identity.new(:provider => 'OpenStackCommon',
                                 :openstack_username => "demo",
                                 :openstack_api_key => "stack",
-                                :openstack_auth_uri => URI.parse(auth_url),
-                                :openstack_tenant => "invisible_to_admin",
-                                :openstack_region => "RegionOne")
+                                :openstack_auth_url => auth_url,
+                                :openstack_tenant => "invisible_to_admin")
   end
 
   it "will return a result" do

@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
 
         def delete_user(user_id)
@@ -23,10 +23,10 @@ module Fog
           response.status = 204
           response
         rescue
-          raise Fog::Identity::OpenStack::NotFound
+          raise Fog::Identity::OpenStackCommon::NotFound
         end
 
       end
-    end
-  end
-end
+    end # OpenStackCommon
+  end # Identity
+end # Fog

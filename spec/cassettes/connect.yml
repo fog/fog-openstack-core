@@ -1,0 +1,76 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: http://172.16.0.2:5000/v2.0/tokens
+    body:
+      encoding: UTF-8
+      string: "{\"auth\":{\"passwordCredentials\":{\"username\":\"demo\",\"password\":\"stack\"},\"tenantName\":\"invisible_to_admin\"}}"
+    headers:
+      User-Agent:
+      - fog/1.21.0
+      Content-Type:
+      - application/json
+  response:
+    status:
+      code: 200
+      message: ''
+    headers:
+      Vary:
+      - X-Auth-Token
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '9010'
+      Date:
+      - Tue, 25 Feb 2014 18:36:50 GMT
+    body:
+      encoding: UTF-8
+      string: "{\"access\": {\"token\": {\"issued_at\": \"2014-02-25T18:36:49.972478\",
+        \"expires\": \"2014-02-25T19:36:49Z\", \"id\": \"MIIP1gYJKoZIhvcNAQcCoIIPxzCCD8MCAQExCTAHBgUrDgMCGjCCDiwGCSqGSIb3DQEHAaCCDh0Egg4ZeyJhY2Nlc3MiOiB7InRva2VuIjogeyJpc3N1ZWRfYXQiOiAiMjAxNC0wMi0yNVQxODozNjo0OS45NzI0NzgiLCAiZXhwaXJlcyI6ICIyMDE0LTAyLTI1VDE5OjM2OjQ5WiIsICJpZCI6ICJwbGFjZWhvbGRlciIsICJ0ZW5hbnQiOiB7ImRlc2NyaXB0aW9uIjogbnVsbCwgImVuYWJsZWQiOiB0cnVlLCAiaWQiOiAiMWVhMTZjOTE3YjllNGI0OWFkY2I3ZjdkZDkxZDAwYTUiLCAibmFtZSI6ICJpbnZpc2libGVfdG9fYWRtaW4ifX0sICJzZXJ2aWNlQ2F0YWxvZyI6IFt7ImVuZHBvaW50cyI6IFt7ImFkbWluVVJMIjogImh0dHA6Ly8xNzIuMTYuMC4yOjg3NzQvdjIvMWVhMTZjOTE3YjllNGI0OWFkY2I3ZjdkZDkxZDAwYTUiLCAicmVnaW9uIjogIlJlZ2lvbk9uZSIsICJpbnRlcm5hbFVSTCI6ICJodHRwOi8vMTcyLjE2LjAuMjo4Nzc0L3YyLzFlYTE2YzkxN2I5ZTRiNDlhZGNiN2Y3ZGQ5MWQwMGE1IiwgImlkIjogIjA3NjIyMWJiYzgwMzRjNGZhNDIyN2ViYWE2ZjM2MWY1IiwgInB1YmxpY1VSTCI6ICJodHRwOi8vMTcyLjE2LjAuMjo4Nzc0L3YyLzFlYTE2YzkxN2I5ZTRiNDlhZGNiN2Y3ZGQ5MWQwMGE1In1dLCAiZW5kcG9pbnRzX2xpbmtzIjogW10sICJ0eXBlIjogImNvbXB1dGUiLCAibmFtZSI6ICJub3ZhIn0sIHsiZW5kcG9pbnRzIjogW3siYWRtaW5VUkwiOiAiaHR0cDovLzE3Mi4xNi4wLjI6ODc3Ni92Mi8xZWExNmM5MTdiOWU0YjQ5YWRjYjdmN2RkOTFkMDBhNSIsICJyZWdpb24iOiAiUmVnaW9uT25lIiwgImludGVybmFsVVJMIjogImh0dHA6Ly8xNzIuMTYuMC4yOjg3NzYvdjIvMWVhMTZjOTE3YjllNGI0OWFkY2I3ZjdkZDkxZDAwYTUiLCAiaWQiOiAiOGI1MGU4ZTU1MTViNGE2Yzg4NTM1MGVjOTcwMWJmMTgiLCAicHVibGljVVJMIjogImh0dHA6Ly8xNzIuMTYuMC4yOjg3NzYvdjIvMWVhMTZjOTE3YjllNGI0OWFkY2I3ZjdkZDkxZDAwYTUifV0sICJlbmRwb2ludHNfbGlua3MiOiBbXSwgInR5cGUiOiAidm9sdW1ldjIiLCAibmFtZSI6ICJjaW5kZXJ2MiJ9LCB7ImVuZHBvaW50cyI6IFt7ImFkbWluVVJMIjogImh0dHA6Ly8xNzIuMTYuMC4yOjg3NzQvdjMiLCAicmVnaW9uIjogIlJlZ2lvbk9uZSIsICJpbnRlcm5hbFVSTCI6ICJodHRwOi8vMTcyLjE2LjAuMjo4Nzc0L3YzIiwgImlkIjogIjBjYTc3NzBhMzRiODRlZTA5NGY1MDg1YzQ2MTVhN2VlIiwgInB1YmxpY1VSTCI6ICJodHRwOi8vMTcyLjE2LjAuMjo4Nzc0L3YzIn1dLCAiZW5kcG9pbnRzX2xpbmtzIjogW10sICJ0eXBlIjogImNvbXB1dGV2MyIsICJuYW1lIjogIm5vdmF2MyJ9LCB7ImVuZHBvaW50cyI6IFt7ImFkbWluVVJMIjogImh0dHA6Ly8xNzIuMTYuMC4yOjMzMzMiLCAicmVnaW9uIjogIlJlZ2lvbk9uZSIsICJpbnRlcm5hbFVSTCI6ICJodHRwOi8vMTcyLjE2LjAuMjozMzMzIiwgImlkIjogIjk1NzY4ODE1MTY1ZjQ0MDFiNTYwY2EyM2JmOGJlYzYyIiwgInB1YmxpY1VSTCI6ICJodHRwOi8vMTcyLjE2LjAuMjozMzMzIn1dLCAiZW5kcG9pbnRzX2xpbmtzIjogW10sICJ0eXBlIjogInMzIiwgIm5hbWUiOiAiczMifSwgeyJlbmRwb2ludHMiOiBbeyJhZG1pblVSTCI6ICJodHRwOi8vMTcyLjE2LjAuMjo5MjkyIiwgInJlZ2lvbiI6ICJSZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovLzE3Mi4xNi4wLjI6OTI5MiIsICJpZCI6ICIzZGNhMGRmYWMwNTg0MzY1OTk4MWQxZDcyNTUyMGY4NCIsICJwdWJsaWNVUkwiOiAiaHR0cDovLzE3Mi4xNi4wLjI6OTI5MiJ9XSwgImVuZHBvaW50c19saW5rcyI6IFtdLCAidHlwZSI6ICJpbWFnZSIsICJuYW1lIjogImdsYW5jZSJ9LCB7ImVuZHBvaW50cyI6IFt7ImFkbWluVVJMIjogImh0dHA6Ly8xNzIuMTYuMC4yOjgwMDAvdjEiLCAicmVnaW9uIjogIlJlZ2lvbk9uZSIsICJpbnRlcm5hbFVSTCI6ICJodHRwOi8vMTcyLjE2LjAuMjo4MDAwL3YxIiwgImlkIjogIjU2Y2UyOTU5N2MxOTQ2MWM5Mzg1ZjIzN2UxMDYwZDk0IiwgInB1YmxpY1VSTCI6ICJodHRwOi8vMTcyLjE2LjAuMjo4MDAwL3YxIn1dLCAiZW5kcG9pbnRzX2xpbmtzIjogW10sICJ0eXBlIjogImNsb3VkZm9ybWF0aW9uIiwgIm5hbWUiOiAiaGVhdC1jZm4ifSwgeyJlbmRwb2ludHMiOiBbeyJhZG1pblVSTCI6ICJodHRwOi8vMTcyLjE2LjAuMjo4Nzc2L3YxLzFlYTE2YzkxN2I5ZTRiNDlhZGNiN2Y3ZGQ5MWQwMGE1IiwgInJlZ2lvbiI6ICJSZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovLzE3Mi4xNi4wLjI6ODc3Ni92MS8xZWExNmM5MTdiOWU0YjQ5YWRjYjdmN2RkOTFkMDBhNSIsICJpZCI6ICIwNzEyMTZmMTdlYzE0Yzk5YjBkNzk2ZDEzMWExMWM2MiIsICJwdWJsaWNVUkwiOiAiaHR0cDovLzE3Mi4xNi4wLjI6ODc3Ni92MS8xZWExNmM5MTdiOWU0YjQ5YWRjYjdmN2RkOTFkMDBhNSJ9XSwgImVuZHBvaW50c19saW5rcyI6IFtdLCAidHlwZSI6ICJ2b2x1bWUiLCAibmFtZSI6ICJjaW5kZXIifSwgeyJlbmRwb2ludHMiOiBbeyJhZG1pblVSTCI6ICJodHRwOi8vMTcyLjE2LjAuMjo4NzczL3NlcnZpY2VzL0FkbWluIiwgInJlZ2lvbiI6ICJSZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovLzE3Mi4xNi4wLjI6ODc3My9zZXJ2aWNlcy9DbG91ZCIsICJpZCI6ICIwYjZhZDMzYjc2MWY0YzQ1YTAyZWIzOGY4M2Q5MmI2OSIsICJwdWJsaWNVUkwiOiAiaHR0cDovLzE3Mi4xNi4wLjI6ODc3My9zZXJ2aWNlcy9DbG91ZCJ9XSwgImVuZHBvaW50c19saW5rcyI6IFtdLCAidHlwZSI6ICJlYzIiLCAibmFtZSI6ICJlYzIifSwgeyJlbmRwb2ludHMiOiBbeyJhZG1pblVSTCI6ICJodHRwOi8vMTcyLjE2LjAuMjo4MDA0L3YxLzFlYTE2YzkxN2I5ZTRiNDlhZGNiN2Y3ZGQ5MWQwMGE1IiwgInJlZ2lvbiI6ICJSZWdpb25PbmUiLCAiaW50ZXJuYWxVUkwiOiAiaHR0cDovLzE3Mi4xNi4wLjI6ODAwNC92MS8xZWExNmM5MTdiOWU0YjQ5YWRjYjdmN2RkOTFkMDBhNSIsICJpZCI6ICIwZGVkNDgyYjhmNjE0OTMwYmU3ZWM1Yzc3NTc5NTczNyIsICJwdWJsaWNVUkwiOiAiaHR0cDovLzE3Mi4xNi4wLjI6ODAwNC92MS8xZWExNmM5MTdiOWU0YjQ5YWRjYjdmN2RkOTFkMDBhNSJ9XSwgImVuZHBvaW50c19saW5rcyI6IFtdLCAidHlwZSI6ICJvcmNoZXN0cmF0aW9uIiwgIm5hbWUiOiAiaGVhdCJ9LCB7ImVuZHBvaW50cyI6IFt7ImFkbWluVVJMIjogImh0dHA6Ly8xNzIuMTYuMC4yOjM1MzU3L3YyLjAiLCAicmVnaW9uIjogIlJlZ2lvbk9uZSIsICJpbnRlcm5hbFVSTCI6ICJodHRwOi8vMTcyLjE2LjAuMjo1MDAwL3YyLjAiLCAiaWQiOiAiMGRkMDg3ZjRkOGFjNGRhNjk4MWJhZGE0OGYxMDNjMjAiLCAicHVibGljVVJMIjogImh0dHA6Ly8xNzIuMTYuMC4yOjUwMDAvdjIuMCJ9XSwgImVuZHBvaW50c19saW5rcyI6IFtdLCAidHlwZSI6ICJpZGVudGl0eSIsICJuYW1lIjogImtleXN0b25lIn1dLCAidXNlciI6IHsidXNlcm5hbWUiOiAiZGVtbyIsICJyb2xlc19saW5rcyI6IFtdLCAiaWQiOiAiMWEzNmUyYmI4OGE0NDY2MjkxYWQ5OTg4ZWFmZmMyMGUiLCAicm9sZXMiOiBbeyJuYW1lIjogIk1lbWJlciJ9XSwgIm5hbWUiOiAiZGVtbyJ9LCAibWV0YWRhdGEiOiB7ImlzX2FkbWluIjogMCwgInJvbGVzIjogWyI2NjBlYTcyMjcwYmY0YmE4OWYxMzA4NDQxZmUyNDM3YiJdfX19MYIBgTCCAX0CAQEwXDBXMQswCQYDVQQGEwJVUzEOMAwGA1UECAwFVW5zZXQxDjAMBgNVBAcMBVVuc2V0MQ4wDAYDVQQKDAVVbnNldDEYMBYGA1UEAwwPd3d3LmV4YW1wbGUuY29tAgEBMAcGBSsOAwIaMA0GCSqGSIb3DQEBAQUABIIBAJ3x3r0WU+RzpRwmgzfaIppTajAGlVO-SyuCl5HGCBofJVLnAZRDoKo0H9iTzc3xLVfuwLXw1xj0JGd-yrlVwiPYMwIJLMAEtzZsqZEnDCIeZ7jp5fWeoPLYavPuofNGGjYPZxrIixZRWkPzoZx-YAR3GpgFJtfBgHoQkaAp4-CKMgMnTlOl8N6HVAsg28P4tGODu9vJ4zZiC0UZ+M4wQzOVLRslSBdlFbfw5bUXLaEQIWhX+RNG-53ezhD7-huyGxMoT8Er9FvLfYMCDDFMTZDrWNydEeJvFSi26lsCRebJpvXvRw7G+ADeuFB69m+8VH6GDTH8JDKJRBv6nwnDmbU=\",
+        \"tenant\": {\"description\": null, \"enabled\": true, \"id\": \"1ea16c917b9e4b49adcb7f7dd91d00a5\",
+        \"name\": \"invisible_to_admin\"}}, \"serviceCatalog\": [{\"endpoints\": [{\"adminURL\":
+        \"http://172.16.0.2:8774/v2/1ea16c917b9e4b49adcb7f7dd91d00a5\", \"region\":
+        \"RegionOne\", \"internalURL\": \"http://172.16.0.2:8774/v2/1ea16c917b9e4b49adcb7f7dd91d00a5\",
+        \"id\": \"076221bbc8034c4fa4227ebaa6f361f5\", \"publicURL\": \"http://172.16.0.2:8774/v2/1ea16c917b9e4b49adcb7f7dd91d00a5\"}],
+        \"endpoints_links\": [], \"type\": \"compute\", \"name\": \"nova\"}, {\"endpoints\":
+        [{\"adminURL\": \"http://172.16.0.2:8776/v2/1ea16c917b9e4b49adcb7f7dd91d00a5\",
+        \"region\": \"RegionOne\", \"internalURL\": \"http://172.16.0.2:8776/v2/1ea16c917b9e4b49adcb7f7dd91d00a5\",
+        \"id\": \"8b50e8e5515b4a6c885350ec9701bf18\", \"publicURL\": \"http://172.16.0.2:8776/v2/1ea16c917b9e4b49adcb7f7dd91d00a5\"}],
+        \"endpoints_links\": [], \"type\": \"volumev2\", \"name\": \"cinderv2\"},
+        {\"endpoints\": [{\"adminURL\": \"http://172.16.0.2:8774/v3\", \"region\":
+        \"RegionOne\", \"internalURL\": \"http://172.16.0.2:8774/v3\", \"id\": \"0ca7770a34b84ee094f5085c4615a7ee\",
+        \"publicURL\": \"http://172.16.0.2:8774/v3\"}], \"endpoints_links\": [], \"type\":
+        \"computev3\", \"name\": \"novav3\"}, {\"endpoints\": [{\"adminURL\": \"http://172.16.0.2:3333\",
+        \"region\": \"RegionOne\", \"internalURL\": \"http://172.16.0.2:3333\", \"id\":
+        \"95768815165f4401b560ca23bf8bec62\", \"publicURL\": \"http://172.16.0.2:3333\"}],
+        \"endpoints_links\": [], \"type\": \"s3\", \"name\": \"s3\"}, {\"endpoints\":
+        [{\"adminURL\": \"http://172.16.0.2:9292\", \"region\": \"RegionOne\", \"internalURL\":
+        \"http://172.16.0.2:9292\", \"id\": \"3dca0dfac05843659981d1d725520f84\",
+        \"publicURL\": \"http://172.16.0.2:9292\"}], \"endpoints_links\": [], \"type\":
+        \"image\", \"name\": \"glance\"}, {\"endpoints\": [{\"adminURL\": \"http://172.16.0.2:8000/v1\",
+        \"region\": \"RegionOne\", \"internalURL\": \"http://172.16.0.2:8000/v1\",
+        \"id\": \"56ce29597c19461c9385f237e1060d94\", \"publicURL\": \"http://172.16.0.2:8000/v1\"}],
+        \"endpoints_links\": [], \"type\": \"cloudformation\", \"name\": \"heat-cfn\"},
+        {\"endpoints\": [{\"adminURL\": \"http://172.16.0.2:8776/v1/1ea16c917b9e4b49adcb7f7dd91d00a5\",
+        \"region\": \"RegionOne\", \"internalURL\": \"http://172.16.0.2:8776/v1/1ea16c917b9e4b49adcb7f7dd91d00a5\",
+        \"id\": \"071216f17ec14c99b0d796d131a11c62\", \"publicURL\": \"http://172.16.0.2:8776/v1/1ea16c917b9e4b49adcb7f7dd91d00a5\"}],
+        \"endpoints_links\": [], \"type\": \"volume\", \"name\": \"cinder\"}, {\"endpoints\":
+        [{\"adminURL\": \"http://172.16.0.2:8773/services/Admin\", \"region\": \"RegionOne\",
+        \"internalURL\": \"http://172.16.0.2:8773/services/Cloud\", \"id\": \"0b6ad33b761f4c45a02eb38f83d92b69\",
+        \"publicURL\": \"http://172.16.0.2:8773/services/Cloud\"}], \"endpoints_links\":
+        [], \"type\": \"ec2\", \"name\": \"ec2\"}, {\"endpoints\": [{\"adminURL\":
+        \"http://172.16.0.2:8004/v1/1ea16c917b9e4b49adcb7f7dd91d00a5\", \"region\":
+        \"RegionOne\", \"internalURL\": \"http://172.16.0.2:8004/v1/1ea16c917b9e4b49adcb7f7dd91d00a5\",
+        \"id\": \"0ded482b8f614930be7ec5c775795737\", \"publicURL\": \"http://172.16.0.2:8004/v1/1ea16c917b9e4b49adcb7f7dd91d00a5\"}],
+        \"endpoints_links\": [], \"type\": \"orchestration\", \"name\": \"heat\"},
+        {\"endpoints\": [{\"adminURL\": \"http://172.16.0.2:35357/v2.0\", \"region\":
+        \"RegionOne\", \"internalURL\": \"http://172.16.0.2:5000/v2.0\", \"id\": \"0dd087f4d8ac4da6981bada48f103c20\",
+        \"publicURL\": \"http://172.16.0.2:5000/v2.0\"}], \"endpoints_links\": [],
+        \"type\": \"identity\", \"name\": \"keystone\"}], \"user\": {\"username\":
+        \"demo\", \"roles_links\": [], \"id\": \"1a36e2bb88a4466291ad9988eaffc20e\",
+        \"roles\": [{\"name\": \"Member\"}], \"name\": \"demo\"}, \"metadata\": {\"is_admin\":
+        0, \"roles\": [\"660ea72270bf4ba89f1308441fe2437b\"]}}}"
+    http_version: 
+  recorded_at: Tue, 25 Feb 2014 18:36:50 GMT
+recorded_with: VCR 2.8.0

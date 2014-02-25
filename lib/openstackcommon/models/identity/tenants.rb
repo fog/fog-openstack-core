@@ -3,9 +3,9 @@ require 'openstackcommon/models/identity/tenant'
 
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Tenants < Fog::Collection
-        model Fog::Identity::OpenStack::Tenant
+        model Fog::Identity::OpenStackCommon::Tenant
 
         def all
           load(service.list_tenants.body['tenants'])
@@ -15,7 +15,7 @@ module Fog
           cached_tenant = self.find {|tenant| tenant.id == id}
           return cached_tenant if cached_tenant
           tenant_hash = service.get_tenant(id).body['tenant']
-          Fog::Identity::OpenStack::Tenant.new(
+          Fog::Identity::OpenStackCommon::Tenant.new(
             tenant_hash.merge(:service => service))
         end
 

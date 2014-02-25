@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
         def list_tenants(limit = nil, marker = nil)
           params = Hash.new
@@ -40,6 +40,6 @@ module Fog
           )
         end # def list_tenants
       end # class Mock
-    end # class OpenStack
+    end # class OpenStackCommon
   end # module Identity
 end # module Fog

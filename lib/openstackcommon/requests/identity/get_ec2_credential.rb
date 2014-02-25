@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
 
         ##
@@ -28,7 +28,7 @@ module Fog
             :path    => "users/#{user_id}/credentials/OS-EC2/#{access}"
           )
         rescue Excon::Errors::Unauthorized
-          raise Fog::Identity::OpenStack::NotFound
+          raise Fog::Identity::OpenStackCommon::NotFound
         end
       end
 
@@ -36,7 +36,7 @@ module Fog
         def get_ec2_credential(user_id, access)
           ec2_credential = self.data[:ec2_credentials][user_id][access]
 
-          raise Fog::OpenStack::Identity::NotFound unless ec2_credential
+          raise Fog::OpenStackCommon::Identity::NotFound unless ec2_credential
 
           response = Excon::Response.new
           response.status = 200
@@ -44,6 +44,6 @@ module Fog
           response
         end
       end
-    end
-  end
-end
+    end # OpenStackCommon
+  end # Identity
+end # Fog

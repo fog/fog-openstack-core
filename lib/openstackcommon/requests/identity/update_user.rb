@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
 
         def update_user(user_id, options = {})
@@ -13,7 +13,7 @@ module Fog
           )
         end
 
-      end
+      end # Real
 
       class Mock
 
@@ -26,11 +26,11 @@ module Fog
             response.status = 200
             response
           else
-            raise Fog::Identity::OpenStack::NotFound
+            raise Fog::Identity::OpenStackCommon::NotFound
           end
         end
 
-      end
-    end
-  end
-end
+      end # Mock
+    end # OpenStackCommon
+  end # Identity
+end # Fog

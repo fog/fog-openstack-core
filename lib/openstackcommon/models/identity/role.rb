@@ -2,7 +2,7 @@ require 'fog/core/model'
 
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Role < Fog::Model
         identity :id
         attribute :name

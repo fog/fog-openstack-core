@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
         def remove_user_from_tenant(tenant_id, user_id, role_id)
           request(
@@ -15,6 +15,6 @@ module Fog
         def remove_user_from_tenant(tenant_id, user_id, role_id)
         end # def remove_user_from_tenant
       end # class Mock
-    end # class OpenStack
+    end # class OpenStackCommon
   end # module Identity
 end

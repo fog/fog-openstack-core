@@ -3,9 +3,9 @@ require 'openstackcommon/models/identity/user'
 
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Users < Fog::Collection
-        model Fog::Identity::OpenStack::User
+        model Fog::Identity::OpenStackCommon::User
 
         attribute :tenant_id
 
@@ -15,7 +15,7 @@ module Fog
 
         def find_by_id(id)
           self.find {|user| user.id == id} ||
-            Fog::Identity::OpenStack::User.new(
+            Fog::Identity::OpenStackCommon::User.new(
               service.get_user_by_id(id).body['user'].merge(
                 'service' => service
               )

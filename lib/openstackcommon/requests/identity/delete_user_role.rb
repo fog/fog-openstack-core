@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
 
         def delete_user_role(tenant_id, user_id, role_id)
@@ -20,7 +20,7 @@ module Fog
           response
         end
       end
-    end
-  end
-end
+    end # OpenStackCommon
+  end # Identity
+end # Fog
 

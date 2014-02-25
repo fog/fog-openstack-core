@@ -1,6 +1,6 @@
 module Fog
   module Identity
-    class OpenStack
+    class OpenStackCommon
       class Real
 
         def create_user_role(tenant_id, user_id, role_id)
@@ -21,6 +21,6 @@ module Fog
           )
         end
       end
-    end
-  end
-end
+    end # OpenStackCommon
+  end # Identity
+end # Fog
