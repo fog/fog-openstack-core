@@ -1,7 +1,7 @@
 require 'fog/core'
 
 module Fog
-  module OpenStack
+  module OpenStackCommon
     module Authenticator
       extend self
 

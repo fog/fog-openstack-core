@@ -1,9 +1,8 @@
 require 'multi_json'
 require 'fog/core'
-require_relative 'identity/authenticator'
 
 module Fog
-  module OpenStack
+  module OpenStackCommon
     extend Fog::Provider
 
     module Errors
@@ -52,17 +51,6 @@ module Fog
 #     service(:volume,        'Volume')
 #     service(:metering,      'Metering')
 #     service(:orchestration, 'Orchestration')
-
-
-    # def self.authenticate(options, connection_options = {})
-    #   case options[:openstack_auth_uri].path
-    #   when /v1(\.\d+)?/
-    #     Fog::OpenStack::Authenticator.adapter = :authenticator_v1
-    #   else
-    #     Fog::OpenStack::Authenticator.adapter = :authenticator_v2
-    #   end
-    #   Fog::OpenStack::Authenticator.adapter.authenticate(options, connection_options)
-    # end
 
   end   # OpenStack
 end   # FOG

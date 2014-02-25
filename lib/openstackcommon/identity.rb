@@ -1,8 +1,9 @@
-require 'openstackcloud/core'
+require_relative './core'
+require_relative './identity/authenticator'
 
 module Fog
   module Identity
-    class OpenStackCloud < Fog::Service
+    class OpenStackCommon < Fog::Service
 
       requires :openstack_auth_url
       recognizes :openstack_auth_token, :openstack_management_url, :persistent,
@@ -11,7 +12,7 @@ module Fog
                   :openstack_endpoint_type,
                   :current_user, :current_tenant
 
-      model_path 'fog_openstack_tng/models/identity'
+      model_path 'openstackcommon/models/identity'
       model       :tenant
       collection  :tenants
       model       :user
@@ -21,7 +22,7 @@ module Fog
       model       :ec2_credential
       collection  :ec2_credentials
 
-      request_path 'fog_openstack_tng/requests/identity'
+      request_path 'openstackcommon/requests/identity'
 
       request :check_token
       request :validate_token
@@ -164,12 +165,12 @@ module Fog
 
             case options[:openstack_auth_uri].path
             when /v1(\.\d+)?/
-              Fog::OpenStack::Authenticator.adapter = :authenticator_v1
+              Fog::OpenStackCommon::Authenticator.adapter = :authenticator_v1
             else
-              Fog::OpenStack::Authenticator.adapter = :authenticator_v2
+              Fog::OpenStackCommon::Authenticator.adapter = :authenticator_v2
             end
 
-            credentials = Fog::OpenStack::Authenticator.adapter.authenticate(options, @connection_options)
+            credentials = Fog::OpenStackCommon::Authenticator.adapter.authenticate(options, @connection_options)
             # credentials = Fog::OpenStack.authenticate_v2(options, @connection_options)
 
             @current_user = credentials[:user]

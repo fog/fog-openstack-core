@@ -1,5 +1,7 @@
+require 'fog/core'
+
 module Fog
-  module OpenStack
+  module OpenStackCommon
     module Authentication
       module Adapters
         module AuthenticatorV1

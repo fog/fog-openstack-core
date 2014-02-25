@@ -1,8 +1,8 @@
 require_relative './spec_helper'
 
 require 'rubygems'
-require 'openstackcloud'
 require 'fog/core'
+require 'openstackcommon'
 
 describe "connect" do
   before do
@@ -21,10 +21,9 @@ describe "connect" do
     # }
     # connection_options = {}
 
-    # add openstackcould
-    Fog::Identity.providers << :openstackcloud
+    # Fog::Identity.providers = [:openstack,:openstackcommon]
 
-    @result = Fog::Identity.new(:provider => 'OpenStackCloud',
+    @result = Fog::Identity.new(:provider => 'OpenStackCommon',
                                 :openstack_username => "demo",
                                 :openstack_api_key => "stack",
                                 :openstack_auth_uri => URI.parse(auth_url),
