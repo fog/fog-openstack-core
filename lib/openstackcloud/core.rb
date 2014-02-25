@@ -54,15 +54,15 @@ module Fog
 #     service(:orchestration, 'Orchestration')
 
 
-    def self.authenticate(options, connection_options = {})
-      case options[:openstack_auth_uri].path
-      when /v1(\.\d+)?/
-        Fog::OpenStack::Authenticator.adapter = :authenticator_v1
-      else
-        Fog::OpenStack::Authenticator.adapter = :authenticator_v2
-      end
-      Fog::OpenStack::Authenticator.adapter.authenticate(options, connection_options)
-    end
+    # def self.authenticate(options, connection_options = {})
+    #   case options[:openstack_auth_uri].path
+    #   when /v1(\.\d+)?/
+    #     Fog::OpenStack::Authenticator.adapter = :authenticator_v1
+    #   else
+    #     Fog::OpenStack::Authenticator.adapter = :authenticator_v2
+    #   end
+    #   Fog::OpenStack::Authenticator.adapter.authenticate(options, connection_options)
+    # end
 
   end   # OpenStack
 end   # FOG
