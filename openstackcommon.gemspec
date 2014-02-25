@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "fog_openstack_tng"
+  spec.name          = "openstackcommon"
   spec.version       = Fog::OpenStackCommon::VERSION
   spec.platform      = Gem::Platform::RUBY
   spec.authors       = ["Evan Light", "Kyle Rames", "Chris Johnson", "Mike Hagedorn"]

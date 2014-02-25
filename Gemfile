@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in fog_openstack_tng.gemspec
+# Specify your gem's dependencies in openstackcommon.gemspec
 gemspec
 
 
