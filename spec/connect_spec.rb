@@ -2,7 +2,7 @@ require_relative './spec_helper'
 
 require 'rubygems'
 require 'fog/core'
-require 'openstackcommon'
+require 'fog/openstackcommon'
 
 describe "connect" do
   before do

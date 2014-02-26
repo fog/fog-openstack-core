@@ -1,5 +1,5 @@
 require 'fog/core/collection'
-require 'openstackcommon/models/identity/tenant'
+require 'fog/openstackcommon/models/identity/tenant'
 
 module Fog
   module Identity

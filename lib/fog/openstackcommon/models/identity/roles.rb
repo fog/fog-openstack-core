@@ -1,5 +1,5 @@
 require 'fog/core/collection'
-require 'openstackcommon/models/identity/role'
+require 'fog/openstackcommon/models/identity/role'
 
 module Fog
   module Identity

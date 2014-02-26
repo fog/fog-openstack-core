@@ -12,7 +12,7 @@ module Fog
                   :openstack_endpoint_type,
                   :current_user, :current_tenant
 
-      model_path 'openstackcommon/models/identity'
+      model_path 'fog/openstackcommon/models/identity'
       model       :tenant
       collection  :tenants
       model       :user
@@ -22,7 +22,7 @@ module Fog
       model       :ec2_credential
       collection  :ec2_credentials
 
-      request_path 'openstackcommon/requests/identity'
+      request_path 'fog/openstackcommon/requests/identity'
 
       request :check_token
       request :validate_token
