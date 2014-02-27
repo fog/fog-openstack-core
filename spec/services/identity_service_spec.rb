@@ -14,7 +14,7 @@ describe Fog::Identity::OpenStackCommon::Real do
     }
 
     before do
-      VCR.insert_cassette 'connection', :record => :new_episodes
+      VCR.insert_cassette 'identity_service#initialize', :record => :new_episodes
     end
 
     after do
@@ -25,22 +25,9 @@ describe Fog::Identity::OpenStackCommon::Real do
       connection.wont_be_nil
     end
 
-    it "must have a current_user method" do
-      connection.must_respond_to :current_user
+    [ :current_user, :current_tenant, :unscoped_token ].each do |attrib|
+      it { connection.must_respond_to attrib }
     end
-
-    it "must have a current_tenant method" do
-      connection.must_respond_to :current_tenant
-    end
-
-    it "must have an unscoped_token" do
-      connection.must_respond_to :unscoped_token
-    end
-
-    # it "must have an connection_options" do
-    #   connection.must_respond_to :connection_options
-    # end
-
 
   end
 
