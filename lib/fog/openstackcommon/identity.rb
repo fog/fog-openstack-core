@@ -138,16 +138,16 @@ module Fog
           @connection
         end
 
-        def credentials
-          # puts "===== Fog::Identity::OpenStackCommon -> credentials ====="
-          { :provider                   => 'openstack',
-            :openstack_auth_url         => @openstack_auth_uri.to_s,
-            :openstack_auth_token       => @auth_token,
-            :openstack_management_url   => @openstack_management_url,
-            :openstack_current_user_id  => @openstack_current_user_id,
-            :current_user               => @current_user,
-            :current_tenant             => @current_tenant }
-        end
+        # def credentials
+        #   # puts "===== Fog::Identity::OpenStackCommon -> credentials ====="
+        #   { :provider                   => 'openstack',
+        #     :openstack_auth_url         => @openstack_auth_uri.to_s,
+        #     :openstack_auth_token       => @auth_token,
+        #     :openstack_management_url   => @openstack_management_url,
+        #     :openstack_current_user_id  => @openstack_current_user_id,
+        #     :current_user               => @current_user,
+        #     :current_tenant             => @current_tenant }
+        # end
 
         def reload
           # puts "===== Fog::Identity::OpenStackCommon -> reload ====="
@@ -192,17 +192,7 @@ module Fog
         def authenticate
           # puts "===== Fog::Identity::OpenStackCommon -> authenticate ====="
           if !@openstack_management_url || @openstack_must_reauthenticate
-            options = {
-              :openstack_api_key  => @openstack_api_key,
-              :openstack_username => @openstack_username,
-              :openstack_auth_token => @openstack_auth_token,
-              :openstack_auth_uri => @openstack_auth_uri,
-              :openstack_tenant   => @openstack_tenant,
-              :openstack_service_type => @openstack_service_type,
-              :openstack_service_name => @openstack_service_name,
-              :openstack_endpoint_type => @openstack_endpoint_type
-            }
-
+            options = init_auth_options
             case options[:openstack_auth_uri].path
             when /v1(\.\d+)?/
               Fog::OpenStackCommon::Authenticator.adapter = :authenticator_v1
@@ -211,27 +201,46 @@ module Fog
             end
 
             credentials = Fog::OpenStackCommon::Authenticator.adapter.authenticate(options, @connection_options)
+            handle_auth_results(credentials)
 
-            @current_user = credentials[:user]
-            @current_tenant = credentials[:tenant]
-
-            @openstack_must_reauthenticate = false
-            @auth_token = credentials[:token]
-            @openstack_management_url = credentials[:server_management_url]
-            @openstack_current_user_id = credentials[:current_user_id]
-            @unscoped_token = credentials[:unscoped_token]
             uri = URI.parse(@openstack_management_url)
           else
             @auth_token = @openstack_auth_token
             uri = URI.parse(@openstack_management_url)
           end
 
+          save_host_attributes(uri)
+          true
+        end
+
+        def init_auth_options
+          { :openstack_api_key  => @openstack_api_key,
+            :openstack_username => @openstack_username,
+            :openstack_auth_token => @openstack_auth_token,
+            :openstack_auth_uri => @openstack_auth_uri,
+            :openstack_tenant   => @openstack_tenant,
+            :openstack_service_type => @openstack_service_type,
+            :openstack_service_name => @openstack_service_name,
+            :openstack_endpoint_type => @openstack_endpoint_type
+          }
+        end
+
+        def handle_auth_results(credentials)
+          @current_user = credentials[:user]
+          @current_tenant = credentials[:tenant]
+          @openstack_must_reauthenticate = false
+          @auth_token = credentials[:token]
+          @openstack_management_url = credentials[:server_management_url]
+          @openstack_current_user_id = credentials[:current_user_id]
+          @unscoped_token = credentials[:unscoped_token]
+        end
+
+        def save_host_attributes(uri)
           @host   = uri.host
           @path   = uri.path
           @path.sub!(/\/$/, '')
           @port   = uri.port
           @scheme = uri.scheme
-          true
         end
 
       end

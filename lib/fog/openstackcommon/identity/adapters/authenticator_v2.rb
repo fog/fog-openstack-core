@@ -38,7 +38,7 @@ module Fog
             openstack_region      = options[:openstack_region]
             # puts "openstack_region: #{openstack_region}"
 
-            body = retrieve_tokens(options, connection_options)
+            body = request_tokens(options, connection_options)
 
             service = get_service(body, service_type, service_name)
 
@@ -46,39 +46,19 @@ module Fog
 
             unless service
               unless tenant_name
-                response = new_connection(uri, connection_options, body)
-                body = MultiJson.decode(response.body)
-                if body['tenants'].empty?
-                  raise Fog::Errors::NotFound.new('No Tenant Found')
-                else
-                  options[:openstack_tenant] = body['tenants'].first['name']
-                end
+                options[:openstack_tenant] = get_tenant_name(new_connection(uri, connection_options, body))
               end
-              body = retrieve_tokens(options, connection_options)
+              body = request_tokens(options, connection_options)
               service = get_service(body, service_type, service_name)
             end
 
             if openstack_region
-              service['endpoints'] = service['endpoints'].select do |endpoint|
-                endpoint['region'] == openstack_region
-              end
-              if service['endpoints'].empty?
-                raise Fog::Errors::NotFound.new("No endpoints available for region '#{openstack_region}'")
-              end
+              service['endpoints'] = get_endpoints(service['endpoints'])
             end
 
-            unless service
-              available = body['access']['serviceCatalog'].map { |endpoint|
-                 endpoint['type'] }.sort.join ', '
-              missing = service_type.join ', '
-              message = "Could not find service #{missing}.  Have #{available}"
-              raise Fog::Errors::NotFound, message
-            end
+            ensure_service_available(service, body['access']['serviceCatalog'], service_type)
 
-            if service['endpoints'].count > 1
-              regions = service["endpoints"].map{ |e| e['region'] }.uniq.join(',')
-              raise Fog::Errors::NotFound.new("Multiple regions available choose one of these '#{regions}'")
-            end
+            raise_error_if_multiple_endpoints(service['endpoints'])
 
             identity_service = get_service(body, identity_service_type) if identity_service_type
             tenant = body['access']['token']['tenant']
@@ -129,8 +109,36 @@ module Fog
             end
           end
 
-          def retrieve_tokens(options, connection_options = {})
-            # puts "===== retrieve_tokens ====="
+          def get_tenant_name(response)
+            body = MultiJson.decode(response.body)
+            raise Fog::Errors::NotFound.new('No Tenant Found') if body['tenants'].empty?
+            body['tenants'].first['name']
+          end
+
+          def get_endpoints(endpoints)
+            ep = endpoints.select { |endpoint| endpoint['region'] == openstack_region }
+            if ep.empty?
+              raise Fog::Errors::NotFound.new("No endpoints available for region '#{openstack_region}'")
+            end
+          end
+
+          def ensure_service_available(service, service_catalog, service_type)
+            unless service
+              available = service_catalog.map { |endpoint| endpoint['type'] }.sort.join ', '
+              missing = service_type.join ', '
+              raise Fog::Errors::NotFound, "Could not find service #{missing}.  Have #{available}"
+            end
+          end
+
+          def raise_error_if_multiple_endpoints(endpoints)
+            if endpoints.count > 1
+              regions = endpoints.map{ |e| e['region'] }.uniq.join(',')
+              raise Fog::Errors::NotFound.new("Multiple regions available choose one of these '#{regions}'")
+            end
+          end
+
+          def request_tokens(options, connection_options = {})
+            # puts "===== request_tokens ====="
             # puts "options:"
             # puts options.to_yaml
             # puts "connection_options:"
@@ -155,13 +163,11 @@ module Fog
             # puts "----- after Connection create -----"
             # puts connection.to_yaml
 
-            request_body = {:auth => Hash.new}
+            request_body = { :auth => Hash.new }
 
             if auth_token
               # puts "----- if auth_token -----"
-              request_body[:auth][:token] = {
-                :id => auth_token
-              }
+              request_body[:auth][:token] = { :id => auth_token }
               # puts "request_body: "
               # puts request_body.to_yaml
             else
