@@ -9,34 +9,34 @@ module Fog
           extend self
 
           def authenticate(options, connection_options = {})
-            puts "===== Fog::OpenStackCommon::Authentication::Adapters::AuthenticatorV2.authenticate ====="
+            # puts "===== Fog::OpenStackCommon::Authentication::Adapters::AuthenticatorV2.authenticate ====="
 
-            puts "OPTIONS:"
-            puts options.to_yaml
-            puts " "
-            puts "CONNECTION_OPTIONS:"
-            puts connection_options.to_yaml
+            # puts "OPTIONS:"
+            # puts options.to_yaml
+            # puts " "
+            # puts "CONNECTION_OPTIONS:"
+            # puts connection_options.to_yaml
 
             uri                   = options[:openstack_auth_uri]
-            puts "URI: #{uri}"
+            # puts "URI: #{uri}"
 
             tenant_name           = options[:openstack_tenant]
-            puts "tenant_name: #{tenant_name}"
+            # puts "tenant_name: #{tenant_name}"
 
             service_type          = options[:openstack_service_type]
-            puts "service_type: #{service_type}"
+            # puts "service_type: #{service_type}"
 
             service_name          = options[:openstack_service_name]
-            puts "service_name: #{service_name}"
+            # puts "service_name: #{service_name}"
 
             identity_service_type = options[:openstack_identity_service_type]
-            puts "identity_service_type: #{identity_service_type}"
+            # puts "identity_service_type: #{identity_service_type}"
 
             endpoint_type         = (options[:openstack_endpoint_type] || 'publicURL').to_s
-            puts "endpoint_type: #{endpoint_type}"
+            # puts "endpoint_type: #{endpoint_type}"
 
             openstack_region      = options[:openstack_region]
-            puts "openstack_region: #{openstack_region}"
+            # puts "openstack_region: #{openstack_region}"
 
             body = retrieve_tokens(options, connection_options)
 
@@ -102,7 +102,7 @@ module Fog
           private
 
           def new_connection(uri, connection_options = {}, body = {})
-            puts "===== new_connection ====="
+            # puts "===== new_connection ====="
 
             # Fog::Connection.new(
             Fog::Core::Connection.new(
@@ -118,7 +118,7 @@ module Fog
           end
 
           def get_service(body, service_type=[], service_name=nil)
-            puts "===== get_service ====="
+            # puts "===== get_service ====="
 
             body['access']['serviceCatalog'].detect do |s|
               if service_name.nil? or service_name.empty?
@@ -130,11 +130,11 @@ module Fog
           end
 
           def retrieve_tokens(options, connection_options = {})
-            puts "===== retrieve_tokens ====="
-            puts "options:"
-            puts options.to_yaml
-            puts "connection_options:"
-            puts connection_options.to_yaml
+            # puts "===== retrieve_tokens ====="
+            # puts "options:"
+            # puts options.to_yaml
+            # puts "connection_options:"
+            # puts connection_options.to_yaml
 
             api_key     = options[:openstack_api_key].to_s
             username    = options[:openstack_username].to_s
@@ -142,45 +142,45 @@ module Fog
             auth_token  = options[:openstack_auth_token] || options[:unscoped_token]
             uri         = options[:openstack_auth_uri]
 
-            puts "api_key: #{api_key}"
-            puts "username: #{username}"
-            puts "tenant_name: #{tenant_name}"
-            puts "auth_token: #{auth_token}"
-            puts "uri: #{uri}"
+            # puts "api_key: #{api_key}"
+            # puts "username: #{username}"
+            # puts "tenant_name: #{tenant_name}"
+            # puts "auth_token: #{auth_token}"
+            # puts "uri: #{uri}"
 
-            puts "----- before Connection create -----"
+            # puts "----- before Connection create -----"
             # connection = Fog::Connection.new(uri.to_s, false, connection_options)
             connection = Fog::Core::Connection.new(uri.to_s, false, connection_options)
 
-            puts "----- after Connection create -----"
-            puts connection.to_yaml
+            # puts "----- after Connection create -----"
+            # puts connection.to_yaml
 
             request_body = {:auth => Hash.new}
 
             if auth_token
-              puts "----- if auth_token -----"
+              # puts "----- if auth_token -----"
               request_body[:auth][:token] = {
                 :id => auth_token
               }
-              puts "request_body: "
-              puts request_body.to_yaml
+              # puts "request_body: "
+              # puts request_body.to_yaml
             else
-              puts "----- else (!auth_token) -----"
+              # puts "----- else (!auth_token) -----"
               request_body[:auth][:passwordCredentials] = {
                 :username => username,
                 :password => api_key
               }
-              puts "request_body: "
-              puts request_body.to_yaml
+              # puts "request_body: "
+              # puts request_body.to_yaml
             end
 
             request_body[:auth][:tenantName] = tenant_name if tenant_name
 
-            puts "----- before connection.request -----"
-            puts "request body:"
-            puts request_body.to_yaml
-            puts "request_body encoded:"
-            puts MultiJson.encode(request_body)
+            # puts "----- before connection.request -----"
+            # puts "request body:"
+            # puts request_body.to_yaml
+            # puts "request_body encoded:"
+            # puts MultiJson.encode(request_body)
 
             response = connection.request({
               :expects  => [200, 204],
@@ -190,9 +190,9 @@ module Fog
               :path     => (uri.path and not uri.path.empty?) ? uri.path : 'v2.0'
             })
 
-            puts "----- after connection.request -----"
-            puts "response:"
-            puts response.to_yaml
+            # puts "----- after connection.request -----"
+            # puts "response:"
+            # puts response.to_yaml
 
             MultiJson.decode(response.body)
           end
