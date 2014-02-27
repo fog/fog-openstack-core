@@ -4,6 +4,7 @@ require 'vcr'
 require "minitest-vcr"
 require "webmock"
 require "minitest/reporters"
+require 'simplecov'
 
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/cassettes'
@@ -15,3 +16,4 @@ end
 
 MinitestVcr::Spec.configure!
 Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
+SimpleCov.start
