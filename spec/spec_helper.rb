@@ -6,8 +6,11 @@ require "webmock"
 require "minitest/reporters"
 
 VCR.configure do |c|
-    c.cassette_library_dir = 'spec/cassettes'
-    c.hook_into :webmock
+  c.cassette_library_dir = 'spec/cassettes'
+  c.hook_into :webmock
+  # c.default_cassette_options = {
+  #   re_record_interval: 1.week
+  # }
 end
 
 MinitestVcr::Spec.configure!
