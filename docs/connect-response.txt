@@ -26,9 +26,9 @@
   "enabled"=>true,
   "id"=>"1ea16c917b9e4b49adcb7f7dd91d00a5",
   "name"=>"invisible_to_admin"
-  } @auth_token="MIIP1gYJKoZIhvcNAQcCoIIPxzCCD8MCAQExCTAHBgUrDgMCGjCCDiwGCSqGSIb3DQEHAaCCDh0Egg4ZeyJhY2Nlc9RnPbbccAFgVzQHb0BwBw7zZd2hKMhivBpL0l-UY6+nU9fxOeE-WWXzm3h+KuZsASLxBTSG1GBH6+VwljbMgiPBDw="
-   @unscoped_token="MIIP1gYJKoZIhvcNAQcCoIIPxzCCD8MCAQExCTAHBgUrDgMCGjCCDiwGCSqGSIb3DQEHAaCCDh0Egg4ZeyJhYBTSG1GBH6+VwljbMgiPBDw="
-
+  }
+@auth_token="HAaCCDh0Egg4ZeyJhY2Nlc9RnPbbccAFgVzQHb0BwBw7zZd2hKMhivBpL0l-UY6+nU9fxOeE-WWXzm3h+KuZsASLxBTSG1GBH6+VwljbMgiPBDw="
+@unscoped_token="MIIP1gYJKoZIhvcNAQcCoIIPxzCCD8MCAQExCTAHBgUrDgMCGjCCDiwGCSqGSIb3DQEHAaCCDh0Egg4ZeyJhYBTSG1GBH6+VwljbMgiPBDw="
 @host="172.16.0.2"
 @path="/v2.0"
 @port=35357

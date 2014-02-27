@@ -3,6 +3,16 @@ require_relative '../spec_helper'
 require 'fog/openstackcommon'
 
 describe Fog::Identity::OpenStackCommon::Real do
+
+  let(:valid_options) { {
+    :provider => 'OpenStackCommon',
+    :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
+    :openstack_username => "demo",
+    :openstack_api_key => "stack" #,
+    # :openstack_tenant => "invisible_to_admin"
+    }
+  }
+
   describe "#initialize" do
 
     describe "endpoint version 1" do
@@ -12,90 +22,114 @@ describe Fog::Identity::OpenStackCommon::Real do
     end
 
     describe "endpoint version 2" do
-      describe "auth with valid credentails" do
+      describe "credentials" do
+        describe "valid auth" do
 
-        let(:connection) {
-          Fog::Identity.new(
-            :provider => 'OpenStackCommon',
-            :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
-            :openstack_username => "demo",
-            :openstack_api_key => "stack",
-            :openstack_tenant => "invisible_to_admin")
-        }
+          let(:connection) { Fog::Identity.new(valid_options) }
 
-        before do
-          VCR.insert_cassette 'identity_service#auth_with_creds', :record => :new_episodes
+          before do
+            VCR.insert_cassette 'identity_service#credentials#valid_auth', :record => :new_episodes
+          end
+
+          after do
+            VCR.eject_cassette
+          end
+
+          it "must not be nil" do
+            connection.wont_be_nil
+          end
+
+          [ :current_user, :current_tenant, :unscoped_token ].each do |attrib|
+            it { connection.must_respond_to attrib }
+          end
+
         end
 
-        after do
-          VCR.eject_cassette
-        end
+        describe "invalid auth" do
 
-        it "must not be nil" do
-          connection.wont_be_nil
-        end
+          before do
+            VCR.insert_cassette 'identity_service#credentials#invalid_auth', :record => :new_episodes
+          end
 
-        [ :current_user, :current_tenant, :unscoped_token ].each do |attrib|
-          it { connection.must_respond_to attrib }
+          after do
+            VCR.eject_cassette
+          end
+
+          it "an invalid username raises an Unauthorized exception" do
+            invalid_username_options = valid_options
+            invalid_username_options[:openstack_username] = "none"
+            error = proc {
+              Fog::Identity.new(invalid_username_options)
+            }.must_raise Excon::Errors::Unauthorized
+          end
+
+          it "an invalid password raises an Unauthorized exception" do
+            invalid_password_options = valid_options
+            invalid_password_options[:openstack_api_key] = "none"
+            error = proc {
+              Fog::Identity.new(invalid_password_options)
+            }.must_raise Excon::Errors::Unauthorized
+          end
+
         end
 
       end
 
-      describe "auth with invalid token" do
 
-        before do
-          VCR.insert_cassette 'identity_service#auth_with_invalid_token', :record => :new_episodes
+      describe "token" do
+        describe "invalid auth" do
+          before do
+            VCR.insert_cassette 'identity_service#token#invalid_auth', :record => :new_episodes
+          end
+
+          after do
+            VCR.eject_cassette
+          end
+
+          it "raises an Unauthorized exception" do
+            error = proc {
+              Fog::Identity.new(
+                :provider => 'OpenStackCommon',
+                :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
+                :openstack_auth_token => "abcdefghijklmnopqrstuvwxys0123456789")
+            }.must_raise Excon::Errors::Unauthorized
+          end
         end
 
-        after do
-          VCR.eject_cassette
-        end
+        describe "valid auth" do
 
-        it "raises an Unauthorized exception" do
-          error = proc {
+          let(:connection) {
             Fog::Identity.new(
               :provider => 'OpenStackCommon',
               :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
-              :openstack_auth_token => "abcdefghijklmnopqrstuvwxys0123456789")
-          }.must_raise Excon::Errors::Unauthorized
-          # puts "****************************"
-          # puts error.to_yaml
-          # puts "****************************"
+              :openstack_username => "demo",
+              :openstack_api_key => "stack",
+              :openstack_tenant => "invisible_to_admin")
+          }
+
+          before do
+            VCR.insert_cassette 'identity_service#token#valid_auth', :record => :new_episodes
+          end
+
+          after do
+            VCR.eject_cassette
+          end
+
+          # 1 - get the valid auth token out of the initial connection
+          # 2 - authenticate based on the valid auth token to ensure it works
+          it "must not be nil" do
+            valid_token = connection.auth_token
+            token_based_connection = Fog::Identity.new(
+              :provider => 'OpenStackCommon',
+              :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
+              :openstack_auth_token => valid_token)
+            token_based_connection.wont_be_nil
+          end
+
         end
 
       end
 
-      describe "auth with valid token" do
-
-        let(:connection) {
-          Fog::Identity.new(
-            :provider => 'OpenStackCommon',
-            :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
-            :openstack_username => "demo",
-            :openstack_api_key => "stack",
-            :openstack_tenant => "invisible_to_admin")
-        }
-
-        before do
-          VCR.insert_cassette 'identity_service#auth_with_valid_token', :record => :new_episodes
-        end
-
-        after do
-          VCR.eject_cassette
-        end
-
-        # 1 - get the valid auth token out of the initial connection
-        # 2 - authenticate based on the valid auth token to ensure it works
-        it "must not be nil" do
-          valid_token = connection.auth_token
-          token_based_connection = Fog::Identity.new(
-            :provider => 'OpenStackCommon',
-            :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
-            :openstack_auth_token => valid_token)
-          token_based_connection.wont_be_nil
-        end
-
-      end
     end
 
   end
