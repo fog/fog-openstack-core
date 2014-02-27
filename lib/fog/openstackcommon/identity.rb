@@ -70,6 +70,7 @@ module Fog
         attr_reader :current_user
         attr_reader :current_tenant
         attr_reader :unscoped_token
+        attr_reader :auth_token
 
         def initialize(options={})
           # puts "===== Fog::Identity::OpenStackCommon -> initialize ====="
@@ -84,14 +85,10 @@ module Fog
 
           unless @openstack_auth_token
             # puts "Inside 'unless @openstack_auth_token'"
-            missing_credentials = Array.new
-            @openstack_api_key  = options[:openstack_api_key]
-            @openstack_username = options[:openstack_username]
-
-            missing_credentials << :openstack_api_key  unless @openstack_api_key
-            missing_credentials << :openstack_username unless @openstack_username
-            raise ArgumentError, "Missing required arguments: #{missing_credentials.join(', ')}" unless missing_credentials.empty?
+            set_credentials(options)
+            validate_credentials
           end
+
 
           @openstack_tenant   = options[:openstack_tenant]
           # puts "@openstack_tenant: #{@openstack_tenant}"
@@ -202,14 +199,11 @@ module Fog
 
             credentials = Fog::OpenStackCommon::Authenticator.adapter.authenticate(options, @connection_options)
             handle_auth_results(credentials)
-
-            uri = URI.parse(@openstack_management_url)
           else
             @auth_token = @openstack_auth_token
-            uri = URI.parse(@openstack_management_url)
           end
 
-          save_host_attributes(uri)
+          save_host_attributes
           true
         end
 
@@ -225,7 +219,7 @@ module Fog
           }
         end
 
-        def handle_auth_results(credentials)
+        def handle_auth_results(credentials={})
           @current_user = credentials[:user]
           @current_tenant = credentials[:tenant]
           @openstack_must_reauthenticate = false
@@ -235,12 +229,27 @@ module Fog
           @unscoped_token = credentials[:unscoped_token]
         end
 
-        def save_host_attributes(uri)
+        def save_host_attributes
+          uri = URI.parse(@openstack_management_url)
           @host   = uri.host
           @path   = uri.path
           @path.sub!(/\/$/, '')
           @port   = uri.port
           @scheme = uri.scheme
+        end
+
+        def set_credentials(options={})
+          @openstack_api_key  = options[:openstack_api_key]
+          @openstack_username = options[:openstack_username]
+        end
+
+        def validate_credentials
+          missing_credentials = Array.new
+          missing_credentials << :openstack_api_key  unless @openstack_api_key
+          missing_credentials << :openstack_username unless @openstack_username
+          if !missing_credentials.empty?
+            raise ArgumentError, "Missing required arguments: #{missing_credentials.join(', ')}"
+          end
         end
 
       end

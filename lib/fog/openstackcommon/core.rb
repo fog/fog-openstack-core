@@ -52,5 +52,5 @@ module Fog
 #     service(:metering,      'Metering')
 #     service(:orchestration, 'Orchestration')
 
-  end   # OpenStack
+  end   # OpenStackCommon
 end   # FOG

@@ -4,76 +4,112 @@ require 'fog/openstackcommon'
 
 describe Fog::Identity::OpenStackCommon::Real do
   describe "#initialize" do
-    let(:connection) {
-      Fog::Identity.new(
-        :provider => 'OpenStackCommon',
-        :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
-        :openstack_username => "demo",
-        :openstack_api_key => "stack",
-        :openstack_tenant => "invisible_to_admin")
-    }
 
-    before do
-      VCR.insert_cassette 'identity_service#initialize', :record => :new_episodes
+    describe "endpoint version 1" do
+      describe "auth with credentails" do
+        it { skip("TBD") }
+      end
     end
 
-    after do
-      VCR.eject_cassette
+    describe "endpoint version 2" do
+      describe "auth with valid credentails" do
+
+        let(:connection) {
+          Fog::Identity.new(
+            :provider => 'OpenStackCommon',
+            :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
+            :openstack_username => "demo",
+            :openstack_api_key => "stack",
+            :openstack_tenant => "invisible_to_admin")
+        }
+
+        before do
+          VCR.insert_cassette 'identity_service#auth_with_creds', :record => :new_episodes
+        end
+
+        after do
+          VCR.eject_cassette
+        end
+
+        it "must not be nil" do
+          connection.wont_be_nil
+        end
+
+        [ :current_user, :current_tenant, :unscoped_token ].each do |attrib|
+          it { connection.must_respond_to attrib }
+        end
+
+      end
+
+      describe "auth with invalid token" do
+
+        before do
+          VCR.insert_cassette 'identity_service#auth_with_invalid_token', :record => :new_episodes
+        end
+
+        after do
+          VCR.eject_cassette
+        end
+
+        it "raises an Unauthorized exception" do
+          error = proc {
+            Fog::Identity.new(
+              :provider => 'OpenStackCommon',
+              :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
+              :openstack_auth_token => "abcdefghijklmnopqrstuvwxys0123456789")
+          }.must_raise Excon::Errors::Unauthorized
+          # puts "****************************"
+          # puts error.to_yaml
+          # puts "****************************"
+        end
+
+      end
+
+      describe "auth with valid token" do
+
+        let(:connection) {
+          Fog::Identity.new(
+            :provider => 'OpenStackCommon',
+            :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
+            :openstack_username => "demo",
+            :openstack_api_key => "stack",
+            :openstack_tenant => "invisible_to_admin")
+        }
+
+        before do
+          VCR.insert_cassette 'identity_service#auth_with_valid_token', :record => :new_episodes
+        end
+
+        after do
+          VCR.eject_cassette
+        end
+
+        # 1 - get the valid auth token out of the initial connection
+        # 2 - authenticate based on the valid auth token to ensure it works
+        it "must not be nil" do
+          valid_token = connection.auth_token
+          token_based_connection = Fog::Identity.new(
+            :provider => 'OpenStackCommon',
+            :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
+            :openstack_auth_token => valid_token)
+          token_based_connection.wont_be_nil
+        end
+
+      end
     end
-
-    it "must not be nil" do
-      connection.wont_be_nil
-    end
-
-    [ :current_user, :current_tenant, :unscoped_token ].each do |attrib|
-      it { connection.must_respond_to attrib }
-    end
-
-  end
-
-  describe "#credentials" do
 
   end
 
   describe "#reload" do
-
+    it { skip("No reason to test Excon object methods") }
   end
 
   describe "#request" do
-
+    it { skip("Not sure how to test") }
   end
 
 end
 
-
-
-
-# describe "Identity" do
-
-  #     tests("v2") do
-  #       Excon.stub({ :method => 'POST', :path => "/v2.0/tokens" },
-  #                  { :status => 200, :body => Fog::JSON.encode(body) })
-  #
-  #       expected = {
-  #         :user                     => body['access']['user'],
-  #         :tenant                   => body['access']['token']['tenant'],
-  #         :identity_public_endpoint => nil,
-  #         :server_management_url    =>
-  #           body['access']['serviceCatalog'].
-  #             first['endpoints'].first['publicURL'],
-  #         :token                    => token,
-  #         :expires                  => expires.iso8601,
-  #         :current_user_id          => body['access']['user']['id'],
-  #         :unscoped_token           => token,
-  #       }
-  #
-  #       returns(expected) do
-  #         Fog::OpenStack.authenticate_v2(
-  #           :openstack_auth_uri     => URI('http://example/v2.0/tokens'),
-  #           :openstack_tenant       => 'admin',
-  #           :openstack_service_type => %w[compute])
-  #       end
-  #     end
 
 
 # Shindo.tests('OpenStack | authenticate', ['openstack']) do
