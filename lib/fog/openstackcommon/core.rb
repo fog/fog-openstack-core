@@ -52,5 +52,9 @@ module Fog
 #     service(:metering,      'Metering')
 #     service(:orchestration, 'Orchestration')
 
+    def self.authenticate(options, connection_options = {})
+      Fog::Identity.new(options, connection_options = {})
+    end
+
   end   # OpenStackCommon
 end   # FOG
