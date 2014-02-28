@@ -8,8 +8,7 @@ describe Fog::Identity::OpenStackCommon::Real do
     :provider => 'OpenStackCommon',
     :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
     :openstack_username => "demo",
-    :openstack_api_key => "stack" #,
-    # :openstack_tenant => "invisible_to_admin"
+    :openstack_api_key => "stack"
     }
   }
 
