@@ -77,12 +77,12 @@ module Fog
 
           authenticate
 
-          # connection_url = "#{@scheme}://#{@host}:#{@port}"
-          # c = Fog::Core::Connection.new(connection_url, @persistent, @connection_options)
-          # # puts "@connection: #{c.to_yaml}"
-          #
-          # @connection = c
-          # @connection
+          connection_url = "#{@scheme}://#{@host}:#{@port}"
+          c = Fog::Core::Connection.new(connection_url, @persistent, @connection_options)
+          # puts "@connection: #{c.to_yaml}"
+
+          @connection = c
+          @connection
         end
 
         # def reload

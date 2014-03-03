@@ -14,7 +14,7 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   let(:service) { Fog::Identity.new(valid_options) }
 
-  describe "#create_user", :vcr do
+  describe "#create_user", :vcr, :record => :all do
 
     it "adds a user" do
       name = "jsmith#{Time.now.to_i}"
