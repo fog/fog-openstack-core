@@ -16,14 +16,6 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   describe "#create_user", :vcr do
 
-    # before do
-    #   VCR.insert_cassette 'identity_requests#create_user', :record => :new_episodes
-    # end
-    #
-    # after do
-    #   VCR.eject_cassette
-    # end
-
     it "adds a user" do
       name = "jsmith#{Time.now.to_i}"
       password = "password!"
@@ -33,8 +25,6 @@ describe Fog::Identity::OpenStackCommon::Real do
 
       result = service.create_user(name, password, email, tenant_id, enabled)
       result.status.must_include [200,202]
-      # result.body["role"]["id"].must_equal ""
-      # result.body["role"]["name"].must_equal ""
     end
 
   end
