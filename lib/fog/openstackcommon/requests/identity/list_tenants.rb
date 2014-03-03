@@ -10,7 +10,7 @@ module Fog
           request(
             :expects => [200, 204],
             :method  => 'GET',
-            :path    => "tenants",
+            :path    => "/tenants",
             :query   => params
           )
         end
