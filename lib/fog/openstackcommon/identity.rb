@@ -75,13 +75,13 @@ module Fog
           apply_options(options)
           authenticate
           connection_url = "#{@scheme}://#{@host}:#{@port}"
-          Fog::Core::Connection.new(connection_url, @persistent, @connection_options)
+          @connection = Fog::Core::Connection.new(connection_url, @persistent, @connection_options)
         end
 
-        # def reload
-        #   # puts "===== Fog::Identity::OpenStackCommon -> reload ====="
-        #   @connection.reset
-        # end
+        def reload
+          # puts "===== Fog::Identity::OpenStackCommon -> reload ====="
+          @connection.reset
+        end
 
         def request(params)
           # puts "===== Fog::Identity::OpenStackCommon -> request ====="
@@ -93,7 +93,7 @@ module Fog
                 'Accept' => 'application/json',
                 'X-Auth-Token' => @auth_token
               }.merge!(params[:headers] || {}),
-              :path     => "#{@path}/#{params[:path]}"#,
+              :path     => "#{@path}#{params[:path]}"#,
             }))
           rescue Excon::Errors::Unauthorized => error
             raise if retried
@@ -217,6 +217,10 @@ module Fog
           @path.sub!(/\/$/, '')
           @port   = uri.port
           @scheme = uri.scheme
+          puts "HOST: #{@host}"
+          puts "path: #{@path}"
+          puts "port: #{@port}"
+          puts "scheme: #{@scheme}"
         end
 
         def set_credentials(options={})
