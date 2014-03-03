@@ -14,15 +14,15 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   let(:service) { Fog::Identity.new(valid_options) }
 
-  describe "#create_user" do
+  describe "#create_user", :vcr do
 
-    before do
-      VCR.insert_cassette 'identity_requests#create_user', :record => :new_episodes
-    end
-
-    after do
-      VCR.eject_cassette
-    end
+    # before do
+    #   VCR.insert_cassette 'identity_requests#create_user', :record => :new_episodes
+    # end
+    #
+    # after do
+    #   VCR.eject_cassette
+    # end
 
     it "adds a user" do
       name = "jsmith#{Time.now.to_i}"

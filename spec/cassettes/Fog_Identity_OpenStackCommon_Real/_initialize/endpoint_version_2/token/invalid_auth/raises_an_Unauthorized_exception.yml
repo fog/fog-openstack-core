@@ -25,11 +25,11 @@ http_interactions:
       Content-Length:
       - '123'
       Date:
-      - Fri, 28 Feb 2014 23:05:05 GMT
+      - Mon, 03 Mar 2014 19:46:16 GMT
     body:
       encoding: UTF-8
       string: "{\"error\": {\"message\": \"Could not find token, abcdefghijklmnopqrstuvwxys0123456789.\",
         \"code\": 401, \"title\": \"Unauthorized\"}}"
     http_version: 
-  recorded_at: Fri, 28 Feb 2014 23:05:05 GMT
+  recorded_at: Mon, 03 Mar 2014 19:46:16 GMT
 recorded_with: VCR 2.8.0

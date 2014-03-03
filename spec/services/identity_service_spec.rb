@@ -22,17 +22,17 @@ describe Fog::Identity::OpenStackCommon::Real do
 
     describe "endpoint version 2" do
       describe "credentials" do
-        describe "valid auth" do
+        describe "valid auth", :vcr do
 
           let(:connection) { Fog::Identity.new(valid_options) }
 
-          before do
-            VCR.insert_cassette 'identity_service#credentials#valid_auth', :record => :new_episodes
-          end
-
-          after do
-            VCR.eject_cassette
-          end
+          # before do
+          #   VCR.insert_cassette 'identity_service#credentials#valid_auth', :record => :new_episodes
+          # end
+          #
+          # after do
+          #   VCR.eject_cassette
+          # end
 
           it "must be a hash" do
             # connection.must_be_instance_of Hash
@@ -54,15 +54,15 @@ describe Fog::Identity::OpenStackCommon::Real do
 
         end
 
-        describe "invalid auth" do
+        describe "invalid auth", :vcr do
 
-          before do
-            VCR.insert_cassette 'identity_service#credentials#invalid_auth', :record => :new_episodes
-          end
-
-          after do
-            VCR.eject_cassette
-          end
+          # before do
+          #   VCR.insert_cassette 'identity_service#credentials#invalid_auth', :record => :new_episodes
+          # end
+          #
+          # after do
+          #   VCR.eject_cassette
+          # end
 
           it "an invalid username raises an Unauthorized exception" do
             invalid_username_options = valid_options
@@ -86,14 +86,14 @@ describe Fog::Identity::OpenStackCommon::Real do
 
 
       describe "token" do
-        describe "invalid auth" do
-          before do
-            VCR.insert_cassette 'identity_service#token#invalid_auth', :record => :new_episodes
-          end
-
-          after do
-            VCR.eject_cassette
-          end
+        describe "invalid auth", :vcr do
+          # before do
+          #   VCR.insert_cassette 'identity_service#token#invalid_auth', :record => :new_episodes
+          # end
+          #
+          # after do
+          #   VCR.eject_cassette
+          # end
 
           it "raises an Unauthorized exception" do
             error = proc {
@@ -105,7 +105,7 @@ describe Fog::Identity::OpenStackCommon::Real do
           end
         end
 
-        describe "valid auth" do
+        describe "valid auth", :vcr do
 
           let(:connection) {
             Fog::Identity.new(
@@ -116,13 +116,13 @@ describe Fog::Identity::OpenStackCommon::Real do
               :openstack_tenant => "invisible_to_admin")
           }
 
-          before do
-            VCR.insert_cassette 'identity_service#token#valid_auth', :record => :new_episodes
-          end
-
-          after do
-            VCR.eject_cassette
-          end
+          # before do
+          #   VCR.insert_cassette 'identity_service#token#valid_auth', :record => :new_episodes
+          # end
+          #
+          # after do
+          #   VCR.eject_cassette
+          # end
 
           # 1 - get the valid auth token out of the initial connection
           # 2 - authenticate based on the valid auth token to ensure it works
