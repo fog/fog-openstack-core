@@ -77,28 +77,18 @@ module Fog
 
           authenticate
 
-          c = Fog::Core::Connection.new("#{@scheme}://#{@host}:#{@port}", @persistent, @connection_options)
-          # puts "@connection: #{c.to_yaml}"
-
-          @connection = c
-          @connection
+          # connection_url = "#{@scheme}://#{@host}:#{@port}"
+          # c = Fog::Core::Connection.new(connection_url, @persistent, @connection_options)
+          # # puts "@connection: #{c.to_yaml}"
+          #
+          # @connection = c
+          # @connection
         end
 
-        # def credentials
-        #   # puts "===== Fog::Identity::OpenStackCommon -> credentials ====="
-        #   { :provider                   => 'openstack',
-        #     :openstack_auth_url         => @openstack_auth_uri.to_s,
-        #     :openstack_auth_token       => @auth_token,
-        #     :openstack_management_url   => @openstack_management_url,
-        #     :openstack_current_user_id  => @openstack_current_user_id,
-        #     :current_user               => @current_user,
-        #     :current_tenant             => @current_tenant }
+        # def reload
+        #   # puts "===== Fog::Identity::OpenStackCommon -> reload ====="
+        #   @connection.reset
         # end
-
-        def reload
-          # puts "===== Fog::Identity::OpenStackCommon -> reload ====="
-          @connection.reset
-        end
 
         def request(params)
           # puts "===== Fog::Identity::OpenStackCommon -> request ====="
@@ -135,6 +125,27 @@ module Fog
 
         private
 
+        def authenticate
+          # puts "===== Fog::Identity::OpenStackCommon -> authenticate ====="
+          if !@openstack_management_url || @openstack_must_reauthenticate
+            case @openstack_auth_uri.path
+            when /v1(\.\d+)?/
+              Fog::OpenStackCommon::Authenticator.adapter = :authenticator_v1
+            else
+              Fog::OpenStackCommon::Authenticator.adapter = :authenticator_v2
+            end
+
+            options = init_auth_options
+            credentials = Fog::OpenStackCommon::Authenticator.adapter.authenticate(options, @connection_options)
+            handle_auth_results(credentials)
+          else
+            @auth_token = @openstack_auth_token
+          end
+
+          save_host_attributes
+          credentials
+        end
+
         def apply_options(options)
 
           @openstack_auth_token = options[:openstack_auth_token]
@@ -148,8 +159,10 @@ module Fog
           @openstack_tenant   = options[:openstack_tenant]
           # puts "@openstack_tenant: #{@openstack_tenant}"
 
-          @openstack_auth_uri = URI.parse(options[:openstack_auth_url])
-          # puts "@openstack_auth_uri: #{@openstack_auth_uri}"
+          @openstack_auth_url = options[:openstack_auth_url]
+          @openstack_auth_uri = URI.parse(@openstack_auth_url)
+          # puts "@openstack_auth_url: #{@openstack_auth_url}"
+          # puts "@openstack_auth_uri: #{@openstack_auth_uri.to_yaml}"
 
           @openstack_management_url       = options[:openstack_management_url]
           # puts "@openstack_management_url: #{@openstack_management_url}"
@@ -163,9 +176,6 @@ module Fog
           @openstack_service_name = options[:openstack_service_name]
           # puts "@openstack_service_name: #{@openstack_service_name}"
 
-          @connection_options = options[:connection_options] || {}
-          # puts "@connection_options: #{@connection_options}"
-
           @openstack_current_user_id = options[:openstack_current_user_id]
           # puts "@openstack_current_user_id: #{@openstack_current_user_id}"
 
@@ -178,29 +188,11 @@ module Fog
           @current_tenant = options[:current_tenant]
           # puts "@current_tenant: #{@current_tenant}"
 
+          @connection_options = options[:connection_options] || {}
+          # puts "@connection_options: #{@connection_options}"
+
           @persistent = options[:persistent] || false
           # puts "@persistent: #{@persistent}"
-        end
-
-        def authenticate
-          # puts "===== Fog::Identity::OpenStackCommon -> authenticate ====="
-          if !@openstack_management_url || @openstack_must_reauthenticate
-            options = init_auth_options
-            case options[:openstack_auth_uri].path
-            when /v1(\.\d+)?/
-              Fog::OpenStackCommon::Authenticator.adapter = :authenticator_v1
-            else
-              Fog::OpenStackCommon::Authenticator.adapter = :authenticator_v2
-            end
-
-            credentials = Fog::OpenStackCommon::Authenticator.adapter.authenticate(options, @connection_options)
-            handle_auth_results(credentials)
-          else
-            @auth_token = @openstack_auth_token
-          end
-
-          save_host_attributes
-          true
         end
 
         def init_auth_options

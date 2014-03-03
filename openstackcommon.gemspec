@@ -5,7 +5,7 @@ require_relative './lib/fog/openstackcommon/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "openstackcommon"
-  spec.version       = OpenStackCommon::VERSION
+  spec.version       = Fog::OpenStackCommon::VERSION
   spec.platform      = Gem::Platform::RUBY
   spec.authors       = ["Evan Light", "Kyle Rames", "Chris Johnson", "Mike Hagedorn"]
   spec.email         = ["evan@tripledogdare.net", "kyle.rames@rackspace.com", "wchrisjohnson@gmail.com", "mike.hagedorn@hp.com"]

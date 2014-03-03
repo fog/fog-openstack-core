@@ -34,6 +34,14 @@ describe Fog::Identity::OpenStackCommon::Real do
             VCR.eject_cassette
           end
 
+          it "must be a hash" do
+            connection.must_be_instance_of Hash
+          end
+
+          it "must be a connection" do
+            connection.must_be_instance_of Fog::Core::Connection
+          end
+
           it "must not be nil" do
             connection.wont_be_nil
           end
