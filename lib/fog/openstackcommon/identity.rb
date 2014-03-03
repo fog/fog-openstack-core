@@ -111,7 +111,7 @@ module Fog
             end
           end
           unless response.body.empty?
-            response.body = Fog::JSON.decode(response.body)
+            response.body = MultiJson.decode(response.body)
           end
           response
         end

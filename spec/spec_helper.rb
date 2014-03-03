@@ -9,7 +9,8 @@ require 'simplecov'
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/cassettes'
   c.hook_into :webmock
-  c.debug_logger = File.open('log/vcr.log', 'w')
+  #c.debug_logger = File.open('log/vcr.log', 'w')
+  c.debug_logger = $stdout
 end
 
 MinitestVcr::Spec.configure!

@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: http://172.16.0.2:5000/v2.0/tokens
+    uri: http://172.16.0.2:35357/v2.0/users
     body:
       encoding: UTF-8
       string: "{\"auth\":{\"passwordCredentials\":{\"username\":\"admin\",\"password\":\"stack\"},\"tenantName\":\"\"}}"
@@ -31,7 +31,7 @@ http_interactions:
         \"serviceCatalog\": [], \"user\": {\"username\": \"admin\", \"roles_links\":
         [], \"id\": \"a956f0ef089244b7935d743481740d77\", \"roles\": [], \"name\":
         \"admin\"}, \"metadata\": {\"is_admin\": 0, \"roles\": []}}}"
-    http_version: 
+    http_version:
   recorded_at: Mon, 03 Mar 2014 19:38:10 GMT
 - request:
     method: get
@@ -67,7 +67,7 @@ http_interactions:
         true, \"id\": \"77d49e5184de486ab75500e9fbfed15e\", \"name\": \"demo\"}, {\"description\":
         null, \"enabled\": true, \"id\": \"cb7358a6546147a38d13c885626f10f3\", \"name\":
         \"admin\"}]}"
-    http_version: 
+    http_version:
   recorded_at: Mon, 03 Mar 2014 19:38:10 GMT
 - request:
     method: post
@@ -132,6 +132,6 @@ http_interactions:
         \"admin\", \"roles_links\": [], \"id\": \"a956f0ef089244b7935d743481740d77\",
         \"roles\": [{\"name\": \"admin\"}], \"name\": \"admin\"}, \"metadata\": {\"is_admin\":
         0, \"roles\": [\"184c57925aea42359bdbfe043bbd13d0\"]}}}"
-    http_version: 
+    http_version:
   recorded_at: Mon, 03 Mar 2014 19:38:10 GMT
 recorded_with: VCR 2.8.0
