@@ -72,17 +72,10 @@ module Fog
 
         def initialize(options={})
           # puts "===== Fog::Identity::OpenStackCommon -> initialize ====="
-
           apply_options(options)
-
           authenticate
-
           connection_url = "#{@scheme}://#{@host}:#{@port}"
-          c = Fog::Core::Connection.new(connection_url, @persistent, @connection_options)
-          # puts "@connection: #{c.to_yaml}"
-
-          @connection = c
-          @connection
+          Fog::Core::Connection.new(connection_url, @persistent, @connection_options)
         end
 
         # def reload
