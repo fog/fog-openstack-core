@@ -46,48 +46,48 @@ describe Fog::Identity::OpenStackCommon::User do
 
   end
 
-  describe ".ec2_credentials" do
-    let(:service) { MiniTest::Mock.new }
+  # describe ".ec2_credentials" do
+  #   let(:service) { MiniTest::Mock.new }
+  #
+  #   it "service receives the 'ec2_credentials' message" do
+  #     service.expect(:ec2_credentials, true, [{ :user => user }])
+  #     user.ec2_credentials
+  #     service.verify
+  #   end
+  #
+  # end
 
-    it "service receives the 'ec2_credentials' message" do
-      service.expect(:ec2_credentials, true, [{ :user => user }])
-      user.ec2_credentials
-      service.verify
-    end
+  # def ec2_credentials
+  #   requires :id
+  #   service.ec2_credentials(:user => self)
+  # end
 
-  end
-
-  def ec2_credentials
-    requires :id
-    service.ec2_credentials(:user => self)
-  end
-
-  describe ".save" do
-    it { skip("TBD") }
-  end
-
-  describe ".update" do
-    it { skip("TBD") }
-  end
-
-  describe ".update_password" do
-    it { skip("TBD") }
-  end
-
-  describe ".update_tenant" do
-    it { skip("TBD") }
-  end
-
-  describe ".update_enabled" do
-    it { skip("TBD") }
-  end
-
-  describe ".destroy" do
-    it { skip("TBD") }
-  end
-
-  describe ".roles" do
-    it { skip("TBD") }
-  end
+  # describe ".save" do
+  #   it { skip("TBD") }
+  # end
+  #
+  # describe ".update" do
+  #   it { skip("TBD") }
+  # end
+  #
+  # describe ".update_password" do
+  #   it { skip("TBD") }
+  # end
+  #
+  # describe ".update_tenant" do
+  #   it { skip("TBD") }
+  # end
+  #
+  # describe ".update_enabled" do
+  #   it { skip("TBD") }
+  # end
+  #
+  # describe ".destroy" do
+  #   it { skip("TBD") }
+  # end
+  #
+  # describe ".roles" do
+  #   it { skip("TBD") }
+  # end
 
 end

@@ -2,7 +2,6 @@ require_relative '../../spec_helper'
 
 require 'fog/openstackcommon'
 # require_relative '../../../lib/fog/openstackcommon/models/identity/user'
-require ''
 
 describe Fog::Identity::OpenStackCommon::Real do
 
@@ -13,26 +12,30 @@ describe Fog::Identity::OpenStackCommon::Real do
     :openstack_api_key => "stack"
     } }
 
-  let(:service) {Fog::Identity.new(options)}
+  let(:service) { Fog::Identity.new(valid_options) }
 
-  describe "#add_user_to_tenant"
+  describe "#create_user" do
 
-    let(:response) {
-      {'role' => {
-        'id'   => role['id'],
-        'name' => role['name']
-        }
-      }
-    }
+    before do
+      VCR.insert_cassette 'identity_requests#create_user', :record => :new_episodes
+    end
 
-    tenant_id = "admin"
-    user_id = "a956f0ef089244b7935d743481740d77"
-    role_id = 200
-    result = service.add_user_to_tenant(tenant_id,user_id,role_id)
+    after do
+      VCR.eject_cassette
+    end
 
-    result.status.must_equal 200
-    result.body["role"]["id"].must_equal ""
-    result.body["role"]["name"].must_equal ""
+    it "adds a user" do
+      name = "jsmith#{Time.now.to_i}"
+      password = "password!"
+      tenant_id = "cb7358a6546147a38d13c885626f10f3"
+      email = "jsmith#{Time.now.to_i}@acme.com"
+      enabled = true
+
+      result = service.create_user(name, password, email, tenant_id, enabled)
+      result.status.must_include [200,202]
+      # result.body["role"]["id"].must_equal ""
+      # result.body["role"]["name"].must_equal ""
+    end
 
   end
 end
