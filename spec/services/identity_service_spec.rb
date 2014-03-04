@@ -6,7 +6,7 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   let(:valid_options) { {
     :provider => 'OpenStackCommon',
-    :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
+    :openstack_auth_url => "http://devstack.local:5000/v2.0/tokens",
     :openstack_username => "demo",
     :openstack_api_key => "stack"
     }
@@ -51,7 +51,7 @@ describe Fog::Identity::OpenStackCommon::Real do
           it "an invalid username raises an Unauthorized exception" do
             invalid_username_options = valid_options
             invalid_username_options[:openstack_username] = "none"
-            error = proc {
+            proc {
               Fog::Identity.new(invalid_username_options)
             }.must_raise Excon::Errors::Unauthorized
           end
@@ -59,7 +59,7 @@ describe Fog::Identity::OpenStackCommon::Real do
           it "an invalid password raises an Unauthorized exception" do
             invalid_password_options = valid_options
             invalid_password_options[:openstack_api_key] = "none"
-            error = proc {
+            proc {
               Fog::Identity.new(invalid_password_options)
             }.must_raise Excon::Errors::Unauthorized
           end
@@ -72,34 +72,25 @@ describe Fog::Identity::OpenStackCommon::Real do
       describe "token" do
         describe "invalid auth", :vcr do
           it "raises an Unauthorized exception" do
-            error = proc {
-              Fog::Identity.new(
-                :provider => 'OpenStackCommon',
-                :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
-                :openstack_auth_token => "abcdefghijklmnopqrstuvwxys0123456789")
+            invalid_auth_token_options = valid_options
+            invalid_auth_token_options[:openstack_auth_token] = "abcdefghijklmnopqrstuvwxys0123456789"
+            proc {
+              Fog::Identity.new(invalid_auth_token_options)
             }.must_raise Excon::Errors::Unauthorized
           end
         end
 
         describe "valid auth", :vcr do
           let(:connection) {
-            Fog::Identity.new(
-              :provider => 'OpenStackCommon',
-              :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
-              :openstack_username => "demo",
-              :openstack_api_key => "stack",
-              :openstack_tenant => "invisible_to_admin")
+            Fog::Identity.new(valid_options)
           }
 
           # 1 - get the valid auth token out of the initial connection
           # 2 - authenticate based on the valid auth token to ensure it works
           it "must not be nil" do
-            valid_token = connection.auth_token
-            token_based_connection = Fog::Identity.new(
-              :provider => 'OpenStackCommon',
-              :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
-              :openstack_auth_token => valid_token)
-            token_based_connection.wont_be_nil
+            valid_auth_token_options = valid_options
+            valid_auth_token_options[:openstack_auth_token] = connection.auth_token
+            Fog::Identity.new(valid_options).wont_be_nil
           end
 
         end

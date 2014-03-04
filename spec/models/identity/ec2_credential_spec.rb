@@ -7,7 +7,7 @@
 #
 #   # let(:valid_options) { {
 #   #   :provider => 'OpenStackCommon',
-#   #   :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
+#   #   :openstack_auth_url => "http://devstack.local:5000/v2.0/tokens",
 #   #   :openstack_username => "demo",
 #   #   :openstack_api_key => "stack"
 #   #   }
