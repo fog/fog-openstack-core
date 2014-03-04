@@ -27,6 +27,11 @@ module Fog
       # Administrative API Operations ----------------------------
 
       ## Token Operations
+
+      # ToDo:
+      # this might be the request_tokens method in the authenticator_v2
+      # class... if so, we should extract into a request class like the
+      # others.
       # request :generate_token                 # cannot find
       request :validate_token
       request :check_token
@@ -93,11 +98,7 @@ module Fog
       request :get_ec2_credential               # differs
 
 
-
-
-      request :set_tenant
-
-
+      request :set_tenant                       # not in API, unsure of purpose
 
 
       # minimal requirement
@@ -131,7 +132,7 @@ module Fog
                 'Accept' => 'application/json',
                 'X-Auth-Token' => @auth_token
               }.merge!(params[:headers] || {}),
-              :path     => "#{@path}#{params[:path]}"#,
+              :path     => "#{@base_path}#{params[:path]}"#,
             }))
           rescue Excon::Errors::Unauthorized => error
             raise if retried
@@ -251,12 +252,12 @@ module Fog
         def save_host_attributes
           uri = URI.parse(@openstack_management_url)
           @host   = uri.host
-          @path   = uri.path
-          @path.sub!(/\/$/, '')
+          @base_path   = uri.path
+          @base_path.sub!(/\/$/, '')
           @port   = uri.port
           @scheme = uri.scheme
           puts "HOST: #{@host}"
-          puts "path: #{@path}"
+          puts "path: #{@base_path}"
           puts "port: #{@port}"
           puts "scheme: #{@scheme}"
         end
