@@ -75,7 +75,7 @@ module Fog
       request :create_user_role                 # DUP -> :add_user_to_tenant
 
       ## Role Operations
-      #request :get_role_by_name                 # missing
+      # request :get_role_by_name                 # missing
       request :create_role                      # differs
       request :get_role
       request :delete_role
@@ -256,10 +256,10 @@ module Fog
           @base_path.sub!(/\/$/, '')
           @port   = uri.port
           @scheme = uri.scheme
-          puts "HOST: #{@host}"
-          puts "path: #{@base_path}"
-          puts "port: #{@port}"
-          puts "scheme: #{@scheme}"
+          # puts "HOST: #{@host}"
+          # puts "path: #{@base_path}"
+          # puts "port: #{@port}"
+          # puts "scheme: #{@scheme}"
         end
 
         def set_credentials(options={})
