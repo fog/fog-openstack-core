@@ -24,43 +24,81 @@ module Fog
 
       request_path 'fog/openstackcommon/requests/identity'
 
-      request :check_token
+      # Administrative API Operations ----------------------------
+
+      ## Token Operations
+      # request :generate_token                 # cannot find
       request :validate_token
+      request :check_token
+      request :list_endpoints_for_token         # HEAD in request, GET in doc
 
+      ## User Operations
+      request :get_user_by_name
+      request :get_user_by_id
+      request :list_user_global_roles
+
+      ## Tenant Operations
       request :list_tenants
-      request :create_tenant
-      request :get_tenant
+      request :get_tenants_by_name              # differs
       request :get_tenants_by_id
-      request :get_tenants_by_name
-      request :update_tenant
-      request :delete_tenant
+      request :list_roles_for_user_on_tenant
 
-      request :list_users
+      # Openstack Identity Service Extensions --------------------
+
+      ## User Operations
+      # request :list_users                     # Plain 'ol list users missing
       request :create_user
       request :update_user
       request :delete_user
-      request :get_user_by_id
-      request :get_user_by_name
-      request :add_user_to_tenant
-      request :remove_user_from_tenant
+      # request :enable_user                    # missing
+      # request :list_user_global_roles         # close to :list_user_global_roles
+      # request :add_global_role_to_user        # missing
+      # request :delete_global_role_from_user   # missing
+      # request :add_user_credentials           # missing
+      # request :list_credentials               # missing
+      # request :update_user_credentials        # missing
+      # request :delete_user_credentials        # missing
+      # request :get_user_credentials           # missing
 
-      request :list_endpoints_for_token
-      request :list_roles_for_user_on_tenant
-      request :list_user_global_roles
+      ## Tenant Operations
+      request :create_tenant
+      request :update_tenant
+      request :delete_tenant
+      request :list_users                       # missing limits
+      request :get_tenant
+      request :delete_user_role                 # DUP -> :remove_user_from_tenant
+      request :create_user_role                 # DUP -> :add_user_to_tenant
 
-      request :create_role
-      request :delete_role
-      request :delete_user_role
-      request :create_user_role
+      ## Role Operations
+      request :get_role_by_name                 # missing
+      request :create_role                      # differs
       request :get_role
-      request :list_roles
+      request :delete_role
+      request :list_roles                       # not in the docs
+
+      ## Service Operations
+      # request :list_services
+      # request :add_service
+      # request :get_service
+      # request :delete_service
+
+
+      # OS-KSEC2 Admin Extension ----------------------------------
+
+      ## User Operations
+      request :create_ec2_credential            # differs
+      request :list_ec2_credentials             # differs
+      # request :update_credentials             # missing
+      request :delete_ec2_credential            # differs
+      request :get_ec2_credential               # differs
+
+
+
 
       request :set_tenant
 
-      request :create_ec2_credential
-      request :delete_ec2_credential
-      request :get_ec2_credential
-      request :list_ec2_credentials
+
+
 
       # minimal requirement
       class Mock
