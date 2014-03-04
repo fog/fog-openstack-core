@@ -6,7 +6,7 @@ module Fog
           request(
             :expects => [200],
             :method  => 'POST',
-            :path    => "tenants",
+            :path    => "/tenants",
             :body    =>  MultiJson.encode({ 'tenant' => attributes })
           )
         end # def create_tenant

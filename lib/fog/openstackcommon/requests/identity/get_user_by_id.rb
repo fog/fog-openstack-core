@@ -7,7 +7,7 @@ module Fog
           request(
             :expects  => [200, 203],
             :method   => 'GET',
-            :path     => "users/#{user_id}"
+            :path     => "/users/#{user_id}"
           )
         end
 

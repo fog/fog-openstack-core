@@ -35,7 +35,7 @@ module Fog
           tenant_id = get_id(tenant)
           case ops
           when :add
-            service.create_user_role(tenant_id, user_id, id).status == 200
+            service.add_role_to_user_on_tenant(tenant_id, user_id, id).status == 200
           when :remove
             service.delete_user_role(tenant_id, user_id, id).status == 204
           end

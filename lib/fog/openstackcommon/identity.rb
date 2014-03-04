@@ -72,7 +72,7 @@ module Fog
       request :list_users                       # missing limits
       request :get_tenant
       request :delete_user_role                 # DUP -> :remove_user_from_tenant
-      request :create_user_role                 # DUP -> :add_user_to_tenant
+      request :add_role_to_user_on_tenant
 
       ## Role Operations
       # request :get_role_by_name                 # missing

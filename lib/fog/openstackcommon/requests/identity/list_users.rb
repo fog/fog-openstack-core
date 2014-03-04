@@ -3,7 +3,7 @@ module Fog
     class OpenStackCommon
       class Real
         def list_users(tenant_id = nil)
-          path = tenant_id ? "tenants/#{tenant_id}/users" : 'users'
+          path = tenant_id ? "/tenants/#{tenant_id}/users" : '/users'
           request(
             :expects => [200, 204],
             :method  => 'GET',
