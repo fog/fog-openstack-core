@@ -7,7 +7,7 @@ module Fog
           request(
             :expects  => [200, 203],
             :method   => 'GET',
-            :path     => "tokens/#{token_id}/endpoints"
+            :path     => "/tokens/#{token_id}/endpoints"
           )
         end
 
