@@ -19,8 +19,7 @@ describe Fog::Identity::OpenStackCommon::Real do
     it "adds a user" do
       name     = "jsmith#{Time.now.to_i}"
       password = "password!"
-      tenant_id = "77d49e5184de486ab75500e9fbfed15e"
-      # tenant_id = "e5d888bd17d941eaa4a9a47a674a9d6d"
+      tenant_id = service.list_tenants.body['tenants'].first['id']
       email    = "jsmith#{Time.now.to_i}@acme.com"
       enabled  = true
 

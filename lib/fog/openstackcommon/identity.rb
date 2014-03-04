@@ -75,7 +75,7 @@ module Fog
       request :create_user_role                 # DUP -> :add_user_to_tenant
 
       ## Role Operations
-      request :get_role_by_name                 # missing
+      #request :get_role_by_name                 # missing
       request :create_role                      # differs
       request :get_role
       request :delete_role

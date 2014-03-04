@@ -16,9 +16,16 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   describe "#list_tenants", :vcr do
 
+    before  do
+      @result = service.list_tenants
+    end
+
     it "lists the tenants" do
-      result = service.list_tenants
-      result.status.must_equal 200
+      @result.status.must_equal 200
+    end
+
+    it "returns valid data" do
+      @result.body['tenants'].first['id'].wont_be_nil
     end
 
   end

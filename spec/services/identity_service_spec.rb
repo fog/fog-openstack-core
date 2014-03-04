@@ -6,7 +6,7 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   let(:valid_options) { {
     :provider => 'OpenStackCommon',
-    :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
+    :openstack_auth_url => "http://#{IP_ADDRESS}:5000/v2.0/tokens",
     :openstack_username => "demo",
     :openstack_api_key => "stack"
     }
@@ -75,7 +75,7 @@ describe Fog::Identity::OpenStackCommon::Real do
             error = proc {
               Fog::Identity.new(
                 :provider => 'OpenStackCommon',
-                :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
+                :openstack_auth_url => "http://#{IP_ADDRESS}:5000/v2.0/tokens",
                 :openstack_auth_token => "abcdefghijklmnopqrstuvwxys0123456789")
             }.must_raise Excon::Errors::Unauthorized
           end
@@ -85,7 +85,7 @@ describe Fog::Identity::OpenStackCommon::Real do
           let(:connection) {
             Fog::Identity.new(
               :provider => 'OpenStackCommon',
-              :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
+              :openstack_auth_url => "http://#{IP_ADDRESS}:5000/v2.0/tokens",
               :openstack_username => "demo",
               :openstack_api_key => "stack",
               :openstack_tenant => "invisible_to_admin")
@@ -97,7 +97,7 @@ describe Fog::Identity::OpenStackCommon::Real do
             valid_token = connection.auth_token
             token_based_connection = Fog::Identity.new(
               :provider => 'OpenStackCommon',
-              :openstack_auth_url => "http://172.16.0.2:5000/v2.0/tokens",
+              :openstack_auth_url => "http://#{IP_ADDRESS}:5000/v2.0/tokens",
               :openstack_auth_token => valid_token)
             token_based_connection.wont_be_nil
           end
