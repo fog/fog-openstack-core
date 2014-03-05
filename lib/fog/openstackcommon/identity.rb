@@ -66,22 +66,18 @@ module Fog
 
       ## Endpoint Template Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Endpoint_Template_Operations_OS-KSCATALOG.html
+      # request ???
 
       ## Endpoint Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations_OS-KSCATALOG.html
+      # request ???
+
 
       # OS-KSEC2 Admin Extension ----------------------------------
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Admin_API_Service_Developer_Operations-OS-KSEC2.html
 
       ## User Operations
-      request :create_ec2_credential            # differs
-      request :list_ec2_credentials             # differs
-      # request :update_credentials             # missing
-      request :delete_ec2_credential            # differs
-      request :get_ec2_credential               # differs
-
-
-      # request :set_tenant                       # not in API, unsure of purpose
+      request :ksec2_extn_user_operations
 
 
       # minimal requirement
