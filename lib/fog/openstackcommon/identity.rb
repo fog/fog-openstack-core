@@ -46,49 +46,20 @@ module Fog
 
       ## User Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/User_Operations_OS-KSADM.html
-
-
-      # request :list_users                     # Plain 'ol list users missing
-      request :create_user
-      request :update_user
-      request :delete_user
-      # request :enable_user                    # missing
-      # request :list_user_global_roles         # close to :list_user_global_roles
-      # request :add_global_role_to_user        # missing
-      # request :delete_global_role_from_user   # missing
-      # request :add_user_credentials           # missing
-      # request :list_credentials               # missing
-      # request :update_user_credentials        # missing
-      # request :delete_user_credentials        # missing
-      # request :get_user_credentials           # missing
+      request :identity_extn_user_operations
 
       ## Tenant Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations_OS-KSADM.html
-
-      request :create_tenant
-      request :update_tenant
-      request :delete_tenant
-      request :list_users                       # missing limits
-      request :get_tenant
-      request :delete_user_role                 # DUP -> :remove_user_from_tenant
-      request :add_role_to_user_on_tenant       # DUP -> :add_user_to_tenant
+      request :identity_extn_tenant_operations
 
       ## Role Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Role_Operations_OS-KSADM.html
-
-      # request :get_role_by_name                 # missing
-      request :create_role                      # differs
-      request :get_role
-      request :delete_role
-      request :list_roles                       # not in the docs
+      request :identity_extn_role_operations
 
       ## Service Operations
       #http://docs.openstack.org/api/openstack-identity-service/2.0/content/Service_Operations_OS-KSADM.html
+      request :identity_extn_service_operations
 
-      # request :list_services
-      # request :add_service
-      # request :get_service
-      # request :delete_service
 
       # OS-KSCATALOG Admin Extension ------------------------------
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Admin_API_Service_Developer_Operations-OS-KSCATALOG.html
@@ -110,7 +81,7 @@ module Fog
       request :get_ec2_credential               # differs
 
 
-      request :set_tenant                       # not in API, unsure of purpose
+      # request :set_tenant                       # not in API, unsure of purpose
 
 
       # minimal requirement

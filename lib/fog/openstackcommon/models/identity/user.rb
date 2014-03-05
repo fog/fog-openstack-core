@@ -41,15 +41,18 @@ module Fog
           true
         end
 
+        # ToDo: Move url stuff to request
         def update_password(password)
           update({'password' => password, 'url' => "/users/#{id}/OS-KSADM/password"})
         end
 
+        # ToDo: Move url stuff to request
         def update_tenant(tenant)
           tenant = tenant.id if tenant.class != String
           update({:tenantId => tenant, 'url' => "/users/#{id}/OS-KSADM/tenant"})
         end
 
+        # ToDo: Move url stuff to request
         def update_enabled(enabled)
           update({:enabled => enabled, 'url' => "/users/#{id}/OS-KSADM/enabled"})
         end
@@ -67,4 +70,3 @@ module Fog
     end # class OpenStack
   end # module Identity
 end # module Fog
-

@@ -51,11 +51,28 @@ module Fog
 
         def get_tenants_by_id(tenant_id)
           request(
-            :expects  => [200],
+            :expects  => [200, 204],
             :method   => 'GET',
             :path     => "tenants/#{tenant_id}"
           )
         end
+
+        # class Mock
+        #   def get_tenant(id)
+        #     response = Excon::Response.new
+        #     response.status = [200, 204][rand(1)]
+        #     response.body = {
+        #       'tenant' => {
+        #         'id' => id,
+        #         'description' => 'Has access to everything',
+        #         'enabled' => true,
+        #         'name' => 'admin'
+        #       }
+        #     }
+        #     response
+        #   end # def list_tenants
+        # end # class Mock
+
 
         # request :list_roles_for_user_on_tenant
         def list_roles_for_user_on_tenant(tenant_id, user_id)
