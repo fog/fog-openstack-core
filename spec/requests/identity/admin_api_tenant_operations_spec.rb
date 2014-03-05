@@ -1,5 +1,4 @@
 require_relative '../../spec_helper'
-
 require 'fog/openstackcommon'
 
 describe Fog::Identity::OpenStackCommon::Real do
@@ -13,16 +12,30 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   let(:service) { Fog::Identity.new(valid_options) }
 
-  describe "#get_user_by_name", :vcr do
+  describe "#list_tenants", :vcr do
 
-    it "retrieves user information" do
+    let(:result) { service.list_tenants }
 
-      valid_user_name = service.list_users.body['users'].first["username"]
-
-      result = service.get_user_by_name(valid_user_name)
+    it "lists the tenants" do
       result.status.must_equal 200
+    end
 
+    it "returns valid data" do
+      result.body['tenants'].first['id'].wont_be_nil
     end
 
   end
+
+  describe "#get_tenants_by_name", :vcr do
+    it { skip("TBD") }
+  end
+
+  describe "get_tenants_by_id", :vcr do
+    it { skip("TBD") }
+  end
+
+  describe "#list_roles_for_user_on_tenant", :vcr do
+    it { skip("TBD") }
+  end
+
 end

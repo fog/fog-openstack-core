@@ -1,5 +1,4 @@
 require_relative '../../spec_helper'
-
 require 'fog/openstackcommon'
 
 describe Fog::Identity::OpenStackCommon::Real do
@@ -13,19 +12,20 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   let(:service) { Fog::Identity.new(valid_options) }
 
-  describe "#create_tenant", :vcr do
-
-    before  do
-      @result = service.create_tenant( :name => "azahabada#{Time.now.to_i}", :description => "my tenant", :enabled => true)
-    end
-
-    it "creates the tenant" do
-      @result.status.must_equal 200
-    end
-
-    it "returns valid data" do
-      @result.body['tenant'].wont_be_nil
-    end
-
+  describe "#list_services" do
+    it { skip("TBD") }
   end
+
+  describe "#add_service" do
+    it { skip("TBD") }
+  end
+
+  describe "#get_service" do
+    it { skip("TBD") }
+  end
+
+  describe "#delete_service" do
+    it { skip("TBD") }
+  end
+
 end

@@ -24,33 +24,30 @@ module Fog
 
       request_path 'fog/openstackcommon/requests/identity'
 
+
       # Administrative API Operations ----------------------------
+      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Admin_API_Service_Developer_Operations-d1e1356.html
 
       ## Token Operations
-
-      # ToDo:
-      # this might be the request_tokens method in the authenticator_v2
-      # class... if so, we should extract into a request class like the
-      # others.
-      # request :generate_token                 # cannot find
-      request :validate_token
-      request :check_token
-      request :list_endpoints_for_token         # HEAD in request, GET in doc
+      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Token_Operations.html
+      request :admin_api_token_operations
 
       ## User Operations
-      request :get_user_by_name
-      request :get_user_by_id
-      request :list_user_global_roles
+      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/User_Operations.html
+      request :admin_api_user_operations
 
       ## Tenant Operations
-      request :list_tenants
-      request :get_tenants_by_name              # differs
-      request :get_tenants_by_id
-      request :list_roles_for_user_on_tenant
+      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations.html
+      request :admin_api_tenant_operations
+
 
       # Openstack Identity Service Extensions --------------------
+      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/openstack_identity_extensions.html
 
       ## User Operations
+      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/User_Operations_OS-KSADM.html
+
+
       # request :list_users                     # Plain 'ol list users missing
       request :create_user
       request :update_user
@@ -66,15 +63,19 @@ module Fog
       # request :get_user_credentials           # missing
 
       ## Tenant Operations
+      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations_OS-KSADM.html
+
       request :create_tenant
       request :update_tenant
       request :delete_tenant
       request :list_users                       # missing limits
       request :get_tenant
       request :delete_user_role                 # DUP -> :remove_user_from_tenant
-      request :add_role_to_user_on_tenant
+      request :add_role_to_user_on_tenant       # DUP -> :add_user_to_tenant
 
       ## Role Operations
+      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Role_Operations_OS-KSADM.html
+
       # request :get_role_by_name                 # missing
       request :create_role                      # differs
       request :get_role
@@ -82,13 +83,24 @@ module Fog
       request :list_roles                       # not in the docs
 
       ## Service Operations
+      #http://docs.openstack.org/api/openstack-identity-service/2.0/content/Service_Operations_OS-KSADM.html
+
       # request :list_services
       # request :add_service
       # request :get_service
       # request :delete_service
 
+      # OS-KSCATALOG Admin Extension ------------------------------
+      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Admin_API_Service_Developer_Operations-OS-KSCATALOG.html
+
+      ## Endpoint Template Operations
+      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Endpoint_Template_Operations_OS-KSCATALOG.html
+
+      ## Endpoint Operations
+      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations_OS-KSCATALOG.html
 
       # OS-KSEC2 Admin Extension ----------------------------------
+      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Admin_API_Service_Developer_Operations-OS-KSEC2.html
 
       ## User Operations
       request :create_ec2_credential            # differs

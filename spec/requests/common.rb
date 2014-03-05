@@ -1,3 +1,0 @@
-module Fog::OpenstackCommon
-
-end
