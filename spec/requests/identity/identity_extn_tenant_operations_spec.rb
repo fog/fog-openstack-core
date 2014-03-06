@@ -14,23 +14,40 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   describe "#create_tenant", :vcr do
 
-    let(:result) {
-      service.create_tenant(:name => "azahabada#{Time.now.to_i}",
-                            :description => "my tenant",
-                            :enabled => true)
-    }
+    describe "when it succeeds" do
 
-    it "creates the tenant" do
-      result.status.must_equal 200
+      let(:result) {
+        service.create_tenant(:name => "azahabada#{Time.now.to_i}")
+      }
+
+      it "creates the tenant" do
+        result.status.must_equal 200
+      end
+
+      it "returns valid data" do
+        result.body['tenant'].wont_be_nil
+      end
     end
 
-    it "returns valid data" do
-      result.body['tenant'].wont_be_nil
+    describe "when it fails" do
+
+      it "without name", :vcr do
+        proc {
+          service.create_tenant(:name => nil)
+        }.must_raise Fog::Identity::OpenStackCommon::BadRequest
+      end
+
+      it "without name, with description", :vcr do
+        proc {
+          service.create_tenant(:name => nil,
+                                :description => "my tenant")
+        }.must_raise Fog::Identity::OpenStackCommon::BadRequest
+      end
+
     end
 
   end
 
-  # request :add_role_to_user_on_tenant       # DUP -> :add_user_to_tenant
   describe "#add_role_to_user_on_tenant", :vcr do
 
     let(:role_response) { service.create_role("azahabada#{Time.now.to_i}") }
@@ -46,19 +63,67 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   end
 
+  describe "#get_tenants_by_name" do
+    describe "when the tenant exists" do
+      it "gets the tenant", :vcr do
+        tenant_name = "azahabada#{Time.now.to_i}"
+        temp_tenant = service.create_tenant(tenant_name)
+        result = service.get_tenants_by_name(temp_tenant.body['tenant']['name'])
+        [200].must_include result.status
+      end
+    end
+
+    describe "when the tenant doesnt exist" do
+      it "returns not found error", :vcr do
+        proc {
+          service.get_tenants_by_name("nonexistenttenant12345")
+        }.must_raise Fog::Identity::OpenStackCommon::NotFound
+      end
+    end
+  end
+
+  describe "#get_tenants_by_id" do
+    describe "when the tenant exists" do
+      it "gets the tenant", :vcr do
+        tenant_name = "azahabada#{Time.now.to_i}"
+        temp_tenant = service.create_tenant(tenant_name)
+        result = service.get_tenants_by_id(temp_tenant.body['tenant']['id'])
+        [200, 204].must_include result.status
+      end
+    end
+
+    describe "when the tenant doesnt exist" do
+      it "returns not found error", :vcr do
+        proc {
+          service.get_tenants_by_id("nonexistenttenant12345")
+        }.must_raise Fog::Identity::OpenStackCommon::NotFound
+      end
+    end
+  end
+
   describe "#update_tenant" do
-    it { skip("TBD") }
+    # describe "when the tenant exists" do
+    #   it "gets the tenant", :vcr do
+    #     tenant_name = "azahabada#{Time.now.to_i}"
+    #     temp_tenant = service.create_tenant(tenant_name)
+    #     result = service.get_tenants_by_id(temp_tenant.body['tenant']['id'])
+    #     [200, 204].must_include result.status
+    #   end
+    # end
+    #
+    # describe "when the tenant doesnt exist" do
+    #   it "returns not found error", :vcr do
+    #     proc {
+    #       service.get_tenants_by_id("nonexistenttenant12345")
+    #     }.must_raise Fog::Identity::OpenStackCommon::NotFound
+    #   end
+    # end
   end
 
   describe "#delete_tenant" do
     it { skip("TBD") }
   end
 
-  describe "#get_tenant" do
-    it { skip("TBD") }
-  end
-
-  # request :delete_user_role                 # DUP -> :remove_user_from_tenant
   describe "#delete_user_role" do
     it { skip("TBD") }
   end

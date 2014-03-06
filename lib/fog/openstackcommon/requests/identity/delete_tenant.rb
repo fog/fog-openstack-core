@@ -9,7 +9,7 @@ module Fog
             :method  => 'DELETE',
             :path    => "tenants/#{id}"
           )
-        end # def create_tenant
+        end
 
         # class Mock
         #   def delete_tenant(attributes)
@@ -24,7 +24,7 @@ module Fog
         #       }
         #     }
         #     response
-        #   end # def create_tenant
+        #   end
         # end # class Mock
 
       end # Real
