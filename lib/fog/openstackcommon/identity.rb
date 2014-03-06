@@ -36,7 +36,9 @@ module Fog
 
       ## User Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/User_Operations.html
-      request :admin_api_user_operations
+      request :get_user_by_name
+      request :get_user_by_id
+      request :list_user_global_roles
 
       ## Tenant Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations.html
@@ -51,7 +53,18 @@ module Fog
 
       ## User Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/User_Operations_OS-KSADM.html
-      request :identity_extn_user_operations
+      request :list_users
+      request :create_user
+      request :update_user
+      request :delete_user
+      request :enable_user
+      request :list_global_roles_for_user
+      request :add_global_role_to_user
+      request :delete_global_role_for_user
+      request :add_credential_to_user
+      request :update_credential_for_user
+      request :delete_credential_for_user
+      request :get_user_credentials
 
       ## Tenant Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations_OS-KSADM.html
