@@ -17,7 +17,7 @@ describe Fog::Identity::OpenStackCommon::Real do
     describe "when it succeeds" do
 
       let(:result) {
-        service.create_tenant(:name => "azahabada#{Time.now.to_i}")
+        service.create_tenant("azahabada#{Time.now.to_i}")
       }
 
       it "creates the tenant" do
@@ -33,20 +33,20 @@ describe Fog::Identity::OpenStackCommon::Real do
 
       it "without name", :vcr do
         proc {
-          service.create_tenant(:name => nil)
+          service.create_tenant(nil)
         }.must_raise Fog::Identity::OpenStackCommon::BadRequest
       end
 
       it "without name, with description", :vcr do
         proc {
-          service.create_tenant(:name => nil,
-                                :description => "my tenant")
+          service.create_tenant(nil, "my tenant")
         }.must_raise Fog::Identity::OpenStackCommon::BadRequest
       end
 
     end
 
   end
+
 
   describe "#add_role_to_user_on_tenant", :vcr do
 

@@ -171,6 +171,8 @@ module Fog
               }.merge!(params[:headers] || {}),
               :path     => "#{@base_path}#{params[:path]}"#,
             }))
+          rescue Excon::Errors::BadRequest => error
+            raise Fog::Identity::OpenStackCommon::BadRequest.slurp(error)
           rescue Excon::Errors::Unauthorized => error
             raise if retried
             retried = true
