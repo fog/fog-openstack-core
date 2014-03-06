@@ -14,13 +14,13 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   describe "#initialize" do
 
-    describe "endpoint version 1" do
+    describe "endpoint v1" do
       describe "auth with credentails" do
         it { skip("TBD") }
       end
     end
 
-    describe "endpoint version 2" do
+    describe "endpoint v2" do
       describe "credentials" do
         describe "valid auth", :vcr do
 
