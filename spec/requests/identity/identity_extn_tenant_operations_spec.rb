@@ -14,16 +14,18 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   describe "#create_tenant", :vcr do
 
-    before  do
-      @result = service.create_tenant( :name => "azahabada#{Time.now.to_i}", :description => "my tenant", :enabled => true)
-    end
+    let(:result) {
+      service.create_tenant(:name => "azahabada#{Time.now.to_i}",
+                            :description => "my tenant",
+                            :enabled => true)
+    }
 
     it "creates the tenant" do
-      @result.status.must_equal 200
+      result.status.must_equal 200
     end
 
     it "returns valid data" do
-      @result.body['tenant'].wont_be_nil
+      result.body['tenant'].wont_be_nil
     end
 
   end
@@ -31,30 +33,15 @@ describe Fog::Identity::OpenStackCommon::Real do
   # request :add_role_to_user_on_tenant       # DUP -> :add_user_to_tenant
   describe "#add_role_to_user_on_tenant", :vcr do
 
+    let(:role_response) { service.create_role("azahabada#{Time.now.to_i}") }
+
     it "adds a role" do
       tenant_id = service.list_tenants.body['tenants'].first['id']
       user_id = service.list_users.body['users'].first['id']
-      role_id = service.list_roles.body['roles'].first['id']
+      role_id = role_response[:body]['role']['id']
 
-      result = service.add_role_to_user_on_tenant(tenant_id,user_id,role_id)
-      result.status.must_equal 200
-    end
-
-  end
-
-  # request :add_role_to_user_on_tenant       # DUP -> :add_user_to_tenant
-  describe "#add_user_to_tenant", :vcr do
-
-    it "adds a user" do
-      name     = "jsmith#{Time.now.to_i}"
-      password = "password!"
-      tenant_id = service.list_tenants.body['tenants'].first['id']
-      email    = "jsmith#{Time.now.to_i}@acme.com"
-      enabled  = true
-
-      result = service.create_user(name, password, email, tenant_id, enabled)
-      tenant = service.list_tenants
-      puts tenant
+      result = service.add_role_to_user_on_tenant(tenant_id, user_id, role_id)
+      [200, 201].must_include result.status
     end
 
   end

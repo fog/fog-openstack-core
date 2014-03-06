@@ -68,15 +68,22 @@ module Fog
 
       ## Tenant Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations_OS-KSADM.html
-      request :identity_extn_tenant_operations
+      request :create_tenant
+      request :update_tenant
+      request :delete_tenant
+      request :list_users_for_tenant
+      request :add_role_to_user_on_tenant
+      request :delete_user_from_tenant
 
       ## Role Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Role_Operations_OS-KSADM.html
-      request :identity_extn_role_operations
+      request :list_roles
+      request :create_role
+      request :get_role
+      request :delete_role
 
       ## Service Operations
       #http://docs.openstack.org/api/openstack-identity-service/2.0/content/Service_Operations_OS-KSADM.html
-      request :identity_extn_service_operations
 
 
       # OS-KSCATALOG Admin Extension ------------------------------
@@ -95,7 +102,10 @@ module Fog
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Admin_API_Service_Developer_Operations-OS-KSEC2.html
 
       ## User Operations
-      request :ksec2_extn_user_operations
+      request :list_ec2_credentials
+      request :get_ec2_credential
+      request :create_ec2_credential
+      request :delete_ec2_credential
 
 
       # minimal requirement
