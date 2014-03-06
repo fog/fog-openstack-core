@@ -30,7 +30,9 @@ module Fog
 
       ## Token Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Token_Operations.html
-      request :admin_api_token_operations
+      request :check_token
+      request :validate_token
+      request :list_endpoints_for_token
 
       ## User Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/User_Operations.html
@@ -38,7 +40,10 @@ module Fog
 
       ## Tenant Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations.html
-      request :admin_api_tenant_operations
+      request :list_tenants
+      request :get_tenants_by_name
+      request :get_tenants_by_id
+      request :list_roles_for_user_on_tenant
 
 
       # Openstack Identity Service Extensions --------------------
