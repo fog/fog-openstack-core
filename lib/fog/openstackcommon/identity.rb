@@ -30,6 +30,7 @@ module Fog
 
       ## Token Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Token_Operations.html
+      request :create_token
       request :check_token
       request :validate_token
       request :list_endpoints_for_token

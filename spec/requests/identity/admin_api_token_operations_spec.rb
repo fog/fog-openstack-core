@@ -12,6 +12,25 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   let(:service) { Fog::Identity.new(valid_options) }
 
+  describe "#create_token", :vcr do
+
+    let(:result) {
+      service.create_token(
+        valid_options[:openstack_username],
+        valid_options[:openstack_api_key])
+    }
+
+    it "creates the token" do
+      [200, 203].must_include result.status
+    end
+
+    it "returns valid data" do
+      token = result.body['access']['token']['id']
+      token.wont_be_nil
+    end
+
+  end
+
   describe "#check_token" do
 
     it "good token", :vcr do
