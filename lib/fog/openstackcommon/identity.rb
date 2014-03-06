@@ -38,7 +38,37 @@ module Fog
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/User_Operations.html
       request :get_user_by_name
       request :get_user_by_id
-      request :list_user_global_roles
+      # request :list_user_global_roles
+      #
+      # ---- 3/6/2014 ----
+      # NOTE - commented request out as not supported in Keystone, even tho the
+      # docs might still reference it - irc conversation for background.
+      #
+      # <wchrisj>	 Am trying to hit this URL, and the docs for v2 say it should work:
+      #             http://devstack.local:5000/v2.0/users/{userid}/roles
+      # <wchrisj>	 when I manually hit the url, I get a 404 - would I get that if there are no
+      #             roles associated with the user in question? stevemar:
+      # <@dolphm>	 stevemar: wchrisj: i don't think it's a supported call, as the error message indicates
+      # <wchrisj>	 yeah, I'm getting a 404 trying to hit this url
+      # <wchrisj>	 http://devstack.local:5000/v2.0/users/2f649419c1ed4801bea38ead0e1ed6ad/roles
+      # <@dolphm>	 wchrisj: it's an ambiguously specified API call that we chose to never implement so as
+      #             to avoid flip-flopping between the two perceivable interpretations of the spec; instead
+      #             we have GET /v3/role_assignments
+      # <@dolphm>	 wchrisj: which is much more powerful and avoids any confusing semantics around the call
+      # <wchrisj>	 so why do the v2 docs say it exists?
+      # <@dolphm>	 wchrisj: because it *may* be implemented by an alternative implementation of the API, but
+      #             keystone chooses not to
+      # <@dolphm>	 wchrisj: if you have authz on the rackspace public cloud, i think you'll get something
+      #             back -- but you'd likely file a bug report because it's not the results you'd expect :)
+      # <@dolphm>	 wchrisj: the identity service is one of the few APIs with more than one complete
+      #             implementation in production floating around
+      # <@dolphm>	 wchrisj: keystone just happens to be the one supported by openstack directly
+      # <@dolphm>	 wchrisj: and if you look at the diablo release of keystone vs the essex release of
+      #             keystone -- those were actually two completely different implementations from the ground up
+      # <ayoung>	 wchrisj, we've stabilized somewhat from that point
+      # <@dolphm>	 wchrisj: ++ i'd like it to be removed from openstack's api site since we don't support it directly
+      # <@dolphm>	 wchrisj: you're not the only one to be confused by it :(
+      # ---- 3/6/2014 ----
 
       ## Tenant Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations.html

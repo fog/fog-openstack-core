@@ -50,9 +50,9 @@ describe Fog::Identity::OpenStackCommon::Real do
   end
 
   # request :list_user_global_roles         # close to :list_user_global_roles
-  describe "#list_user_global_roles" do
-    it { skip("TBD") }
-  end
+  # describe "#list_user_global_roles" do
+  #   it { skip("TBD") }
+  # end
 
   describe "#add_global_role_to_user" do
     it { skip("TBD") }
