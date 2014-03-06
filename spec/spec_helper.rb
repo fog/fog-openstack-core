@@ -1,15 +1,22 @@
-# require_relative 'fog_openstack_tng'
-require 'minitest/autorun'
-require 'minitest/spec'
-require 'minitest/pride'
-require 'vcr'
-require "minitest-vcr"
-require "webmock"
-
-VCR.configure do |c|
-    c.cassette_library_dir = 'spec/cassettes'
-    c.hook_into :webmock
+require 'simplecov'
+SimpleCov.start do
+  add_filter "/spec/"
 end
 
 
+require 'minitest/autorun'
+require 'minitest/spec'
+require 'vcr'
+require "minitest-vcr"
+require "webmock"
+require "minitest/reporters"
+
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/cassettes'
+  c.hook_into :webmock
+  # c.debug_logger = $stdout
+  c.default_cassette_options = { :serialize_with => :json }
+end
+
 MinitestVcr::Spec.configure!
+Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]

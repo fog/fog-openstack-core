@@ -1,11 +1,12 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'version'
+require './lib/fog/openstackcommon/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "fog-openstack-tng"
-  spec.version       = FogOpenStack::VERSION
+  spec.name          = "openstackcommon"
+  spec.version       = Fog::OpenStackCommon::VERSION
+  spec.platform      = Gem::Platform::RUBY
   spec.authors       = ["Evan Light", "Kyle Rames", "Chris Johnson", "Mike Hagedorn"]
   spec.email         = ["evan@tripledogdare.net", "kyle.rames@rackspace.com", "wchrisjohnson@gmail.com", "mike.hagedorn@hp.com"]
   spec.summary       = %q{Next generation openstack provider.}
@@ -18,11 +19,9 @@ Gem::Specification.new do |spec|
   spec.test_files    = spec.files.grep(%r{^(test|spec|features)/})
   spec.require_paths = ["lib"]
 
-  spec.add_dependency('fog-core')
-  # spec.add_dependency('builder')
-  # spec.add_dependency('excon', '~>0.31.0')
-  # spec.add_dependency('formatador', '~>0.2.0')
-  # spec.add_dependency('mime-types')
+  spec.add_dependency('fog-core', '1.21.0')
+  spec.add_dependency('faraday')
+  spec.add_dependency('multi_json')
   spec.add_dependency('net-scp', '~>1.1')
   spec.add_dependency('net-ssh', '>=2.1.3')
 
@@ -33,8 +32,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency('vcr')
   spec.add_development_dependency('minitest-vcr')
   spec.add_development_dependency('webmock','<1.16')
-  # spec.add_development_dependency('yard')
-  # spec.add_development_dependency('thor')
-  # spec.add_development_dependency('pry')
-  # spec.add_development_dependency('coveralls')
+  spec.add_development_dependency('minitest-reporters')
+  spec.add_development_dependency('simplecov')
+  spec.add_development_dependency('guard-minitest')
 end
