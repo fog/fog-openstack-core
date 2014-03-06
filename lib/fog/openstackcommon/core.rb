@@ -1,5 +1,8 @@
 require 'multi_json'
 require 'fog/core'
+require 'fog/openstackcommon/errors'
+
+include Fog::OpenStackCommon::Errors
 
 module Fog
   module OpenStackCommon

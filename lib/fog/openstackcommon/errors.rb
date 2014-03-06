@@ -2,16 +2,14 @@ module Fog
   module OpenStackCommon
     module Errors
       class ServiceError < Fog::Errors::Error
-        extend self
 
         attr_reader :response_data
 
-        def slurp(error)
+        def self.slurp(error)
           if error.response.body.empty?
             data = nil
             message = nil
           else
-            # data = Fog::JSON.decode(error.response.body)
             data = MultiJson.decode(error.response.body)
             message = data['message']
             if message.nil? and !data.values.first.nil?
@@ -28,11 +26,10 @@ module Fog
       class ServiceUnavailable < ServiceError; end
 
       class BadRequest < ServiceError
-        extend self
 
         attr_reader :validation_errors
 
-        def slurp(error)
+        def self.slurp(error)
           new_error = super(error)
           unless new_error.response_data.nil? or new_error.response_data['badRequest'].nil?
             new_error.instance_variable_set(:@validation_errors, new_error.response_data['badRequest']['validationErrors'])
@@ -40,6 +37,7 @@ module Fog
           new_error
         end
       end # BadRequest
+
     end # Errors
   end # OpenStackCommon
 end # Fog
