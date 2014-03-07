@@ -78,14 +78,8 @@ describe Fog::Identity::OpenStackCommon::Real do
       }.must_raise Fog::Identity::OpenStackCommon::NotFound
     end
 
-    #     response.status = [200, 204][rand(1)]
-    #     response.body = {
-    #       'tenant' => {
-    #         'id' => id,
-    #         'description' => 'Has access to everything',
-    #         'enabled' => true,
-    #         'name' => 'admin' } }
   end
+
 
   describe "#list_roles_for_user_on_tenant", :vcr do
 
@@ -94,12 +88,11 @@ describe Fog::Identity::OpenStackCommon::Real do
     it "gets list of roles", :vcr do
       tenant_id = list.body['tenants'].first['id']
       user_id = "2f649419c1ed4801bea38ead0e1ed6ad"
+
       result = service.list_roles_for_user_on_tenant(tenant_id, user_id)
       [200, 204].must_include result.status
     end
 
-    #       :body   => { 'roles' => roles },
-    #       :status => 200
   end
 
 end

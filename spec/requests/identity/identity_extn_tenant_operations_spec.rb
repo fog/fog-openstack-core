@@ -47,53 +47,6 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   end
 
-  describe "#add_role_to_user_on_tenant" do
-
-    let(:role_response) { service.create_role("azahabada#{Time.now.to_i}") }
-
-    it "adds a role", :vcr do
-      tenant_id = service.list_tenants.body['tenants'].first['id']
-      user_id = service.list_users.body['users'].first['id']
-      role_id = role_response[:body]['role']['id']
-
-      result = service.add_role_to_user_on_tenant(tenant_id, user_id, role_id)
-      [200, 201].must_include result.status
-    end
-
-  end
-
-  describe "#get_tenants" do
-    describe "when tenant exists" do
-      it "by name", :vcr do
-        tenant_name = service.list_tenants.body['tenants'].first['name']
-
-        result = service.get_tenants_by_name(tenant_name)
-        [200].must_include result.status
-      end
-
-      it "by id", :vcr do
-        tenant_id = service.list_tenants.body['tenants'].first['id']
-
-        result = service.get_tenants_by_id(tenant_id)
-        [200, 204].must_include result.status
-      end
-    end
-
-    describe "when tenant doesnt exist" do
-      it "attempting to find with an invalid name", :vcr do
-        proc {
-          service.get_tenants_by_name("nonexistenttenant12345")
-        }.must_raise Fog::Identity::OpenStackCommon::NotFound
-      end
-      it "attempting to find with an invalid id", :vcr do
-        proc {
-          service.get_tenants_by_id("nonexistenttenant12345")
-        }.must_raise Fog::Identity::OpenStackCommon::NotFound
-      end
-    end
-
-  end
-
   describe "#update_tenant" do
     describe "when the tenant exists" do
 
@@ -143,8 +96,57 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   end
 
-  describe "#delete_user_role" do
-    it { skip("TBD") }
+  describe "#list_users_for_tenant" do
+
+    it "returns users in tenant", :vcr do
+      tenant_id = service.list_tenants.body['tenants'].first['id']
+
+      result = service.list_users_for_tenant(tenant_id)
+      [200, 203].must_include result.status
+    end
+
+  end
+
+  describe "#add_role_to_user_on_tenant" do
+
+    let(:role_response) { service.create_role("azahabada#{Time.now.to_i}") }
+
+    it "adds a role", :vcr do
+      tenant_id = service.list_tenants.body['tenants'].first['id']
+      user_id = service.list_users.body['users'].first['id']
+      role_id = role_response[:body]['role']['id']
+
+      result = service.add_role_to_user_on_tenant(tenant_id, user_id, role_id)
+      [200, 201].must_include result.status
+    end
+
+  end
+
+  describe "#delete_role_from_user_on_tenant" do
+
+    let(:role_response) { service.create_role("azahabada#{Time.now.to_i}") }
+
+    it "deletes role", :vcr do
+      tenant_id = service.list_tenants.body['tenants'].first['id']
+      users_list = service.list_users_for_tenant(tenant_id).body['users']
+      user_id = users_list.first['id']
+      role_id = role_response[:body]['role']['id']
+      new_role = service.add_role_to_user_on_tenant(tenant_id, user_id, role_id)
+
+      result = service.delete_role_from_user_on_tenant(tenant_id, user_id, role_id)
+      [200, 204].must_include result.status
+    end
+
+    it "returns not found error", :vcr do
+      proc {
+        tenant_id = service.list_tenants.body['tenants'].first['id']
+        users_list = service.list_users_for_tenant(tenant_id).body['users']
+        user_id = users_list.first['id']
+
+        service.delete_role_from_user_on_tenant(tenant_id, user_id, 'bogus-role-id')
+      }.must_raise Fog::Identity::OpenStackCommon::NotFound
+    end
+
   end
 
 end

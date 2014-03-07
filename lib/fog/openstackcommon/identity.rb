@@ -104,7 +104,7 @@ module Fog
       request :delete_tenant
       request :list_users_for_tenant
       request :add_role_to_user_on_tenant
-      request :delete_user_from_tenant
+      request :delete_role_from_user_on_tenant
 
       ## Role Operations
       # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Role_Operations_OS-KSADM.html
