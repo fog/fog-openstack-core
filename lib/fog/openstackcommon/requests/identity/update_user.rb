@@ -6,12 +6,11 @@ module Fog
       class Real
 
         def update_user(user_id, options = {})
-          url = options.delete('url') || "/users/#{user_id}"
           request(
-            :body     => Fog::JSON.encode({ 'user' => options }),
-            :expects  => 200,
             :method   => 'PUT',
-            :path     => url
+            :expects  => 200,
+            :path     => "/users/#{user_id}",
+            :body     => MultiJson.encode({ 'user' => options })
           )
         end
 
