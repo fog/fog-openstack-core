@@ -45,4 +45,8 @@ describe Fog::Identity::OpenStackCommon::Real do
 
   end
 
+  describe "#list_user_global_roles" do
+    it { skip("API returns NotImplemented") }
+  end
+
 end

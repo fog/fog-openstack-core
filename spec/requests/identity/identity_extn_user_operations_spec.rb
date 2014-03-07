@@ -134,35 +134,58 @@ describe Fog::Identity::OpenStackCommon::Real do
       [200, 204].must_include result.status
     end
 
-
   end
 
-  # request :list_user_global_roles         # close to :list_user_global_roles
-  # describe "#list_user_global_roles" do
-  #   it { skip("TBD") }
-  # end
+  describe "#list_global_roles_for_user" do
+    it { skip("API returns NotImplemented") }
+  end
 
   describe "#add_global_role_to_user" do
+    it { skip("API returns NotImplemented") }
+    # before do
+    #   name = "jsmith#{Time.now.to_i}"
+    #   password = "password!"
+    #   tenant_id = service.list_tenants.body['tenants'].first['id']
+    #   email = "jsmith#{Time.now.to_i}@acme.com"
+    #   enabled = false
+    #   result = service.create_user(name, password, email, tenant_id, enabled)
+    #   @user_id = result.body['user']['id']
+    #
+    #   roles_list = service.list_roles
+    #   @role_id = roles_list.body['roles'].first['id']
+    # end
+    #
+    # it "succeeds", :vcr do
+    #   result = service.add_global_role_to_user(@user_id, @role_id)
+    #   [200, 201].must_include result.status
+    # end
+    #
+    # it "fails if invalid user_id", :vcr do
+    #   proc {
+    #     service.add_global_role_to_user("1234567890", @role_id)
+    #   }.must_raise Fog::Identity::OpenStackCommon::NotFound
+    # end
+    #
+    # it "fails if invalid role_id", :vcr do
+    #   proc {
+    #     service.add_global_role_to_user(@user_id, 1234567890)
+    #   }.must_raise Fog::Identity::OpenStackCommon::NotFound
+    # end
+  end
+
+  describe "#delete_global_role_for_user" do
+    it { skip("API returns NotImplemented") }
+  end
+
+  describe "#add_credential_to_user" do
     it { skip("TBD") }
   end
 
-  describe "#delete_global_role_from_user" do
+  describe "#update_credential_for_user" do
     it { skip("TBD") }
   end
 
-  describe "#add_user_credentials" do
-    it { skip("TBD") }
-  end
-
-  describe "#list_credentials" do
-    it { skip("TBD") }
-  end
-
-  describe "#update_user_credentials" do
-    it { skip("TBD") }
-  end
-
-  describe "#delete_user_credentials" do
+  describe "#delete_credential_for_user" do
     it { skip("TBD") }
   end
 

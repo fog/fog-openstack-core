@@ -90,8 +90,8 @@ module Fog
       request :delete_user
       request :enable_user
       # request :list_global_roles_for_user    see above: :list_user_global_roles
-      request :add_global_role_to_user
-      request :delete_global_role_for_user
+      # request :add_global_role_to_user       API returns NotImplemented
+      # request :delete_global_role_for_user   API returns NotImplemented
       request :add_credential_to_user
       request :update_credential_for_user
       request :delete_credential_for_user
