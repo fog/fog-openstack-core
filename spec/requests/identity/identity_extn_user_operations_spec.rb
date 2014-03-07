@@ -91,13 +91,50 @@ describe Fog::Identity::OpenStackCommon::Real do
   end
 
   describe "#delete_user" do
+    before do
+      name = "jsmith#{Time.now.to_i}"
+      password = "password!"
+      tenant_id = service.list_tenants.body['tenants'].first['id']
+      email = "jsmith#{Time.now.to_i}@acme.com"
+      enabled = true
+      result = service.create_user(name, password, email, tenant_id, enabled)
+      @user_id = result.body['user']['id']
+    end
 
+    it "deletes user", :vcr do
+      result = service.delete_user(@user_id)
+      result.status.must_equal 204
+    end
 
-    it { skip("TBD") }
+    it "fails to delete", :vcr do
+      proc {
+        service.delete_user("1234567890")
+      }.must_raise Fog::Identity::OpenStackCommon::NotFound
+    end
   end
 
   describe "#enable_user" do
-    it { skip("TBD") }
+    before do
+      name = "jsmith#{Time.now.to_i}"
+      password = "password!"
+      tenant_id = service.list_tenants.body['tenants'].first['id']
+      email = "jsmith#{Time.now.to_i}@acme.com"
+      enabled = false
+      result = service.create_user(name, password, email, tenant_id, enabled)
+      @user_id = result.body['user']['id']
+    end
+
+    it "enables user", :vcr do
+      result = service.enable_user(@user_id, true)
+      [200, 204].must_include result.status
+    end
+
+    it "disables user", :vcr do
+      result = service.enable_user(@user_id, false)
+      [200, 204].must_include result.status
+    end
+
+
   end
 
   # request :list_user_global_roles         # close to :list_user_global_roles

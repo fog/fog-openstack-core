@@ -14,23 +14,6 @@ module Fog
           )
         end
 
-        # class Mock
-        #
-        #   def update_user(user_id, options)
-        #     response = Excon::Response.new
-        #     if user = self.data[:users][user_id]
-        #       if options['name']
-        #         user['name'] = options['name']
-        #       end
-        #       response.status = 200
-        #       response
-        #     else
-        #       raise Fog::Identity::OpenStackCommon::NotFound
-        #     end
-        #   end
-        #
-        # end # Mock
-
       end # Real
 
       class Mock
