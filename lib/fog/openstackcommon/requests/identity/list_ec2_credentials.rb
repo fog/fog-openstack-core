@@ -22,8 +22,8 @@ module Fog
 
         def list_ec2_credentials(user_id)
           request(
-            :expects => [200, 202],
             :method  => 'GET',
+            :expects => [200, 202],
             :path    => "/users/#{user_id}/credentials/OS-EC2"
           )
         end

@@ -7,8 +7,8 @@ module Fog
 
         def list_users
           request(
-            :expects => [200, 204],
             :method  => 'GET',
+            :expects => [200, 204],
             :path    => '/users'
           )
         end

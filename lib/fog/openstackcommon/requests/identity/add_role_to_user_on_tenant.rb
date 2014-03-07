@@ -5,8 +5,8 @@ module Fog
 
         def add_role_to_user_on_tenant(tenant_id, user_id, role_id)
           request(
-            :expects  => [200,201],
             :method   => 'PUT',
+            :expects  => [200,201],
             :path     => "/tenants/#{tenant_id}/users/#{user_id}/roles/OS-KSADM/#{role_id}"
           )
         end

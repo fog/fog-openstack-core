@@ -5,8 +5,8 @@ module Fog
 
         def list_roles
           request(
-            :expects => 200,
             :method => 'GET',
+            :expects => 200,
             :path   => '/OS-KSADM/roles'
           )
         end

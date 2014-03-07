@@ -17,9 +17,9 @@ module Fog
           }
 
           request(
-            :body     => MultiJson.encode(data),
-            :expects  => [200, 202],
             :method   => 'POST',
+            :expects  => [200, 202],
+            :body     => MultiJson.encode(data),
             :path     => '/users'
           )
         end

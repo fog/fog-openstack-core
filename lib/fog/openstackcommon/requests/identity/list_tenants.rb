@@ -9,8 +9,8 @@ module Fog
           params['marker'] = marker if marker
 
           request(
-            :expects => [200, 204],
             :method  => 'GET',
+            :expects => [200, 204],
             :path    => "/tenants",
             :query   => params
           )
