@@ -5,10 +5,10 @@ module Fog
 
         def update_tenant(id, attributes)
           request(
+            :method  => 'POST',
             :expects => [200],
-            :method  => 'PUT',
-            :path    => "tenants/#{id}",
-            :body    => Fog::JSON.encode({ 'tenant' => attributes })
+            :path    => "/tenants/#{id}",
+            :body    => MultiJson.encode({ 'tenant' => attributes })
           )
         end # def update_tenant
 
