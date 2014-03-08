@@ -146,7 +146,7 @@ describe "identity" do
       it "when valid name specified", :vcr do
         name = list.body['tenants'].first['name']
         test_tenant = service.get_tenants_by_name(name)
-        [200, 204].must_include list.status
+        [200, 204].must_include test_tenant.status
       end
 
       it "when invalid name specified", :vcr do
@@ -164,7 +164,7 @@ describe "identity" do
       it "when valid tenant id specified", :vcr do
         id = list.body['tenants'].first['id']
         test_tenant = service.get_tenants_by_id(id)
-        [200, 204].must_include list.status
+        [200, 204].must_include test_tenant.status
       end
 
       it "when invalid tenant id specified", :vcr do
@@ -237,7 +237,7 @@ describe "identity" do
         role_id = role_response[:body]['role']['id']
         new_role = service.add_role_to_user_on_tenant(tenant_id, user_id, role_id)
 
-        result = service.delete_role_from_user_on_tenant(tenant_id, user_id, role_id)
+        result = service.delete_role_from_user_on_tenant(tenant_id, user_id, new_role.body['role']['id'])
         [200, 204].must_include result.status
       end
 
