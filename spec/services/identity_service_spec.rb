@@ -2,111 +2,115 @@ require_relative '../spec_helper'
 
 require 'fog/openstackcommon'
 
-describe Fog::Identity::OpenStackCommon::Real do
+describe "identity" do
 
-  let(:valid_options) { {
-    :provider => 'OpenStackCommon',
-    :openstack_auth_url => "http://devstack.local:5000/v2.0/tokens",
-    :openstack_username => "demo",
-    :openstack_api_key => "stack"
+  describe "identity service" do
+
+    let(:valid_options) { {
+      :provider => 'OpenStackCommon',
+      :openstack_auth_url => "http://devstack.local:5000/v2.0/tokens",
+      :openstack_username => "demo",
+      :openstack_api_key => "stack"
+      }
     }
-  }
 
-  describe "#initialize" do
+    describe "#initialize" do
 
-    describe "endpoint v1" do
-      describe "auth with credentails" do
-        it { skip("TBD") }
+      describe "endpoint v1" do
+        describe "auth with credentails" do
+          it { skip("TBD") }
+        end
       end
+
+      describe "endpoint v2" do
+        describe "credentials" do
+          describe "valid auth", :vcr do
+
+            let(:connection) { Fog::Identity.new(valid_options) }
+
+            it "must be a hash" do
+              # connection.must_be_instance_of Hash
+              skip("TBD once we understand what this class should return")
+            end
+
+            it "must be a connection" do
+              # connection.must_be_instance_of Fog::Core::Connection
+              skip("TBD once we understand what this class should return")
+            end
+
+            it "must not be nil" do
+              connection.wont_be_nil
+            end
+
+            [ :current_user, :current_tenant, :unscoped_token ].each do |attrib|
+              it { connection.must_respond_to attrib }
+            end
+
+          end
+
+          describe "invalid auth", :vcr do
+
+            it "an invalid username raises an Unauthorized exception" do
+              invalid_username_options = valid_options
+              invalid_username_options[:openstack_username] = "none"
+              proc {
+                Fog::Identity.new(invalid_username_options)
+              }.must_raise Excon::Errors::Unauthorized
+            end
+
+            it "an invalid password raises an Unauthorized exception" do
+              invalid_password_options = valid_options
+              invalid_password_options[:openstack_api_key] = "none"
+              proc {
+                Fog::Identity.new(invalid_password_options)
+              }.must_raise Excon::Errors::Unauthorized
+            end
+
+          end
+
+        end
+
+
+        describe "token" do
+          describe "invalid auth", :vcr do
+            it "raises an Unauthorized exception" do
+              invalid_auth_token_options = valid_options
+              invalid_auth_token_options[:openstack_auth_token] = "abcdefghijklmnopqrstuvwxys0123456789"
+              proc {
+                Fog::Identity.new(invalid_auth_token_options)
+              }.must_raise Excon::Errors::Unauthorized
+            end
+          end
+
+          describe "valid auth", :vcr do
+            let(:connection) {
+              Fog::Identity.new(valid_options)
+            }
+
+            # 1 - get the valid auth token out of the initial connection
+            # 2 - authenticate based on the valid auth token to ensure it works
+            it "must not be nil" do
+              valid_auth_token_options = valid_options
+              valid_auth_token_options[:openstack_auth_token] = connection.auth_token
+              Fog::Identity.new(valid_options).wont_be_nil
+            end
+
+          end
+
+        end
+
+      end
+
     end
 
-    describe "endpoint v2" do
-      describe "credentials" do
-        describe "valid auth", :vcr do
-
-          let(:connection) { Fog::Identity.new(valid_options) }
-
-          it "must be a hash" do
-            # connection.must_be_instance_of Hash
-            skip("TBD once we understand what this class should return")
-          end
-
-          it "must be a connection" do
-            # connection.must_be_instance_of Fog::Core::Connection
-            skip("TBD once we understand what this class should return")
-          end
-
-          it "must not be nil" do
-            connection.wont_be_nil
-          end
-
-          [ :current_user, :current_tenant, :unscoped_token ].each do |attrib|
-            it { connection.must_respond_to attrib }
-          end
-
-        end
-
-        describe "invalid auth", :vcr do
-
-          it "an invalid username raises an Unauthorized exception" do
-            invalid_username_options = valid_options
-            invalid_username_options[:openstack_username] = "none"
-            proc {
-              Fog::Identity.new(invalid_username_options)
-            }.must_raise Excon::Errors::Unauthorized
-          end
-
-          it "an invalid password raises an Unauthorized exception" do
-            invalid_password_options = valid_options
-            invalid_password_options[:openstack_api_key] = "none"
-            proc {
-              Fog::Identity.new(invalid_password_options)
-            }.must_raise Excon::Errors::Unauthorized
-          end
-
-        end
-
-      end
-
-
-      describe "token" do
-        describe "invalid auth", :vcr do
-          it "raises an Unauthorized exception" do
-            invalid_auth_token_options = valid_options
-            invalid_auth_token_options[:openstack_auth_token] = "abcdefghijklmnopqrstuvwxys0123456789"
-            proc {
-              Fog::Identity.new(invalid_auth_token_options)
-            }.must_raise Excon::Errors::Unauthorized
-          end
-        end
-
-        describe "valid auth", :vcr do
-          let(:connection) {
-            Fog::Identity.new(valid_options)
-          }
-
-          # 1 - get the valid auth token out of the initial connection
-          # 2 - authenticate based on the valid auth token to ensure it works
-          it "must not be nil" do
-            valid_auth_token_options = valid_options
-            valid_auth_token_options[:openstack_auth_token] = connection.auth_token
-            Fog::Identity.new(valid_options).wont_be_nil
-          end
-
-        end
-
-      end
-
+    describe "#reload" do
+      it { skip("No reason to test Excon object methods") }
     end
 
-  end
+    describe "#request" do
+      it { skip("Not sure how to test") }
+    end
 
-  describe "#reload" do
-    it { skip("No reason to test Excon object methods") }
-  end
-
-  describe "#request" do
-    it { skip("Not sure how to test") }
   end
 
 end
