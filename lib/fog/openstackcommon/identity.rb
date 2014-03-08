@@ -25,18 +25,61 @@ module Fog
       request_path 'fog/openstackcommon/requests/identity'
 
 
-      # Administrative API Operations ----------------------------
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Admin_API_Service_Developer_Operations-d1e1356.html
+      ## EC2 Credentials
+      request :list_ec2_credentials
+      request :get_ec2_credential
+      request :create_ec2_credential
+      request :delete_ec2_credential
+
+      ## Endpoint Operations
+      # request :list_endpoints
+      # request :get_endpoint
+      # request :create_endpoint
+      # request :delete_endpoint
+
+      ## Role Operations
+      request :list_roles
+      request :create_role
+      request :get_role
+      request :delete_role
+
+      ## Service Operations
+      # request :list_services
+      # request :create_service
+      # request :get_service
+      # request :delete_service
+
+      ## Tenant Operations
+      request :list_tenants
+      request :get_tenants_by_name
+      request :get_tenants_by_id
+      request :list_roles_for_user_on_tenant
+      request :create_tenant
+      request :update_tenant
+      request :delete_tenant
+      request :list_users_for_tenant
+      request :add_role_to_user_on_tenant
+      request :delete_role_from_user_on_tenant
 
       ## Token Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Token_Operations.html
       request :create_token
       request :check_token
       request :validate_token
       request :list_endpoints_for_token
 
       ## User Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/User_Operations.html
+      request :list_users
+      request :create_user
+      request :update_user
+      request :delete_user
+      request :enable_user
+      # request :list_global_roles_for_user    see -> :list_user_global_roles
+      # request :add_global_role_to_user       API returns NotImplemented
+      # request :delete_global_role_for_user   API returns NotImplemented
+      # request :add_credential_to_user        API returns NotImplemented
+      # request :update_credential_for_user    API returns NotImplemented
+      # request :delete_credential_for_user    API returns NotImplemented
+      # request :get_user_credentials          API returns NotImplemented
       request :get_user_by_name
       request :get_user_by_id
       # request :list_user_global_roles
@@ -70,73 +113,6 @@ module Fog
       # <@dolphm>	 wchrisj: ++ i'd like it to be removed from openstack's api site since we don't support it directly
       # <@dolphm>	 wchrisj: you're not the only one to be confused by it :(
       # ---- 3/6/2014 ----
-
-      ## Tenant Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations.html
-      request :list_tenants
-      request :get_tenants_by_name
-      request :get_tenants_by_id
-      request :list_roles_for_user_on_tenant
-
-
-      # Openstack Identity Service Extensions --------------------
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/openstack_identity_extensions.html
-
-      ## User Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/User_Operations_OS-KSADM.html
-      request :list_users
-      request :create_user
-      request :update_user
-      request :delete_user
-      request :enable_user
-      # request :list_global_roles_for_user    see above: :list_user_global_roles
-      # request :add_global_role_to_user       API returns NotImplemented
-      # request :delete_global_role_for_user   API returns NotImplemented
-      request :add_credential_to_user
-      request :update_credential_for_user
-      request :delete_credential_for_user
-      request :get_user_credentials
-
-      ## Tenant Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations_OS-KSADM.html
-      request :create_tenant
-      request :update_tenant
-      request :delete_tenant
-      request :list_users_for_tenant
-      request :add_role_to_user_on_tenant
-      request :delete_role_from_user_on_tenant
-
-      ## Role Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Role_Operations_OS-KSADM.html
-      request :list_roles
-      request :create_role
-      request :get_role
-      request :delete_role
-
-      ## Service Operations
-      #http://docs.openstack.org/api/openstack-identity-service/2.0/content/Service_Operations_OS-KSADM.html
-
-
-      # OS-KSCATALOG Admin Extension ------------------------------
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Admin_API_Service_Developer_Operations-OS-KSCATALOG.html
-
-      ## Endpoint Template Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Endpoint_Template_Operations_OS-KSCATALOG.html
-      # request ???
-
-      ## Endpoint Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations_OS-KSCATALOG.html
-      # request ???
-
-
-      # OS-KSEC2 Admin Extension ----------------------------------
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Admin_API_Service_Developer_Operations-OS-KSEC2.html
-
-      ## User Operations
-      request :list_ec2_credentials
-      request :get_ec2_credential
-      request :create_ec2_credential
-      request :delete_ec2_credential
 
 
       # minimal requirement
