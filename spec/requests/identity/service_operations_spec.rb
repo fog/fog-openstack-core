@@ -15,21 +15,21 @@ describe "identity" do
     let(:service) { Fog::Identity.new(valid_options) }
 
     describe "#list_services" do
-      it { skip("TBD") }
+      it { skip("Choosing to NotImplement for now.") }
     end
 
     describe "#add_service" do
-      it { skip("TBD") }
+      it { skip("Choosing to NotImplement for now.") }
     end
 
     describe "#get_service" do
-      it { skip("TBD") }
+      it { skip("Choosing to NotImplement for now.") }
     end
 
     describe "#delete_service" do
-      it { skip("TBD") }
+      it { skip("Choosing to NotImplement for now.") }
     end
 
   end
-  
+
 end
