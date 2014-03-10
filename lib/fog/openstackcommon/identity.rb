@@ -127,20 +127,20 @@ module Fog
           # puts "===== Fog::Identity::OpenStackCommon -> initialize ====="
           apply_options(options)
           authenticate
-          connection_url = "#{@scheme}://#{@host}:#{@port}"
-          @connection = Fog::Core::Connection.new(connection_url, @persistent, @connection_options)
+          service_url = "#{@scheme}://#{@host}:#{@port}"
+          @service = Fog::Core::Connection.new(service_url, @persistent, @service_options)
         end
 
         def reload
           # puts "===== Fog::Identity::OpenStackCommon -> reload ====="
-          @connection.reset
+          @service.reset
         end
 
         def request(params)
           # puts "===== Fog::Identity::OpenStackCommon -> request ====="
           retried = false
           begin
-            response = @connection.request(params.merge({
+            response = @service.request(params.merge({
               :headers  => {
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
@@ -184,7 +184,7 @@ module Fog
             end
 
             options = init_auth_options
-            credentials = Fog::OpenStackCommon::Authenticator.adapter.authenticate(options, @connection_options)
+            credentials = Fog::OpenStackCommon::Authenticator.adapter.authenticate(options, @service_options)
             handle_auth_results(credentials)
           else
             @auth_token = @openstack_auth_token
@@ -236,8 +236,8 @@ module Fog
           @current_tenant = options[:current_tenant]
           # puts "@current_tenant: #{@current_tenant}"
 
-          @connection_options = options[:connection_options] || {}
-          # puts "@connection_options: #{@connection_options}"
+          @service_options = options[:connection_options] || {}
+          # puts "@service_options: #{@service_options}"
 
           @persistent = options[:persistent] || false
           # puts "@persistent: #{@persistent}"
