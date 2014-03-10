@@ -20,15 +20,13 @@ module Fog
           super
         end
 
-        def ec2_credentials
-          requires :id
-          service.ec2_credentials(:user => self)
-        end
-
         def save
-          raise Fog::Errors::Error.new('Resaving an existing object may create a duplicate') if persisted?
           requires :name, :tenant_id, :password
           enabled = true if enabled.nil?
+          identity ? update : create
+        end
+
+        def create
           data = service.create_user(name, password, email, tenant_id, enabled)
           merge_attributes(data.body['user'])
           true
@@ -37,24 +35,23 @@ module Fog
         def update(options = {})
           requires :id
           options.merge('id' => id)
-          service.update_user(id, options)
+          merge_attributes(
+            service.update_user(self.id, options || attributes).body['user'])
           true
         end
 
-        # ToDo: Move url stuff to request
         def update_password(password)
-          update({'password' => password, 'url' => "/users/#{id}/OS-KSADM/password"})
+          update({'password' => password})
         end
 
-        # ToDo: Move url stuff to request
         def update_tenant(tenant)
           tenant = tenant.id if tenant.class != String
-          update({:tenantId => tenant, 'url' => "/users/#{id}/OS-KSADM/tenant"})
+          update({:tenantId => tenant})
         end
 
-        # ToDo: Move url stuff to request
         def update_enabled(enabled)
-          update({:enabled => enabled, 'url' => "/users/#{id}/OS-KSADM/enabled"})
+          requires :id
+          update({:enabled => enabled})
         end
 
         def destroy
@@ -63,8 +60,16 @@ module Fog
           true
         end
 
+        def ec2_credentials
+          requires :id
+          service.ec2_credentials(:user => self)
+        end
+
         def roles(tenant_id = self.tenant_id)
-          service.list_roles_for_user_on_tenant(tenant_id, self.id).body['roles']
+          puts "TENANTID: #{self.tenant_id}"
+          puts "USERID: #{self.id}"
+          result = service.list_roles_for_user_on_tenant(tenant_id, self.id)
+          result.body['roles']
         end
       end # class User
     end # class OpenStack

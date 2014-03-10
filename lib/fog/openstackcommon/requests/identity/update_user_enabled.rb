@@ -1,3 +1,6 @@
+# update({:enabled => enabled, 'url' => "/users/#{id}/OS-KSADM/enabled"})
+
+
 # require 'multi_json'
 
 module Fog
@@ -5,7 +8,8 @@ module Fog
     class OpenStackCommon
       class Real
 
-        def update_user(user_id, options = {})
+        def update_user_enabled(user_id, options = {})
+          options.merge('id' => user_id)
           request(
             :method   => 'PUT',
             :expects  => 200,
