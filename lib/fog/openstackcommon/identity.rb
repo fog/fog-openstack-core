@@ -118,6 +118,7 @@ module Fog
 
         def initialize(options={})
           # puts "===== Fog::Identity::OpenStackCommon -> initialize ====="
+          options = customize_options(options)
           apply_options(options)
           authenticate
           connection_url = "#{@scheme}://#{@host}:#{@port}"
@@ -161,6 +162,11 @@ module Fog
           end
           response
         end
+
+       def customize_options(options)
+         options
+       end
+
 
         private
 
@@ -227,6 +233,8 @@ module Fog
           @current_tenant = options[:current_tenant]
           # puts "@current_tenant: #{@current_tenant}"
 
+          @openstack_region = options[:openstack_region]
+
           @connection_options = options[:connection_options] || {}
           # puts "@connection_options: #{@connection_options}"
 
@@ -242,7 +250,8 @@ module Fog
             :openstack_tenant   => @openstack_tenant,
             :openstack_service_type => @openstack_service_type,
             :openstack_service_name => @openstack_service_name,
-            :openstack_endpoint_type => @openstack_endpoint_type
+            :openstack_endpoint_type => @openstack_endpoint_type,
+            :openstack_region => @openstack_region
           }
         end
 
@@ -251,7 +260,7 @@ module Fog
           @current_tenant = credentials[:tenant]
           @openstack_must_reauthenticate = false
           @auth_token = credentials[:token]
-          @openstack_management_url = credentials[:server_management_url]
+          @openstack_management_url = credentials[:server_management_url] || @openstack_auth_url
           @openstack_current_user_id = credentials[:current_user_id]
           @unscoped_token = credentials[:unscoped_token]
         end

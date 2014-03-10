@@ -8,6 +8,8 @@ module Fog
         module AuthenticatorV2
           extend self
 
+          VERSION_CODE = "2.0"
+
           def authenticate(options, connection_options = {})
             # puts "===== Fog::OpenStackCommon::Authentication::Adapters::AuthenticatorV2.authenticate ====="
 
@@ -35,7 +37,7 @@ module Fog
             endpoint_type         = (options[:openstack_endpoint_type] || 'publicURL').to_s
             # puts "endpoint_type: #{endpoint_type}"
 
-            openstack_region      = options[:openstack_region]
+            @openstack_region      = options[:openstack_region]
             # puts "openstack_region: #{openstack_region}"
 
             body = request_tokens(options, connection_options)
@@ -52,7 +54,7 @@ module Fog
               service = get_service(body, service_type, service_name)
             end
 
-            if openstack_region
+            if @openstack_region
               service['endpoints'] = get_endpoints(service['endpoints'])
             end
 
@@ -63,7 +65,11 @@ module Fog
             identity_service = get_service(body, identity_service_type) if identity_service_type
             tenant = body['access']['token']['tenant']
             user = body['access']['user']
-            management_url = service['endpoints'].detect{|s| s[endpoint_type]}[endpoint_type]
+            management_url = nil
+            admin_url_data = service['endpoints'].detect { |s| s[endpoint_type] }
+            if admin_url_data
+              management_url = admin_url_data[endpoint_type]
+            end
             identity_url   = identity_service['endpoints'].detect{|s| s['publicURL']}['publicURL'] if identity_service
 
             return {
@@ -116,10 +122,13 @@ module Fog
           end
 
           def get_endpoints(endpoints)
-            ep = endpoints.select { |endpoint| endpoint['region'] == openstack_region }
+            #TODO filter by version also
+            ep = endpoints.select { |endpoint| endpoint['region'] == @openstack_region }
+            ep = ep.select { |endpoint| endpoint['versionId'] == VERSION_CODE }
             if ep.empty?
-              raise Fog::Errors::NotFound.new("No endpoints available for region '#{openstack_region}'")
+              raise Fog::Errors::NotFound.new("No endpoints available for region '#{@openstack_region}'")
             end
+            ep
           end
 
           def ensure_service_available(service, service_catalog, service_type)
