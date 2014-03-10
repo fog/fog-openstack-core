@@ -179,11 +179,19 @@ describe "identity" do
 
       let(:list) { service.list_users }
 
-      it "when valid tenant id specified", :vcr do
-        tenant_id = list.body['users'].first['tenantId']
-        user_id = list.body['users'].first['id']
-        result = service.list_roles_for_user_on_tenant(tenant_id, user_id)
-        [200, 204].must_include result.status
+      describe "when valid tenant id specified", :vcr do
+        let(:tenant_id) { list.body['users'].first['tenantId'] }
+        let(:user_id) { list.body['users'].first['id'] }
+        let(:result) { service.list_roles_for_user_on_tenant(tenant_id, user_id) }
+
+        it "returns a valid status" do
+          [200, 204].must_include result.status
+        end
+
+        it "returns a list of roles" do
+          roles_list = result.body['roles']
+          roles_list.must_be_instance_of Array
+        end
       end
 
       it "when invalid tenant id specified", :vcr do
