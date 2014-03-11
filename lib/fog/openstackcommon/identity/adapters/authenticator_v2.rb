@@ -8,7 +8,7 @@ module Fog
         module AuthenticatorV2
           extend self
 
-          VERSION_CODE = "2.0"
+          VERSION = "2.0"
 
           def authenticate(options, connection_options = {})
             # puts "===== Fog::OpenStackCommon::Authentication::Adapters::AuthenticatorV2.authenticate ====="
@@ -85,6 +85,34 @@ module Fog
 
           end
 
+          def authenticate_request(request, options = {})
+            api_key     = options[:openstack_api_key].to_s
+            username    = options[:openstack_username].to_s
+            tenant_name = options[:openstack_tenant].to_s
+            auth_token  = options[:openstack_auth_token] || options[:unscoped_token]
+            uri         = options[:openstack_auth_uri]
+
+            if auth_token
+              # puts "----- if auth_token -----"
+              request[:auth][:token] = {:id => auth_token}
+              # puts "request_body: "
+              # puts request_body.to_yaml
+            else
+              # puts "----- else (!auth_token) -----"
+              request[:auth][:passwordCredentials] = {
+                :username => username,
+                :password => api_key
+              }
+              # puts "request_body: "
+              # puts request_body.to_yaml
+            end
+
+
+            request[:auth][:tenantName] = tenant_name if tenant_name
+
+            request
+          end
+
           private
 
           def new_connection(uri, connection_options = {}, body = {})
@@ -122,9 +150,8 @@ module Fog
           end
 
           def get_endpoints(endpoints)
-            #TODO filter by version also
             ep = endpoints.select { |endpoint| endpoint['region'] == @openstack_region }
-            ep = ep.select { |endpoint| endpoint['versionId'] == VERSION_CODE }
+            ep = ep.select { |endpoint| endpoint['versionId'] == VERSION }
             if ep.empty?
               raise Fog::Errors::NotFound.new("No endpoints available for region '#{@openstack_region}'")
             end
@@ -174,23 +201,7 @@ module Fog
 
             request_body = { :auth => Hash.new }
 
-            if auth_token
-              # puts "----- if auth_token -----"
-              request_body[:auth][:token] = { :id => auth_token }
-              # puts "request_body: "
-              # puts request_body.to_yaml
-            else
-              # puts "----- else (!auth_token) -----"
-              request_body[:auth][:passwordCredentials] = {
-                :username => username,
-                :password => api_key
-              }
-              # puts "request_body: "
-              # puts request_body.to_yaml
-            end
-
-            request_body[:auth][:tenantName] = tenant_name if tenant_name
-
+            authenticate_request(request_body,options)
             # puts "----- before connection.request -----"
             # puts "request body:"
             # puts request_body.to_yaml
@@ -211,6 +222,8 @@ module Fog
 
             MultiJson.decode(response.body)
           end
+
+
 
         end # AuthenticatorV2
       end # Adapters
