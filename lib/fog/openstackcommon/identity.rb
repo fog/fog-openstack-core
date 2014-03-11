@@ -148,6 +148,7 @@ module Fog
 
         def initialize(options={})
           # puts "===== Fog::Identity::OpenStackCommon -> initialize ====="
+          options = customize_options(options)
           apply_options(options)
           authenticate
           connection_url = "#{@scheme}://#{@host}:#{@port}"
@@ -192,6 +193,15 @@ module Fog
           response
         end
 
+       def customize_options(options)
+         options
+       end
+
+       def authenticator
+         Fog::OpenStackCommon::Authenticator
+       end
+
+
         private
 
         def authenticate
@@ -199,13 +209,13 @@ module Fog
           if !@openstack_management_url || @openstack_must_reauthenticate
             case @openstack_auth_uri.path
             when /v1(\.\d+)?/
-              Fog::OpenStackCommon::Authenticator.adapter = :authenticator_v1
+            authenticator.adapter = :authenticator_v1
             else
-              Fog::OpenStackCommon::Authenticator.adapter = :authenticator_v2
+              authenticator.adapter = :authenticator_v2
             end
 
             options = init_auth_options
-            credentials = Fog::OpenStackCommon::Authenticator.adapter.authenticate(options, @connection_options)
+            credentials = authenticator.adapter.authenticate(options, @connection_options)
             handle_auth_results(credentials)
           else
             @auth_token = @openstack_auth_token
@@ -257,11 +267,16 @@ module Fog
           @current_tenant = options[:current_tenant]
           # puts "@current_tenant: #{@current_tenant}"
 
+          @openstack_region = options[:openstack_region]
+
           @connection_options = options[:connection_options] || {}
           # puts "@connection_options: #{@connection_options}"
 
           @persistent = options[:persistent] || false
           # puts "@persistent: #{@persistent}"
+
+          #this is really for subclasses
+          @openstack_use_upass_auth_style = options[:openstack_use_upass_auth_style].nil? ? true : options[:openstack_use_upass_auth_style]
         end
 
         def init_auth_options
@@ -272,7 +287,9 @@ module Fog
             :openstack_tenant   => @openstack_tenant,
             :openstack_service_type => @openstack_service_type,
             :openstack_service_name => @openstack_service_name,
-            :openstack_endpoint_type => @openstack_endpoint_type
+            :openstack_endpoint_type => @openstack_endpoint_type,
+            :openstack_region => @openstack_region,
+            :openstack_use_upass_auth_style => @openstack_use_upass_auth_style
           }
         end
 
@@ -281,7 +298,7 @@ module Fog
           @current_tenant = credentials[:tenant]
           @openstack_must_reauthenticate = false
           @auth_token = credentials[:token]
-          @openstack_management_url = credentials[:server_management_url]
+          @openstack_management_url = credentials[:server_management_url] || @openstack_auth_url
           @openstack_current_user_id = credentials[:current_user_id]
           @unscoped_token = credentials[:unscoped_token]
         end
