@@ -23,6 +23,8 @@ module Fog
         end # slurp
       end # ServiceError
 
+      class Conflict < ServiceError; end
+
       class ServiceUnavailable < ServiceError; end
 
       class BadRequest < ServiceError

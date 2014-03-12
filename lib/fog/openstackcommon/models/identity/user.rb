@@ -66,8 +66,6 @@ module Fog
         end
 
         def roles(tenant_id = self.tenant_id)
-          puts "TENANTID: #{self.tenant_id}"
-          puts "USERID: #{self.id}"
           result = service.list_roles_for_user_on_tenant(tenant_id, self.id)
           result.body['roles']
         end

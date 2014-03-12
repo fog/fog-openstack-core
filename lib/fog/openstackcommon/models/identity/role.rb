@@ -7,6 +7,11 @@ module Fog
         identity :id
         attribute :name
 
+        def initialize(attributes)
+          prepare_service_value(attributes)
+          super
+        end
+
         def save
           requires :name
           data = service.create_role(name)
@@ -21,15 +26,15 @@ module Fog
         end
 
         def add_to_user(user, tenant)
-          add_remove_to_user(user, tenant, :add)
+          add_or_remove_from_user(user, tenant, :add)
         end
 
-        def remove_to_user(user, tenant)
-          add_remove_to_user(user, tenant, :remove)
+        def remove_from_user(user, tenant)
+          add_or_remove_from_user(user, tenant, :remove)
         end
 
         private
-        def add_remove_to_user(user, tenant, ops)
+        def add_or_remove_from_user(user, tenant, ops)
           requires :id
           user_id = get_id(user)
           tenant_id = get_id(tenant)

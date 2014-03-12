@@ -3,13 +3,12 @@ SimpleCov.start do
   add_filter "/spec/"
 end
 
-
 require 'minitest/autorun'
 require 'minitest/spec'
+require 'minitest/reporters'
+require 'minitest-vcr'
+require 'webmock'
 require 'vcr'
-require "minitest-vcr"
-require "webmock"
-require "minitest/reporters"
 
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/cassettes'

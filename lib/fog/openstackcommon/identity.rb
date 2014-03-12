@@ -131,6 +131,7 @@ module Fog
           @service = Fog::Core::Connection.new(service_url, @persistent, @service_options)
         end
 
+        # Close the underlying Excon connection object
         def reload
           # puts "===== Fog::Identity::OpenStackCommon -> reload ====="
           @service.reset
@@ -148,6 +149,8 @@ module Fog
               }.merge!(params[:headers] || {}),
               :path     => "#{@base_path}#{params[:path]}"#,
             }))
+          rescue Excon::Errors::Conflict => error
+            raise Fog::Identity::OpenStackCommon::Conflict.slurp(error)
           rescue Excon::Errors::BadRequest => error
             raise Fog::Identity::OpenStackCommon::BadRequest.slurp(error)
           rescue Excon::Errors::Unauthorized => error
