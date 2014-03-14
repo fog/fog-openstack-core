@@ -16,15 +16,13 @@ module Fog
         end
 
         def destroy
-          requires :access
-          requires :user_id
+          requires :access, :user_id
           service.delete_ec2_credential(user_id, access)
           true
         end
 
         def save
-          raise Fog::Errors::Error, 'Existing credentials cannot be altered' if
-            access
+          raise Fog::Errors::Error, 'Existing credentials cannot be altered' if access
 
           # self.user_id   ||= user.id
           # self.tenant_id ||= user.tenant_id

@@ -77,6 +77,13 @@ describe "models" do
           new_user.save
         end
 
+        it "creates user when name, password and tenant_id specified" do
+          new_user = Fog::Identity::OpenStackCommon::User.new(options)
+          service_mock.expect(:create_user, fake_user_response, [fake_name, fake_password, fake_email, fake_tenant_id, fake_enabled])
+
+          new_user.save
+        end
+
       end
 
 

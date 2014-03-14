@@ -6,6 +6,7 @@ require 'fog/openstackcommon/models/identity/users'
 describe "models" do
   describe "identity" do
     describe "users" do
+      
     end
   end
 end
