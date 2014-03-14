@@ -10,22 +10,33 @@ module Fog
         attribute :tenant_id
 
         def all
-          load(service.list_users(tenant_id).body['users'])
+          users_list = service.list_users_for_tenant(tenant_id)
+          load(users_list.body['users'])
         end
 
         def find_by_id(id)
-          self.find {|user| user.id == id} ||
-            Fog::Identity::OpenStackCommon::User.new(
-              service.get_user_by_id(id).body['user'].merge(
-                'service' => service
-              )
-            )
+          find_user_in_collection(id) || build_user(id)
         end
 
         def destroy(id)
           user = self.find_by_id(id)
           user.destroy
         end
+
+        private
+
+        def find_user_in_collection(id)
+          self.find {|user| user.id == id}
+        end
+
+        def build_user(id)
+          Fog::Identity::OpenStackCommon::User.new(
+            service.get_user_by_id(id).body['user'].merge(
+              'service' => service
+            )
+          )
+        end
+
       end # class Users
     end # class OpenStack
   end # module Identity
