@@ -10,10 +10,10 @@ module Fog
         attribute :tenant_id
         attribute :user_id
 
-        def initialize(attributes)
-          prepare_service_value(attributes)
-          super
-        end
+        # def initialize(attributes)
+        #   prepare_service_value(attributes)
+        #   super
+        # end
 
         def destroy
           requires :access, :user_id
@@ -29,7 +29,7 @@ module Fog
 
           requires :user_id, :tenant_id
 
-          data = service.create_ec2_credential(user_id, tenant_id)
+          data = service.create_ec2_credential(self.user_id, self.tenant_id)
           merge_attributes(data.body['credential'])
           true
         end
