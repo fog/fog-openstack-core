@@ -14,11 +14,6 @@ module Fog
 
         attr_accessor :name, :tenant_id, :password, :email, :enabled
 
-        def initialize(attributes)
-          prepare_service_value(attributes)
-          super
-        end
-
         def save
           # raise Fog::Errors::Error.new('Resaving an existing object may create a duplicate') if persisted?
           requires :name, :tenant_id, :password

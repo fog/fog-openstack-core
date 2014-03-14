@@ -7,16 +7,11 @@ module Fog
         identity :id
         attribute :name
 
-        def initialize(attributes)
-          prepare_service_value(attributes)
-          super
-        end
-
         def save
           requires :name
           data = service.create_role(name)
           merge_attributes(data.body['role'])
-          true
+          self
         end
 
         def destroy
@@ -25,30 +20,20 @@ module Fog
           true
         end
 
-        def add_to_user(user, tenant)
-          add_or_remove_from_user(user, tenant, :add)
-        end
-
-        def remove_from_user(user, tenant)
-          add_or_remove_from_user(user, tenant, :remove)
-        end
-
-        private
-        def add_or_remove_from_user(user, tenant, ops)
+        def add_to_user(user_id, tenant_id)
           requires :id
-          user_id = get_id(user)
-          tenant_id = get_id(tenant)
-          case ops
-          when :add
-            service.add_role_to_user_on_tenant(tenant_id, user_id, id).status == 200
-          when :remove
-            service.delete_user_role(tenant_id, user_id, id).status == 204
-          end
+          result = service.add_role_to_user_on_tenant(tenant_id, user_id, self.id)
+          return true if [200,201].include? result.status
+          false
         end
 
-        def get_id(_)
-          _.is_a?(String) ? _ : _.id
+        def remove_from_user(user_id, tenant_id)
+          requires :id
+          result = service.delete_role_from_user_on_tenant(tenant_id, user_id, self.id)
+          return true if [200,204].include? result.status
+          false
         end
+
       end # class Role
     end # class OpenStack
   end # module Identity

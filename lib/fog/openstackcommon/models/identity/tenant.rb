@@ -44,11 +44,11 @@ module Fog
         end
 
         def grant_user_role(user_id, role_id)
-          service.add_user_to_tenant(self.id, user_id, role_id)
+          service.add_role_to_user_on_tenant(self.id, user_id, role_id)
         end
 
         def revoke_user_role(user_id, role_id)
-          service.remove_user_from_tenant(self.id, user_id, role_id)
+          service.delete_role_from_user_on_tenant(self.id, user_id, role_id)
         end
 
         def to_s

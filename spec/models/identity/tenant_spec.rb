@@ -149,7 +149,7 @@ describe "models" do
         }
 
         it "calls roles" do
-          service_mock.expect(:add_user_to_tenant, {}, [fake_tenant.id, fake_user.id, fake_role.id])
+          service_mock.expect(:add_role_to_user_on_tenant, {}, [fake_tenant.id, fake_user.id, fake_role.id])
 
           fake_tenant.grant_user_role(fake_user.id, fake_role.id)
         end
@@ -171,7 +171,7 @@ describe "models" do
         }
 
         it "calls roles" do
-          service_mock.expect(:remove_user_from_tenant, {}, [fake_tenant.id, fake_user.id, fake_role.id])
+          service_mock.expect(:delete_role_from_user_on_tenant, {}, [fake_tenant.id, fake_user.id, fake_role.id])
 
           fake_tenant.revoke_user_role(fake_user.id, fake_role.id)
         end
