@@ -13,19 +13,6 @@ module Fog
           )
         end
 
-        # class Mock
-        #   def delete_user(user_id)
-        #     self.data[:users].delete(
-        #       list_users.body['users'].find {|x| x['id'] == user_id }['id'])
-        #
-        #     response = Excon::Response.new
-        #     response.status = 204
-        #     response
-        #   rescue
-        #     raise Fog::Identity::OpenStackCommon::NotFound
-        #   end
-        # end
-
       end # Real
 
       class Mock

@@ -5,7 +5,7 @@ require 'fog/openstackcommon/models/identity/ec2_credential'
 
 describe "models" do
   describe "identity" do
-    describe "Fog::Identity::OpenStackCommon::Ec2Credential" do
+    describe "ec2_credential" do
 
       before do
         connect_options = {

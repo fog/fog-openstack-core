@@ -5,7 +5,7 @@ require 'fog/openstackcommon/models/identity/ec2_credentials'
 
 describe "models" do
   describe "identity" do
-    describe "Fog::Identity::OpenStackCommon::Ec2Credentials" do
+    describe "ec2_credentials" do
 
     #   describe ".all" do
     #     let(:svc) { MiniTest::Mock.new }

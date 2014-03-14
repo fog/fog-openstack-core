@@ -5,7 +5,7 @@ require 'fog/openstackcommon/models/identity/tenant'
 
 describe "models" do
   describe "identity" do
-    describe "Fog::Identity::OpenStackCommon::Tenant" do
+    describe "tenant" do
 
       let(:connect_options) { {
         :provider => 'OpenStackCommon',
@@ -17,38 +17,111 @@ describe "models" do
 
       let(:options) { {
         :service => service,
-        :name => "My Tenant",
-        :description => "This is my tenant for spec'ing",
+        :name => "MyTenant-#{Time.now.to_i}",
+        :description => "MyTenantDescription",
         :enabled => true
         } }
 
-      describe "#initialize", :vcr do
+      describe "new tenant" do
 
-        before do
-          @tenant = Fog::Identity::OpenStackCommon::Tenant.new(options)
-        end
+        let(:unsaved_tenant) {
+          Fog::Identity::OpenStackCommon::Tenant.new(options)
+        }
 
-        describe "unsaved tenant" do
+        # describe "#initialize", :vcr do
+        #
+        #   describe "unsaved tenant" do
+        #
+        #     it "is the correct type" do
+        #       unsaved_tenant.must_be_instance_of Fog::Identity::OpenStackCommon::Tenant
+        #     end
+        #
+        #     it "is enabled" do
+        #       unsaved_tenant.enabled.must_equal true
+        #     end
+        #
+        #     it "has correct name" do
+        #       unsaved_tenant.name.must_equal "MyTenant"
+        #     end
+        #
+        #     it "has correct description" do
+        #       unsaved_tenant.description.must_equal "My tenant description"
+        #     end
+        #
+        #   end
+        #
+        # end
 
-          it "is the correct type" do
-            @tenant.must_be_instance_of Fog::Identity::OpenStackCommon::Tenant
+        describe "#save", :vcr do
+
+          it "creates a new tenant" do
+            result = unsaved_tenant.save
+            result.must_be_instance_of Fog::Identity::OpenStackCommon::Tenant
           end
 
-          it "is enabled" do
-            @tenant.enabled.must_equal true
-          end
-
-          it "has correct name" do
-            @tenant.name.must_equal "My Tenant"
-          end
-
-          it "has correct description" do
-            @tenant.description.must_equal "This is my tenant for spec'ing"
-          end
+          # it "updates an existing tenant" do
+          #   unsaved_tenant.save
+          #   result = unsaved_tenant.save
+          #   result.must_equal true
+          # end
 
         end
 
       end
+
+      # describe "existing tenant" do
+
+        # let(:saved_tenant) {
+        #   tenant = Fog::Identity::OpenStackCommon::Tenant.new(options)
+        #   saved_tenant = tenant.save
+        #   saved_tenant
+        # }
+        #
+        # describe "#save" do
+        # end
+
+        # describe "#create" do
+        # end
+
+        # describe "#update" do
+        # end
+
+        # describe "#destroy", :vcr do
+        #
+        #   it "returns true when tenant exists" do
+        #     result = saved_tenant.destroy
+        #     result.must_equal true
+        #   end
+        #
+        #   it "throw exception when invalid tenant" do
+        #     proc {
+        #       tenant = Fog::Identity::OpenStackCommon::Tenant.new(options)
+        #       tenant.destroy
+        #     }.must_raise Fog::Identity::OpenStackCommon::NotFound
+        #   end
+        #
+        # end
+        #
+        #
+        # describe "#to_s" do
+        # end
+        #
+        # describe "#roles_for" do
+        # end
+        #
+        # describe "#users" do
+        # end
+        #
+        # describe "#grant_user_role" do
+        # end
+        #
+        # describe "#revoke_user_role" do
+        # end
+
+      # end
+
+
+
 
     end
   end

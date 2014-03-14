@@ -2,24 +2,15 @@ module Fog
   module Identity
     class OpenStackCommon
       class Real
-
-        def create_tenant(name, description='', enabled=true)
-          data = {
-            'tenant' => {
-              'name'        => name,
-              'description' => description,
-              'enabled'     => enabled
-            }
-          }
-
+        def create_tenant(attributes={})
+          attributes = {} if attributes.nil?
           request(
             :method  => 'POST',
             :expects => [200, 201, 202],
             :path    => '/tenants',
-            :body    =>  MultiJson.encode(data)
+            :body    =>  MultiJson.encode({'tenant' => attributes})
           )
         end
-
       end # Real
 
       class Mock

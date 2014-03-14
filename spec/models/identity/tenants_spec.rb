@@ -5,7 +5,7 @@ require 'fog/openstackcommon/models/identity/tenants'
 
 describe "models" do
   describe "identity" do
-    describe "Fog::Identity::OpenStackCommon::Tenants" do
+    describe "tenants" do
 
     end
   end

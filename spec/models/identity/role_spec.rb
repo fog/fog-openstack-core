@@ -5,7 +5,7 @@ require 'fog/openstackcommon/models/identity/role'
 
 describe "models" do
   describe "identity" do
-    describe "Fog::Identity::OpenStackCommon::Role" do
+    describe "role" do
 
       before do
         connect_options = {

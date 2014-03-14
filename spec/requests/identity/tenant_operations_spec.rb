@@ -18,7 +18,7 @@ describe "requests" do
         describe "when a unique name specified", :vcr do
 
           let(:result) {
-            service.create_tenant("azahabada#{Time.now.to_i}")
+            service.create_tenant({'name' => "azahabada#{Time.now.to_i}"})
           }
 
           it "returns the proper status" do
@@ -32,9 +32,9 @@ describe "requests" do
 
         describe "when the name is missing" do
 
-          it "causes failure", :vcr do
+          it "raises an exception", :vcr do
             proc {
-              service.create_tenant(nil)
+              service.create_tenant({})
             }.must_raise Fog::Identity::OpenStackCommon::BadRequest
           end
 
@@ -42,9 +42,19 @@ describe "requests" do
 
         describe "without name - with description" do
 
-          it "causes failure", :vcr do
+          it "raises an exception", :vcr do
             proc {
-              service.create_tenant(nil, "my tenant")
+              service.create_tenant({'name' => nil, 'description' => "azahabada#{Time.now.to_i}"})
+            }.must_raise Fog::Identity::OpenStackCommon::BadRequest
+          end
+
+        end
+
+        describe "when nil is passed instead of hash" do
+
+          it "raises an exception", :vcr do
+            proc {
+              service.create_tenant(nil)
             }.must_raise Fog::Identity::OpenStackCommon::BadRequest
           end
 
@@ -56,7 +66,7 @@ describe "requests" do
         describe "when the tenant exists" do
 
           it "update name succeeds", :vcr do
-            tenant = service.create_tenant("azahabada#{Time.now.to_i}")
+            tenant = service.create_tenant({'name' => "azahabada#{Time.now.to_i}"})
             name = {'name' => "new-name#{Time.now.to_i}"}
 
             result = service.update_tenant(tenant.body['tenant']['id'], name)
@@ -64,7 +74,7 @@ describe "requests" do
           end
 
           it "update description succeeds", :vcr do
-            tenant = service.create_tenant("azahabada#{Time.now.to_i}")
+            tenant = service.create_tenant({'name' => "azahabada#{Time.now.to_i}"})
             description = {'description' => "new-description#{Time.now.to_i}"}
 
             result = service.update_tenant(tenant.body['tenant']['id'], description)
@@ -72,7 +82,7 @@ describe "requests" do
           end
 
           it "update enabled succeeds", :vcr do
-            tenant = service.create_tenant("azahabada#{Time.now.to_i}")
+            tenant = service.create_tenant({'name' => "azahabada#{Time.now.to_i}"})
             enabled = {'enabled' => false}
 
             result = service.update_tenant(tenant.body['tenant']['id'], enabled)
@@ -93,7 +103,7 @@ describe "requests" do
       describe "#delete_tenant" do
 
         it "when tenand id specified", :vcr do
-          tenant = service.create_tenant("azahabada#{Time.now.to_i}")
+          tenant = service.create_tenant({'name' => "azahabada#{Time.now.to_i}"})
           result = service.delete_tenant(tenant.body['tenant']['id'])
           [200, 204].must_include result.status
         end

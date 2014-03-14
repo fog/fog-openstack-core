@@ -1,164 +1,213 @@
 require_relative '../../spec_helper'
+require 'ostruct'
 
 require 'fog/openstackcommon'
 require 'fog/openstackcommon/models/identity/user'
 
 describe "models" do
   describe "identity" do
-    describe "Fog::Identity::OpenStackCommon::User" do
+    describe "user" do
 
-      let(:connect_options) { {
-        :provider => 'OpenStackCommon',
-        :openstack_auth_url => "http://devstack.local:5000/v2.0/tokens",
-        :openstack_username => "admin",
-        :openstack_api_key => "stack"
-        } }
+      let(:service_mock) { Minitest::Mock.new }
 
-      let(:service) { Fog::Identity.new(connect_options) }
-      let(:user_name) { "John Smith #{Time.now.to_i}" }
-      let(:tenant_id) { service.list_tenants.body['tenants'].first['id'] }
+      let(:fake_id) { "1234567890" }
+      let(:fake_name) { "John Smith #{Time.now.to_i}" }
+      let(:fake_password) { 'password' }
+      let(:fake_email) { 'jsmith@acme.com' }
+      let(:fake_tenant_id) { 'tenant12345' }
+      let(:fake_enabled) { true }
 
       let(:options) { {
-        :service => service,
-        :email => 'jsmith@acme.com',
-        :enabled => true,
-        :name => user_name,
-        :tenant_id => tenant_id,
-        :password => 'password'
-        } }
+        :service => service_mock,
+        'name' => fake_name,
+        'password' => fake_password,
+        'email' => fake_email,
+        'tenant_id' => fake_tenant_id,
+        'enabled' => fake_enabled
+      } }
 
-      let(:unsaved_user) { Fog::Identity::OpenStackCommon::User.new(options) }
+      let(:fake_user_response) {
+        response = OpenStruct.new
+        response.body = {'user' => {}}
+        response
+      }
 
-      describe "new user" do
+      before do
+        # have to do this to handle fog-core check
+        service_mock.expect(:nil?, false, [])
+      end
 
-        describe "#initialize", :vcr do
+      describe "#initialize" do
 
-          it "must be of the correct type" do
-            unsaved_user.must_be_instance_of Fog::Identity::OpenStackCommon::User
-          end
+        it "throws exception when name is missing" do
+          proc {
+            options.delete('name')
+            new_user = Fog::Identity::OpenStackCommon::User.new(options)
+            service_mock.expect(:create_user, {}, [nil, fake_password, fake_email, fake_tenant_id, fake_enabled])
 
-          it "must have correct email" do
-            unsaved_user.email.must_equal "jsmith@acme.com"
-          end
+            new_user.save
+          }.must_raise ArgumentError
+        end
 
-          it "must be enabled" do
-            unsaved_user.enabled.must_equal true
-          end
+        it "throws exception when password is missing" do
+          proc {
+            options.delete('password')
+            new_user = Fog::Identity::OpenStackCommon::User.new(options)
+            service_mock.expect(:create_user, {}, [fake_name, nil, fake_email, fake_tenant_id, fake_enabled])
 
-          it "must have correct name" do
-            unsaved_user.name.must_equal user_name
-          end
+            new_user.save
+          }.must_raise ArgumentError
+        end
 
-          it "must have correct tenant_id" do
-            unsaved_user.tenant_id.must_equal tenant_id
-          end
+        it "throws exception when tenant id is missing" do
+          proc {
+            options.delete('tenant_id')
+            new_user = Fog::Identity::OpenStackCommon::User.new(options)
+            service_mock.expect(:create_user, {}, [fake_name, fake_password, fake_email, nil, fake_enabled])
 
-          it "must have correct password" do
-            unsaved_user.password.must_equal "password"
+            new_user.save
+          }.must_raise ArgumentError
+        end
+
+        it "sets enabled to true when enabled is missing" do
+          options.delete('enabled')
+          new_user = Fog::Identity::OpenStackCommon::User.new(options)
+          service_mock.expect(:create_user, fake_user_response, [fake_name, fake_password, fake_email, fake_tenant_id, nil])
+
+          new_user.save
+        end
+
+      end
+
+
+      describe "#save" do
+
+        describe "with a new user" do
+
+          let(:unsaved_user) { Fog::Identity::OpenStackCommon::User.new(options) }
+
+          it "creates user" do
+            service_mock.expect(:create_user, fake_user_response, [fake_name, fake_password, fake_email, fake_tenant_id, fake_enabled])
+
+            unsaved_user.save
           end
 
         end
 
-        describe "#save", :vcr do
+        describe "with an existing user" do
 
-          it "calls create when user is new" do
-            result = unsaved_user.save
-            result.must_equal true
-          end
+          let(:fake_user) {
+            Fog::Identity::OpenStackCommon::User.new(options.merge!('id' => fake_id))
+          }
 
-          it "calls update when user exists" do
-            unsaved_user.save
-            result = unsaved_user.save
-            result.must_equal true
+          it "updates user" do
+            service_mock.expect(:update_user, fake_user_response, [fake_user.id, {}])
+
+            fake_user.save
           end
 
         end
 
       end
 
-      describe "existing user" do
 
-        let(:saved_user) {
-          user = Fog::Identity::OpenStackCommon::User.new(options)
-          user.save
-          user
+      describe "#update_password" do
+
+        let(:fake_user) {
+          Fog::Identity::OpenStackCommon::User.new(options.merge!('id' => fake_id))
         }
 
-        describe "#update" do
+        it "calls update_password" do
+          new_password = "secret"
+          params_hash = {'password' => new_password}
+          service_mock.expect(:update_user, fake_user_response, [fake_user.id, params_hash])
+
+          fake_user.update_password(new_password)
         end
 
-        describe "#update_password", :vcr do
+      end
 
-          it "returns true" do
-            result = saved_user.update_password('password')
-            result.must_equal true
-          end
 
-          it "updates the password" do
-            result = saved_user.update_password('password')
-            saved_user.password.must_equal 'password'
-          end
+      describe "#update_tenant" do
 
+        let(:fake_user) {
+          Fog::Identity::OpenStackCommon::User.new(options.merge!('id' => fake_id))
+        }
+
+        it "calls update_tenant" do
+          new_tenant = "NewTenant"
+          params_hash = {'tenantId' => new_tenant}
+          service_mock.expect(:update_user, fake_user_response, [fake_user.id, params_hash])
+
+          fake_user.update_tenant(new_tenant)
         end
 
-        describe "#update_tenant", :vcr do
+      end
 
-          let(:tenant) { service.create_tenant("azahabada#{Time.now.to_i}") }
-          let(:tenant_id) { tenant.body['tenant']['id']}
 
-          it "returns true" do
-            result = saved_user.update_tenant(tenant_id)
-            result.must_equal true
-          end
+      describe "#update_enabled" do
 
-          it "updates the tenantId" do
-            result = saved_user.update_tenant(tenant_id)
-            saved_user.tenant_id.must_equal tenant_id
-          end
+        let(:fake_user) {
+          Fog::Identity::OpenStackCommon::User.new(options.merge!('id' => fake_id))
+        }
 
+        it "calls enable_user" do
+          enabled = false
+          params_hash = {'enabled' => enabled}
+          service_mock.expect(:update_user, fake_user_response, [fake_user.id, params_hash])
+
+          fake_user.update_enabled(enabled)
         end
 
-        describe "#update_enabled", :vcr do
+      end
 
-          it "returns true" do
-            result = saved_user.update_enabled(false)
-            result.must_equal true
-          end
 
-          it "updates the enabled flag" do
-            result = saved_user.update_enabled(false)
-            saved_user.enabled.must_equal false
-          end
+      describe "#destroy" do
 
+        let(:fake_user) {
+          Fog::Identity::OpenStackCommon::User.new(options.merge!('id' => fake_id))
+        }
+
+        it "calls destroy" do
+          service_mock.expect(:delete_user, true, [fake_user.id])
+
+          fake_user.destroy
         end
 
-        describe "#destroy", :vcr do
+      end
 
-          it "calls update when user exists" do
-            result = saved_user.destroy
-            result.must_equal true
-          end
 
+      describe "#ec2_credentials" do
+
+        let(:fake_user) {
+          Fog::Identity::OpenStackCommon::User.new(options.merge!('id' => fake_id))
+        }
+
+        it "calls ec2_credentials" do
+          service_mock.expect(:ec2_credentials, {}, [{:user => fake_user}])
+
+          fake_user.ec2_credentials
         end
 
-        describe "#ec2_credentials", :vcr do
+      end
 
-          it "service receives the 'ec2_credentials' message" do
-            creds = saved_user.ec2_credentials
-            creds.must_be_instance_of Fog::Identity::OpenStackCommon::Ec2Credentials
-          end
 
-        end
+      describe "#roles" do
 
-        describe "#roles", :vcr do
+        let(:fake_user) {
+          Fog::Identity::OpenStackCommon::User.new(options.merge!('id' => fake_id))
+        }
 
-          # ToDo: change this to get roles based on user_id and return collection
-          # roles_list.must_be_instance_of Fog::Identity::OpenStackCommon::Roles
-          it "returns an array" do
-            roles_list = saved_user.roles
-            roles_list.must_be_instance_of Array
-          end
+        let(:roles_response) {
+          roles_response = OpenStruct.new
+          roles_response.body = {'roles' => {}}
+          roles_response
+        }
 
+        it "calls roles" do
+          service_mock.expect(:list_roles_for_user_on_tenant, roles_response, [fake_tenant_id, fake_id])
+
+          fake_user.roles
         end
 
       end

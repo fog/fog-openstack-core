@@ -2,10 +2,8 @@ require_relative '../spec_helper'
 
 require 'fog/openstackcommon'
 
-describe "identity" do
-
-  describe "identity service" do
-
+describe "services" do
+  describe "identity" do
     let(:valid_options) { {
       :provider => 'OpenStackCommon',
       :openstack_auth_url => "http://devstack.local:5000/v2.0/tokens",
@@ -112,7 +110,6 @@ describe "identity" do
     end
 
   end
-
 end
 
 
