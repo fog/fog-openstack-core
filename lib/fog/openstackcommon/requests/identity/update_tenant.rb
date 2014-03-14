@@ -4,7 +4,7 @@ module Fog
       class Real
 
         def update_tenant(id, attributes)
-          options.merge!('id' => id)
+          attributes.merge!('id' => id)
           request(
             :method  => 'POST',
             :expects => [200],
