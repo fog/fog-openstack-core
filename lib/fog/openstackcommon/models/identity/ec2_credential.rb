@@ -10,11 +10,6 @@ module Fog
         attribute :tenant_id
         attribute :user_id
 
-        # def initialize(attributes)
-        #   prepare_service_value(attributes)
-        #   super
-        # end
-
         def destroy
           requires :access, :user_id
           service.delete_ec2_credential(user_id, access)
@@ -23,9 +18,6 @@ module Fog
 
         def save
           raise Fog::Errors::Error, 'Existing credentials cannot be altered' if access
-
-          # self.user_id   ||= user.id
-          # self.tenant_id ||= user.tenant_id
 
           requires :user_id, :tenant_id
 

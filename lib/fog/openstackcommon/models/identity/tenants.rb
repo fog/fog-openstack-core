@@ -12,17 +12,28 @@ module Fog
         end
 
         def find_by_id(id)
-          cached_tenant = self.find {|tenant| tenant.id == id}
-          return cached_tenant if cached_tenant
-          tenant_hash = service.get_tenant(id).body['tenant']
-          Fog::Identity::OpenStackCommon::Tenant.new(
-            tenant_hash.merge(:service => service))
+          find_tenant_in_collection(id) || build_tenant(id)
         end
 
         def destroy(id)
           tenant = self.find_by_id(id)
           tenant.destroy
         end
+
+        private
+
+        def find_tenant_in_collection(id)
+          self.find {|tenant| tenant.id == id}
+        end
+
+        def build_tenant(id)
+          Fog::Identity::OpenStackCommon::Tenant.new(
+            service.get_tenant(id).body['tenant'].merge(
+              'service' => service
+            )
+          )
+        end
+
       end # class Tenants
     end # class OpenStack
   end # module Compute
