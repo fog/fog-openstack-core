@@ -9,7 +9,7 @@ describe "models" do
 
       let(:service_mock) { Minitest::Mock.new }
 
-      let(:fake_id) { "credential123" }
+      let(:fake_access) { "access123" }
       let(:fake_password) { "password123" }
       let(:fake_tenant_id) { "tenant123" }
       let(:fake_user_id) { "user123" }
@@ -39,7 +39,7 @@ describe "models" do
             options.delete(:user_id)
             new_credential = Fog::Identity::OpenStackCommon::Ec2Credential.new(options)
             options.delete(:service)
-            service_mock.expect(:create_ec2_credential, {}, [fake_id, fake_id])
+            service_mock.expect(:create_ec2_credential, {}, [fake_user_id, fake_tenant_id])
 
             new_credential.save
           }.must_raise ArgumentError
@@ -50,7 +50,7 @@ describe "models" do
             options.delete(:tenant_id)
             new_credential = Fog::Identity::OpenStackCommon::Ec2Credential.new(options)
             options.delete(:service)
-            service_mock.expect(:create_ec2_credential, {}, [fake_id, fake_id])
+            service_mock.expect(:create_ec2_credential, {}, [fake_user_id, fake_tenant_id])
 
             new_credential.save
           }.must_raise ArgumentError
@@ -66,6 +66,20 @@ describe "models" do
 
       end
 
+
+      describe "#destroy" do
+
+        let(:fake_credential) {
+          Fog::Identity::OpenStackCommon::Ec2Credential.new(options.merge!('access' => fake_access))
+        }
+
+        it "calls destroy" do
+          service_mock.expect(:delete_ec2_credential, true, [fake_user_id, fake_access])
+
+          fake_credential.destroy
+        end
+
+      end
 
 
     end
