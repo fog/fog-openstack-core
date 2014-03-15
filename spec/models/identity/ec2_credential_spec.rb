@@ -42,6 +42,7 @@ describe "models" do
             service_mock.expect(:create_ec2_credential, {}, [fake_user_id, fake_tenant_id])
 
             new_credential.save
+            service_mock.verify
           }.must_raise ArgumentError
         end
 
@@ -53,6 +54,7 @@ describe "models" do
             service_mock.expect(:create_ec2_credential, {}, [fake_user_id, fake_tenant_id])
 
             new_credential.save
+            service_mock.verify
           }.must_raise ArgumentError
         end
 
@@ -62,6 +64,7 @@ describe "models" do
           service_mock.expect(:create_ec2_credential, fake_credential_response, [new_credential.user_id, new_credential.tenant_id])
 
           new_credential.save
+          service_mock.verify
         end
 
       end
@@ -77,6 +80,7 @@ describe "models" do
           service_mock.expect(:delete_ec2_credential, true, [fake_user_id, fake_access])
 
           fake_credential.destroy
+          service_mock.verify
         end
 
       end

@@ -37,6 +37,7 @@ describe "models" do
           service_mock.expect(:list_tenants, fake_tenants_response, [])
 
           fake_tenants_collection.all
+          service_mock.verify
         end
 
       end
@@ -55,13 +56,14 @@ describe "models" do
           service_mock.expect(:get_tenant, fake_tenant_response, [fake_id])
 
           fake_tenants_collection.find_by_id(fake_id)
+          service_mock.verify
         end
 
       end
 
 
       describe "#destroy" do
-
+        it { skip("TBD") }
       end
 
 

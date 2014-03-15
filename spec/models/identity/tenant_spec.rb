@@ -44,6 +44,7 @@ describe "models" do
             service_mock.expect(:create_tenant, fake_tenant_response, [options])
 
             new_tenant.save
+            service_mock.verify
           }.must_raise ArgumentError
         end
 
@@ -53,6 +54,7 @@ describe "models" do
           service_mock.expect(:create_tenant, fake_tenant_response, [options])
 
           new_tenant.save
+          service_mock.verify
         end
 
       end
@@ -68,6 +70,7 @@ describe "models" do
           service_mock.expect(:update_tenant, fake_tenant_response, [fake_tenant.id, new_name])
 
           fake_tenant.update(new_name)
+          service_mock.verify
         end
 
         it "updates description" do
@@ -75,6 +78,7 @@ describe "models" do
           service_mock.expect(:update_tenant, fake_tenant_response, [fake_tenant.id, new_description])
 
           fake_tenant.update(new_description)
+          service_mock.verify
         end
 
         it "updates enabled" do
@@ -82,6 +86,7 @@ describe "models" do
           service_mock.expect(:update_tenant, fake_tenant_response, [fake_tenant.id, new_enabled])
 
           fake_tenant.update(new_enabled)
+          service_mock.verify
         end
 
       end
@@ -97,6 +102,7 @@ describe "models" do
           service_mock.expect(:delete_tenant, true, [fake_tenant.id])
 
           fake_tenant.destroy
+          service_mock.verify
         end
 
       end
@@ -112,6 +118,7 @@ describe "models" do
           service_mock.expect(:users, {}, [{:tenant_id => fake_tenant.id}])
 
           fake_tenant.users
+          service_mock.verify
         end
 
       end
@@ -130,6 +137,7 @@ describe "models" do
           service_mock.expect(:roles, {}, [{:tenant => fake_tenant, :user => fake_user}])
 
           fake_tenant.roles_for(fake_user)
+          service_mock.verify
         end
 
       end
@@ -152,6 +160,7 @@ describe "models" do
           service_mock.expect(:add_role_to_user_on_tenant, {}, [fake_tenant.id, fake_user.id, fake_role.id])
 
           fake_tenant.grant_user_role(fake_user.id, fake_role.id)
+          service_mock.verify
         end
 
       end
@@ -174,6 +183,7 @@ describe "models" do
           service_mock.expect(:delete_role_from_user_on_tenant, {}, [fake_tenant.id, fake_user.id, fake_role.id])
 
           fake_tenant.revoke_user_role(fake_user.id, fake_role.id)
+          service_mock.verify
         end
 
       end

@@ -40,6 +40,7 @@ describe "models" do
             service_mock.expect(:create_role, {}, [nil])
 
             new_role.save
+            service_mock.verify
           }.must_raise ArgumentError
         end
 
@@ -48,6 +49,7 @@ describe "models" do
           service_mock.expect(:create_role, fake_role_response, [fake_name])
 
           new_role.save
+          service_mock.verify
         end
 
       end
@@ -63,6 +65,7 @@ describe "models" do
             service_mock.expect(:create_role, fake_role_response, [fake_name])
 
             unsaved_role.save
+            service_mock.verify
           end
 
         end
@@ -80,6 +83,7 @@ describe "models" do
           service_mock.expect(:delete_role, true, [fake_role.id])
 
           fake_role.destroy
+          service_mock.verify
         end
 
       end
@@ -95,6 +99,7 @@ describe "models" do
           service_mock.expect(:add_role_to_user_on_tenant, fake_role_response, [fake_id, fake_id, fake_id])
 
           fake_role.add_to_user(fake_id, fake_id)
+          service_mock.verify
         end
 
       end
@@ -110,6 +115,7 @@ describe "models" do
           service_mock.expect(:delete_role_from_user_on_tenant, fake_role_response, [fake_id, fake_id, fake_id])
 
           fake_role.remove_from_user(fake_id, fake_id)
+          service_mock.verify
           service_mock.verify
         end
 

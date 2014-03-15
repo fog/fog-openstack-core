@@ -39,6 +39,7 @@ describe "models" do
           service_mock.expect(:list_users_for_tenant, fake_users_response, [fake_id])
 
           fake_users_collection.all
+          service_mock.verify
         end
 
       end
@@ -57,6 +58,7 @@ describe "models" do
           service_mock.expect(:get_user_by_id, fake_user_response, [fake_id])
 
           fake_users_collection.find_by_id(fake_id)
+          service_mock.verify
         end
 
         # it "when user exists in openstack" do
@@ -75,7 +77,8 @@ describe "models" do
       end
 
 
-      # describe "#destroy" do
+      describe "#destroy" do
+        it { skip("TBD") }
       #
       #   let(:user_mock) { MiniTest::Mock.new }
       #   # let(:options) { {
@@ -88,7 +91,7 @@ describe "models" do
       #     user_mock.destroy(fake_id)
       #   end
       #
-      # end
+      end
 
     end
   end

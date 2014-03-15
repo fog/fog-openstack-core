@@ -28,17 +28,6 @@ module Fog
           )
         end
 
-        # class Mock
-        #   def list_ec2_credentials(user_id)
-        #     ec2_credentials = self.data[:ec2_credentials][user_id].values
-        #
-        #     response = Excon::Response.new
-        #     response.status = 200
-        #     response.body = { 'credentials' => ec2_credentials }
-        #     response
-        #   end
-        # end
-
       end
 
       class Mock

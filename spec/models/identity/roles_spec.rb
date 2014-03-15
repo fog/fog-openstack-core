@@ -37,6 +37,7 @@ describe "models" do
           service_mock.expect(:list_roles, fake_roles_response, [])
 
           fake_roles_collection.all
+          service_mock.verify
         end
 
       end
@@ -54,6 +55,7 @@ describe "models" do
           service_mock.expect(:get_role, fake_role_response, [fake_id])
 
           fake_roles_collection.get(fake_id)
+          service_mock.verify
         end
 
       end

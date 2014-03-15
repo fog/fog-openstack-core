@@ -46,6 +46,7 @@ describe "models" do
             service_mock.expect(:create_user, {}, [nil, fake_password, fake_email, fake_tenant_id, fake_enabled])
 
             new_user.save
+            service_mock.verify
           }.must_raise ArgumentError
         end
 
@@ -56,6 +57,7 @@ describe "models" do
             service_mock.expect(:create_user, {}, [fake_name, nil, fake_email, fake_tenant_id, fake_enabled])
 
             new_user.save
+            service_mock.verify
           }.must_raise ArgumentError
         end
 
@@ -66,6 +68,7 @@ describe "models" do
             service_mock.expect(:create_user, {}, [fake_name, fake_password, fake_email, nil, fake_enabled])
 
             new_user.save
+            service_mock.verify
           }.must_raise ArgumentError
         end
 
@@ -75,6 +78,7 @@ describe "models" do
           service_mock.expect(:create_user, fake_user_response, [fake_name, fake_password, fake_email, fake_tenant_id, nil])
 
           new_user.save
+          service_mock.verify
         end
 
         it "creates user when name, password and tenant_id specified" do
@@ -82,6 +86,7 @@ describe "models" do
           service_mock.expect(:create_user, fake_user_response, [fake_name, fake_password, fake_email, fake_tenant_id, fake_enabled])
 
           new_user.save
+          service_mock.verify
         end
 
       end
@@ -97,6 +102,7 @@ describe "models" do
             service_mock.expect(:create_user, fake_user_response, [fake_name, fake_password, fake_email, fake_tenant_id, fake_enabled])
 
             unsaved_user.save
+            service_mock.verify
           end
 
         end
@@ -111,6 +117,7 @@ describe "models" do
             service_mock.expect(:update_user, fake_user_response, [fake_user.id, {}])
 
             fake_user.save
+            service_mock.verify
           end
 
         end
@@ -130,6 +137,7 @@ describe "models" do
           service_mock.expect(:update_user, fake_user_response, [fake_user.id, params_hash])
 
           fake_user.update_password(new_password)
+          service_mock.verify
         end
 
       end
@@ -147,6 +155,7 @@ describe "models" do
           service_mock.expect(:update_user, fake_user_response, [fake_user.id, params_hash])
 
           fake_user.update_tenant(new_tenant)
+          service_mock.verify
         end
 
       end
@@ -164,6 +173,7 @@ describe "models" do
           service_mock.expect(:update_user, fake_user_response, [fake_user.id, params_hash])
 
           fake_user.update_enabled(enabled)
+          service_mock.verify
         end
 
       end
@@ -179,6 +189,7 @@ describe "models" do
           service_mock.expect(:delete_user, true, [fake_user.id])
 
           fake_user.destroy
+          service_mock.verify
         end
 
       end
@@ -194,6 +205,7 @@ describe "models" do
           service_mock.expect(:ec2_credentials, {}, [{:user => fake_user}])
 
           fake_user.ec2_credentials
+          service_mock.verify
         end
 
       end
@@ -215,6 +227,7 @@ describe "models" do
           service_mock.expect(:list_roles_for_user_on_tenant, roles_response, [fake_tenant_id, fake_id])
 
           fake_user.roles
+          service_mock.verify
         end
 
       end
