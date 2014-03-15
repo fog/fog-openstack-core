@@ -25,12 +25,6 @@ describe "models" do
         response
       }
 
-      before do
-        # have to do this to handle fog-core check
-        service_mock.expect(:nil?, false, [])
-      end
-
-
       describe "#all" do
 
         it "gets all roles" do
