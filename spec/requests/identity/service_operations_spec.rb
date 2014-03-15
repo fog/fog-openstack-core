@@ -1,18 +1,14 @@
 require_relative '../../spec_helper'
+require_relative '../../support/spec_helpers'
+include SpecHelpers
+
 require 'fog/openstackcommon'
 
 describe "requests" do
   describe "identity" do
     describe "service operations" do
 
-      let(:valid_options) { {
-        :provider          => 'OpenStackCommon',
-        :openstack_auth_url => "http://devstack.local:5000/v2.0/tokens",
-        :openstack_username => "admin",
-        :openstack_api_key => "stack"
-      } }
-
-      let(:service) { Fog::Identity.new(valid_options) }
+      let(:service) { Fog::Identity.new(admin_options_hash) }
 
       describe "#list_services" do
         it { skip("Choosing to NotImplement for now.") }

@@ -1,16 +1,13 @@
 require_relative '../spec_helper'
+require_relative '../support/spec_helpers'
+include SpecHelpers
 
 require 'fog/openstackcommon'
 
 describe "services" do
   describe "identity" do
-    let(:valid_options) { {
-      :provider => 'OpenStackCommon',
-      :openstack_auth_url => "http://devstack.local:5000/v2.0/tokens",
-      :openstack_username => "demo",
-      :openstack_api_key => "stack"
-      }
-    }
+
+    let(:admin_options) { admin_options_hash }
 
     describe "#initialize" do
 
@@ -24,7 +21,7 @@ describe "services" do
         describe "credentials" do
           describe "valid auth", :vcr do
 
-            let(:connection) { Fog::Identity.new(valid_options) }
+            let(:connection) { Fog::Identity.new(admin_options) }
 
             it "must be a hash" do
               # connection.must_be_instance_of Hash
@@ -49,7 +46,7 @@ describe "services" do
           describe "invalid auth", :vcr do
 
             it "an invalid username raises an Unauthorized exception" do
-              invalid_username_options = valid_options
+              invalid_username_options = admin_options
               invalid_username_options[:openstack_username] = "none"
               proc {
                 Fog::Identity.new(invalid_username_options)
@@ -57,7 +54,7 @@ describe "services" do
             end
 
             it "an invalid password raises an Unauthorized exception" do
-              invalid_password_options = valid_options
+              invalid_password_options = admin_options
               invalid_password_options[:openstack_api_key] = "none"
               proc {
                 Fog::Identity.new(invalid_password_options)
@@ -72,7 +69,7 @@ describe "services" do
         describe "token" do
           describe "invalid auth", :vcr do
             it "raises an Unauthorized exception" do
-              invalid_auth_token_options = valid_options
+              invalid_auth_token_options = admin_options
               invalid_auth_token_options[:openstack_auth_token] = "abcdefghijklmnopqrstuvwxys0123456789"
               proc {
                 Fog::Identity.new(invalid_auth_token_options)
@@ -82,15 +79,15 @@ describe "services" do
 
           describe "valid auth", :vcr do
             let(:connection) {
-              Fog::Identity.new(valid_options)
+              Fog::Identity.new(admin_options)
             }
 
             # 1 - get the valid auth token out of the initial connection
             # 2 - authenticate based on the valid auth token to ensure it works
             it "must not be nil" do
-              valid_auth_token_options = valid_options
+              valid_auth_token_options = admin_options
               valid_auth_token_options[:openstack_auth_token] = connection.auth_token
-              Fog::Identity.new(valid_options).wont_be_nil
+              Fog::Identity.new(admin_options).wont_be_nil
             end
 
           end
