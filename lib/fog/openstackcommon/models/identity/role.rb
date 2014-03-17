@@ -11,7 +11,7 @@ module Fog
           requires :name
           data = service.create_role(name)
           merge_attributes(data.body['role'])
-          self
+          true
         end
 
         def destroy
