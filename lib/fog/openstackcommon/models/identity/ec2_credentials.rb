@@ -20,7 +20,7 @@ module Fog
             attributes[:user_id]   ||= user.id
             attributes[:tenant_id] ||= user.tenant_id
           end
-          super attributes
+          super
         end
 
         def destroy(access_key)
