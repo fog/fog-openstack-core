@@ -24,14 +24,14 @@ module Fog
         def create
           data = service.create_user(name, password, email, tenant_id, enabled)
           merge_attributes(data.body['user'])
-          self
+          true
         end
 
         def update(options = {})
           requires :id
           data = service.update_user(self.id, options || attributes)
           merge_attributes(data.body['user'])
-          self
+          true
         end
 
         def update_password(password)

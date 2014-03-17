@@ -18,14 +18,14 @@ module Fog
         def create
           data = service.create_tenant(attributes)
           merge_attributes(data.body['tenant'])
-          self
+          true
         end
 
         def update(options = {})
           requires :id
           data = service.update_tenant(self.id, options || attributes)
           merge_attributes(data.body['tenant'])
-          self
+          true
         end
 
         def destroy
