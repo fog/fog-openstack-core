@@ -60,32 +60,6 @@ describe "models" do
         it { skip("TBD") }
       end
 
-      describe "#find_by_access_key" do
-
-        let(:fake_credential_response) {
-          response = OpenStruct.new
-          response.body = {'credential' => {}}
-          response
-        }
-
-        describe "without user specified" do
-          it "returns an empty array" do
-            result = fake_credentials_collection.find_by_access_key(fake_id)
-            result.must_equal nil
-          end
-        end
-
-        describe "with user specified" do
-          it { skip("TBD") }
-          # it "gets credential" do
-          #   service_mock.expect(:get_ec2_credential, nil, [fake_id, fake_id])
-          #   fake_credentials_collection.find_by_access_key(fake_id)
-          #   service_mock.verify
-          # end
-        end
-
-
-      end
     end
   end
 end

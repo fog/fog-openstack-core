@@ -36,24 +36,6 @@ describe "models" do
 
       end
 
-
-      describe "#get" do
-
-        let(:fake_role_response) {
-          response = OpenStruct.new
-          response.body = {'role' => {}}
-          response
-        }
-
-        it "when role exists in collection" do
-          service_mock.expect(:get_role, fake_role_response, [fake_id])
-
-          fake_roles_collection.get(fake_id)
-          service_mock.verify
-        end
-
-      end
-
     end
   end
 end

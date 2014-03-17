@@ -40,38 +40,6 @@ describe "models" do
       end
 
 
-      describe "#find_by_id" do
-
-        let(:fake_user_response) {
-          response = OpenStruct.new
-          response.body = {'user' => {}}
-          response
-        }
-
-        it "when user exists in collection" do
-          service_mock.expect(:list_users_for_tenant, fake_users_response, [fake_id])
-          service_mock.expect(:get_user_by_id, fake_user_response, [fake_id])
-
-          fake_users_collection.find_by_id(fake_id)
-          service_mock.verify
-        end
-
-        # it "when user exists in openstack" do
-        #   fake_users_collection.expect(:find_user_in_collection, nil, [fake_id])
-        #   service_mock.expect(get_user_by_id, fake_user_response, [fake_id])
-        #
-        #   fake_users_collection.find_by_id(fake_id)
-        # end
-
-        # it "when user doesn't exist" do
-        #   service_mock.expect(get_user_by_id, fake_user_response, [fake_id])
-        #
-        #   fake_users_collection.find_by_id(fake_id)
-        # end
-
-      end
-
-
       describe "#destroy" do
         it { skip("TBD") }
       #
