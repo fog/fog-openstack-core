@@ -12,7 +12,7 @@ describe "models" do
       let(:service_mock) { Minitest::Mock.new }
 
       let(:fake_id) { "1234567890" }
-      let(:fake_name) { "John Smith #{Time.now.to_i}" }
+      let(:fake_name) { "Role-#{Time.now.to_i}" }
 
       let(:options) {
         { :service => service_mock,
