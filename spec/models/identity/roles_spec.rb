@@ -11,9 +11,9 @@ describe "models" do
 
       let(:fake_id) { "1234567890" }
 
-      let(:options) { {
-        :service => service_mock
-      } }
+      let(:options) {
+        { :service => service_mock }
+      }
 
       let(:fake_roles_collection) {
         Fog::Identity::OpenStackCommon::Roles.new(options)

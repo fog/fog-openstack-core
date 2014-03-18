@@ -14,10 +14,11 @@ describe "models" do
       let(:fake_id) { "1234567890" }
       let(:fake_name) { "John Smith #{Time.now.to_i}" }
 
-      let(:options) { {
-        :service => service_mock,
-        'name' => fake_name
-      } }
+      let(:options) {
+        { :service => service_mock,
+          'name' => fake_name
+        }
+      }
 
       let(:fake_role_response) {
         response = OpenStruct.new

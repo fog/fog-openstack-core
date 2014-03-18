@@ -12,10 +12,11 @@ describe "models" do
 
       let(:fake_id) { "1234567890" }
 
-      let(:options) { {
-        :service => service_mock,
-        :tenant_id => fake_id
-      } }
+      let(:options) {
+        { :service => service_mock,
+          :tenant_id => fake_id
+        }
+      }
 
       let(:fake_users_collection) {
         Fog::Identity::OpenStackCommon::Users.new(options)
@@ -42,18 +43,6 @@ describe "models" do
 
       describe "#destroy" do
         it { skip("TBD") }
-      #
-      #   let(:user_mock) { MiniTest::Mock.new }
-      #   # let(:options) { {
-      #   # } }
-      #   # let(:collection) { Fog::Identity::OpenStackCommon::Users.new(options) }
-      #
-      #   it "calls destroy" do
-      #     user_mock.expect(:destroy, true, [fake_id])
-      #
-      #     user_mock.destroy(fake_id)
-      #   end
-      #
       end
 
     end

@@ -23,10 +23,11 @@ describe "models" do
         'enabled' => true
         ) }
 
-      let(:options) { {
-        :service => service_mock,
-        :tenant_id => fake_id
-      } }
+      let(:options) {
+        { :service => service_mock,
+          :tenant_id => fake_id
+        }
+      }
 
       let(:fake_credentials_collection) {
         Fog::Identity::OpenStackCommon::Ec2Credentials.new(options)

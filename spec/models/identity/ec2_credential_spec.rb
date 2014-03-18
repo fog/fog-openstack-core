@@ -14,12 +14,13 @@ describe "models" do
       let(:fake_tenant_id) { "tenant123" }
       let(:fake_user_id) { "user123" }
 
-      let(:options) { {
-        :service => service_mock,
-        :secret => fake_password,
-        :tenant_id => fake_tenant_id,
-        :user_id => fake_user_id
-        } }
+      let(:options) {
+        { :service => service_mock,
+          :secret => fake_password,
+          :tenant_id => fake_tenant_id,
+          :user_id => fake_user_id
+        }
+      }
 
       let(:fake_credential_response) {
         response = OpenStruct.new

@@ -14,12 +14,13 @@ describe "models" do
       let(:fake_description) { "MyTenantDescription" }
       let(:fake_enabled) { true }
 
-      let(:options) { {
-        :service => service_mock,
-        :name => fake_name,
-        :description => fake_description,
-        :enabled => fake_enabled
-        } }
+      let(:options) {
+        { :service => service_mock,
+          :name => fake_name,
+          :description => fake_description,
+          :enabled => fake_enabled
+        } 
+      }
 
       let(:fake_tenant_response) {
         response = OpenStruct.new
