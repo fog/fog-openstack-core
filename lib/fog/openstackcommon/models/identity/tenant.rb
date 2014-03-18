@@ -12,7 +12,7 @@ module Fog
 
         def save
           requires :name
-          identity ? update : create
+          persisted? ? update : create
         end
 
         def create
@@ -37,18 +37,6 @@ module Fog
         def users
           requires :id
           service.users(:tenant_id => self.id)
-        end
-
-        def roles_for(user)
-          service.roles(:tenant => self, :user => user)
-        end
-
-        def grant_user_role(user_id, role_id)
-          service.add_role_to_user_on_tenant(self.id, user_id, role_id)
-        end
-
-        def revoke_user_role(user_id, role_id)
-          service.delete_role_from_user_on_tenant(self.id, user_id, role_id)
         end
 
         def to_s

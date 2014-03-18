@@ -18,7 +18,7 @@ module Fog
           # raise Fog::Errors::Error.new('Resaving an existing object may create a duplicate') if persisted?
           requires :name, :tenant_id, :password
           enabled = true if enabled.nil?
-          identity ? update : create
+          persisted? ? update : create
         end
 
         def create
@@ -63,6 +63,17 @@ module Fog
           data = service.list_roles_for_user_on_tenant(tenant_id, self.id)
           data.body['roles']
         end
+
+        def grant_role(role_id)
+          service.add_role_to_user_on_tenant(
+            tenant_id = self.tenant_id, self.id, role_id)
+        end
+
+        def revoke_role(role_id)
+          service.delete_role_from_user_on_tenant(
+            tenant_id = self.tenant_id, self.id, role_id)
+        end
+
       end # class User
     end # class OpenStack
   end # module Identity

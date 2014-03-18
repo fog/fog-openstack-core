@@ -2,8 +2,6 @@ require_relative '../../spec_helper'
 
 require 'fog/openstackcommon'
 require 'fog/openstackcommon/models/identity/tenant'
-require 'fog/openstackcommon/models/identity/user'
-require 'fog/openstackcommon/models/identity/role'
 
 describe "models" do
   describe "identity" do
@@ -123,70 +121,6 @@ describe "models" do
 
       end
 
-      describe "#roles_for" do
-
-        let(:fake_tenant) {
-          Fog::Identity::OpenStackCommon::Tenant.new(options.merge!('id' => fake_id))
-        }
-
-        let(:fake_user) {
-          Fog::Identity::OpenStackCommon::User.new(options.merge!('id' => fake_id))
-        }
-
-        it "calls roles" do
-          service_mock.expect(:roles, {}, [{:tenant => fake_tenant, :user => fake_user}])
-
-          fake_tenant.roles_for(fake_user)
-          service_mock.verify
-        end
-
-      end
-
-      describe "#grant_user_role" do
-
-        let(:fake_tenant) {
-          Fog::Identity::OpenStackCommon::Tenant.new(options.merge!('id' => fake_id))
-        }
-
-        let(:fake_user) {
-          Fog::Identity::OpenStackCommon::User.new(options.merge!('id' => fake_id))
-        }
-
-        let(:fake_role) {
-          Fog::Identity::OpenStackCommon::Role.new(options.merge!('id' => fake_id))
-        }
-
-        it "calls roles" do
-          service_mock.expect(:add_role_to_user_on_tenant, {}, [fake_tenant.id, fake_user.id, fake_role.id])
-
-          fake_tenant.grant_user_role(fake_user.id, fake_role.id)
-          service_mock.verify
-        end
-
-      end
-
-      describe "#revoke_user_role" do
-
-        let(:fake_tenant) {
-          Fog::Identity::OpenStackCommon::Tenant.new(options.merge!('id' => fake_id))
-        }
-
-        let(:fake_user) {
-          Fog::Identity::OpenStackCommon::User.new(options.merge!('id' => fake_id))
-        }
-
-        let(:fake_role) {
-          Fog::Identity::OpenStackCommon::Role.new(options.merge!('id' => fake_id))
-        }
-
-        it "calls roles" do
-          service_mock.expect(:delete_role_from_user_on_tenant, {}, [fake_tenant.id, fake_user.id, fake_role.id])
-
-          fake_tenant.revoke_user_role(fake_user.id, fake_role.id)
-          service_mock.verify
-        end
-
-      end
 
       describe "#to_s" do
 

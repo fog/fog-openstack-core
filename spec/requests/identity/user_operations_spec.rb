@@ -78,11 +78,9 @@ describe "requests" do
             }.must_raise Fog::Identity::OpenStackCommon::NotFound
           end
 
-          it "when updating id" do
-            proc {
-              service.update_user(@user_id, { 'id' => "id-#{Time.now.to_i}"})
-            }.must_raise Fog::Identity::OpenStackCommon::BadRequest
-          end
+          # Although the user id is a readonly attribute, no need to write a spec against
+          # the id because it is set with the 'update_user' request (update_user.rb); as a
+          # result, the user will *never* be able to update the id.
 
         end
 

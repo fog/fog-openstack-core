@@ -53,11 +53,11 @@ module Fog
       request :list_tenants
       request :get_tenants_by_name
       request :get_tenants_by_id
-      request :list_roles_for_user_on_tenant
       request :create_tenant
       request :update_tenant
       request :delete_tenant
       request :list_users_for_tenant
+      request :list_roles_for_user_on_tenant
       request :add_role_to_user_on_tenant
       request :delete_role_from_user_on_tenant
 
