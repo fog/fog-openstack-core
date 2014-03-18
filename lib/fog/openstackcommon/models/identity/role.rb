@@ -22,14 +22,12 @@ module Fog
 
         def add_to_user(user_id, tenant_id)
           requires :id
-          result = service.add_role_to_user_on_tenant(tenant_id, user_id, self.id)
-          [200,201].include? result.status
+          service.add_role_to_user_on_tenant(tenant_id, user_id, self.id)
         end
 
         def remove_from_user(user_id, tenant_id)
           requires :id
-          result = service.delete_role_from_user_on_tenant(tenant_id, user_id, self.id)
-          [200,204].include? result.status
+          service.delete_role_from_user_on_tenant(tenant_id, user_id, self.id)
         end
 
       end # class Role
