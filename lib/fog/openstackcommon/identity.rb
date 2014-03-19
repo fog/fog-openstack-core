@@ -25,17 +25,61 @@ module Fog
       request_path 'fog/openstackcommon/requests/identity'
 
 
-      # Administrative API Operations ----------------------------
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Admin_API_Service_Developer_Operations-d1e1356.html
+      ## EC2 Credentials
+      request :list_ec2_credentials
+      request :get_ec2_credential
+      request :create_ec2_credential
+      request :delete_ec2_credential
+
+      ## Endpoint Operations
+      # request :list_endpoints
+      # request :get_endpoint
+      # request :create_endpoint
+      # request :delete_endpoint
+
+      ## Role Operations
+      request :list_roles
+      request :create_role
+      request :get_role
+      request :delete_role
+
+      ## Service Operations
+      # request :list_services
+      # request :create_service
+      # request :get_service
+      # request :delete_service
+
+      ## Tenant Operations
+      request :list_tenants
+      request :get_tenants_by_name
+      request :get_tenants_by_id
+      request :create_tenant
+      request :update_tenant
+      request :delete_tenant
+      request :list_users_for_tenant
+      request :list_roles_for_user_on_tenant
+      request :add_role_to_user_on_tenant
+      request :delete_role_from_user_on_tenant
 
       ## Token Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Token_Operations.html
+      request :create_token
       request :check_token
       request :validate_token
       request :list_endpoints_for_token
 
       ## User Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/User_Operations.html
+      request :list_users
+      request :create_user
+      request :update_user
+      request :delete_user
+      request :enable_user
+      # request :list_global_roles_for_user    see -> :list_user_global_roles
+      # request :add_global_role_to_user       API returns NotImplemented
+      # request :delete_global_role_for_user   API returns NotImplemented
+      # request :add_credential_to_user        API returns NotImplemented
+      # request :update_credential_for_user    API returns NotImplemented
+      # request :delete_credential_for_user    API returns NotImplemented
+      # request :get_user_credentials          API returns NotImplemented
       request :get_user_by_name
       request :get_user_by_id
       # request :list_user_global_roles
@@ -70,73 +114,6 @@ module Fog
       # <@dolphm>	 wchrisj: you're not the only one to be confused by it :(
       # ---- 3/6/2014 ----
 
-      ## Tenant Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations.html
-      request :list_tenants
-      request :get_tenants_by_name
-      request :get_tenants_by_id
-      request :list_roles_for_user_on_tenant
-
-
-      # Openstack Identity Service Extensions --------------------
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/openstack_identity_extensions.html
-
-      ## User Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/User_Operations_OS-KSADM.html
-      request :list_users
-      request :create_user
-      request :update_user
-      request :delete_user
-      request :enable_user
-      request :list_global_roles_for_user
-      request :add_global_role_to_user
-      request :delete_global_role_for_user
-      request :add_credential_to_user
-      request :update_credential_for_user
-      request :delete_credential_for_user
-      request :get_user_credentials
-
-      ## Tenant Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations_OS-KSADM.html
-      request :create_tenant
-      request :update_tenant
-      request :delete_tenant
-      request :list_users_for_tenant
-      request :add_role_to_user_on_tenant
-      request :delete_user_from_tenant
-
-      ## Role Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Role_Operations_OS-KSADM.html
-      request :list_roles
-      request :create_role
-      request :get_role
-      request :delete_role
-
-      ## Service Operations
-      #http://docs.openstack.org/api/openstack-identity-service/2.0/content/Service_Operations_OS-KSADM.html
-
-
-      # OS-KSCATALOG Admin Extension ------------------------------
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Admin_API_Service_Developer_Operations-OS-KSCATALOG.html
-
-      ## Endpoint Template Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Endpoint_Template_Operations_OS-KSCATALOG.html
-      # request ???
-
-      ## Endpoint Operations
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Tenant_Operations_OS-KSCATALOG.html
-      # request ???
-
-
-      # OS-KSEC2 Admin Extension ----------------------------------
-      # http://docs.openstack.org/api/openstack-identity-service/2.0/content/Admin_API_Service_Developer_Operations-OS-KSEC2.html
-
-      ## User Operations
-      request :list_ec2_credentials
-      request :get_ec2_credential
-      request :create_ec2_credential
-      request :delete_ec2_credential
-
 
       # minimal requirement
       class Mock
@@ -150,20 +127,21 @@ module Fog
           # puts "===== Fog::Identity::OpenStackCommon -> initialize ====="
           apply_options(options)
           authenticate
-          connection_url = "#{@scheme}://#{@host}:#{@port}"
-          @connection = Fog::Core::Connection.new(connection_url, @persistent, @connection_options)
+          service_url = "#{@scheme}://#{@host}:#{@port}"
+          @service = Fog::Core::Connection.new(service_url, @persistent, @service_options)
         end
 
+        # Close the underlying Excon connection object
         def reload
           # puts "===== Fog::Identity::OpenStackCommon -> reload ====="
-          @connection.reset
+          @service.reset
         end
 
         def request(params)
           # puts "===== Fog::Identity::OpenStackCommon -> request ====="
           retried = false
           begin
-            response = @connection.request(params.merge({
+            response = @service.request(params.merge({
               :headers  => {
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
@@ -171,6 +149,10 @@ module Fog
               }.merge!(params[:headers] || {}),
               :path     => "#{@base_path}#{params[:path]}"#,
             }))
+          rescue Excon::Errors::Conflict => error
+            raise Fog::Identity::OpenStackCommon::Conflict.slurp(error)
+          rescue Excon::Errors::BadRequest => error
+            raise Fog::Identity::OpenStackCommon::BadRequest.slurp(error)
           rescue Excon::Errors::Unauthorized => error
             raise if retried
             retried = true
@@ -205,7 +187,7 @@ module Fog
             end
 
             options = init_auth_options
-            credentials = Fog::OpenStackCommon::Authenticator.adapter.authenticate(options, @connection_options)
+            credentials = Fog::OpenStackCommon::Authenticator.adapter.authenticate(options, @service_options)
             handle_auth_results(credentials)
           else
             @auth_token = @openstack_auth_token
@@ -257,8 +239,8 @@ module Fog
           @current_tenant = options[:current_tenant]
           # puts "@current_tenant: #{@current_tenant}"
 
-          @connection_options = options[:connection_options] || {}
-          # puts "@connection_options: #{@connection_options}"
+          @service_options = options[:connection_options] || {}
+          # puts "@service_options: #{@service_options}"
 
           @persistent = options[:persistent] || false
           # puts "@persistent: #{@persistent}"

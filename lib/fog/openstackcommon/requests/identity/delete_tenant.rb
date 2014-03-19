@@ -5,11 +5,11 @@ module Fog
 
         def delete_tenant(id)
           request(
-            :expects => [200, 204],
             :method  => 'DELETE',
-            :path    => "tenants/#{id}"
+            :expects => [200, 204],
+            :path    => "/tenants/#{id}"
           )
-        end # def create_tenant
+        end
 
         # class Mock
         #   def delete_tenant(attributes)
@@ -24,7 +24,7 @@ module Fog
         #       }
         #     }
         #     response
-        #   end # def create_tenant
+        #   end
         # end # class Mock
 
       end # Real

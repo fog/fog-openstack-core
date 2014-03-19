@@ -5,8 +5,8 @@ module Fog
 
         def get_tenants_by_id(tenant_id)
           request(
-            :expects  => [200, 204],
             :method   => 'GET',
+            :expects  => [200, 204],
             :path     => "/tenants/#{tenant_id}"
           )
         end

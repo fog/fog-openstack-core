@@ -5,8 +5,8 @@ module Fog
 
         def list_roles_for_user_on_tenant(tenant_id, user_id)
           request(
-            :expects  => [200],
             :method   => 'GET',
+            :expects  => 200,
             :path     => "/tenants/#{tenant_id}/users/#{user_id}/roles"
           )
         end

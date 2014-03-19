@@ -3,17 +3,16 @@ require 'fog/core'
 module Fog
   module OpenStackCommon
     module Authenticator
-      extend self
 
       DEFAULT_AUTHENTICATOR = :authenticator_v2
 
-      def adapter
+      def self.adapter
         return @adapter if @adapter
         self.adapter = DEFAULT_AUTHENTICATOR
         @adapter
       end
 
-      def adapter=(adapter_name)
+      def self.adapter=(adapter_name)
         case adapter_name
         when Symbol, String
           require_relative "./adapters/#{adapter_name}"
@@ -26,7 +25,7 @@ module Fog
 
       # delegate the actual authentication to the underlying version 1|2|3 connection
       # adapter
-      def authenticate(options, connection_options = {})
+      def self.authenticate(options, connection_options = {})
         adapter.authenticate(options, connection_options)
       end
 

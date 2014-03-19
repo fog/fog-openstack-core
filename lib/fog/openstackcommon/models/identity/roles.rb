@@ -11,10 +11,6 @@ module Fog
           load(service.list_roles.body['roles'])
         end
 
-        def get(id)
-          service.get_role(id)
-        end
-
       end
     end # class OpenStack
   end # module Compute

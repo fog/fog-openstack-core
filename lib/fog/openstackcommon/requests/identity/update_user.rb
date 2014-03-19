@@ -1,36 +1,20 @@
-require 'multi_json'
-
 module Fog
   module Identity
     class OpenStackCommon
       class Real
 
-        def update_user(user_id, options = {})
-          url = options.delete('url') || "/users/#{user_id}"
+        def update_user(id, options = {})
+          # Identity service expects to see tenant id as 'tenantId'
+          tenantId = options.delete(:tenant_id) || options.delete('tenant_id')
+          options.merge!('id' => id, 'tenantId' => tenantId)
+
           request(
-            :body     => Fog::JSON.encode({ 'user' => options }),
-            :expects  => 200,
             :method   => 'PUT',
-            :path     => url
+            :expects  => 200,
+            :path     => "/users/#{id}",
+            :body     => MultiJson.encode({ 'user' => options })
           )
         end
-
-        # class Mock
-        #
-        #   def update_user(user_id, options)
-        #     response = Excon::Response.new
-        #     if user = self.data[:users][user_id]
-        #       if options['name']
-        #         user['name'] = options['name']
-        #       end
-        #       response.status = 200
-        #       response
-        #     else
-        #       raise Fog::Identity::OpenStackCommon::NotFound
-        #     end
-        #   end
-        #
-        # end # Mock
 
       end # Real
 

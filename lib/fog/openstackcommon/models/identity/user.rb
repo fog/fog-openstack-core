@@ -6,18 +6,22 @@ module Fog
       class User < Fog::Model
         identity :id
 
-        attribute :email
-        attribute :enabled
         attribute :name
         attribute :tenant_id, :aliases => 'tenantId'
         attribute :password
+        attribute :email
+        attribute :enabled
 
-        attr_accessor :email, :name, :tenant_id, :enabled, :password
+        def save
+          requires :name, :tenant_id, :password
+          enabled ||= true
+          persisted? ? update : create
+        end
 
-        def initialize(attributes)
-          # Old 'connection' is renamed as service and should be used instead
-          prepare_service_value(attributes)
-          super
+        def destroy
+          requires :id
+          service.delete_user(self.id)
+          true
         end
 
         def ec2_credentials
@@ -25,47 +29,36 @@ module Fog
           service.ec2_credentials(:user => self)
         end
 
-        def save
-          raise Fog::Errors::Error.new('Resaving an existing object may create a duplicate') if persisted?
-          requires :name, :tenant_id, :password
-          enabled = true if enabled.nil?
+        def roles(tenant_id = self.tenant_id)
+          data = service.list_roles_for_user_on_tenant(tenant_id, self.id)
+          data.body['roles']
+        end
+
+        def grant_role(role_id)
+          service.add_role_to_user_on_tenant(
+            tenant_id = self.tenant_id, self.id, role_id)
+        end
+
+        def revoke_role(role_id)
+          service.delete_role_from_user_on_tenant(
+            tenant_id = self.tenant_id, self.id, role_id)
+        end
+
+        private
+
+        def create
           data = service.create_user(name, password, email, tenant_id, enabled)
           merge_attributes(data.body['user'])
           true
         end
 
-        def update(options = {})
+        def update
           requires :id
-          options.merge('id' => id)
-          response = service.update_user(id, options)
+          data = service.update_user(self.id, attributes)
+          merge_attributes(data.body['user'])
           true
         end
 
-        # ToDo: Move url stuff to request
-        def update_password(password)
-          update({'password' => password, 'url' => "/users/#{id}/OS-KSADM/password"})
-        end
-
-        # ToDo: Move url stuff to request
-        def update_tenant(tenant)
-          tenant = tenant.id if tenant.class != String
-          update({:tenantId => tenant, 'url' => "/users/#{id}/OS-KSADM/tenant"})
-        end
-
-        # ToDo: Move url stuff to request
-        def update_enabled(enabled)
-          update({:enabled => enabled, 'url' => "/users/#{id}/OS-KSADM/enabled"})
-        end
-
-        def destroy
-          requires :id
-          service.delete_user(id)
-          true
-        end
-
-        def roles(tenant_id = self.tenant_id)
-          service.list_roles_for_user_on_tenant(tenant_id, self.id).body['roles']
-        end
       end # class User
     end # class OpenStack
   end # module Identity

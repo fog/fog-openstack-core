@@ -3,31 +3,18 @@ module Fog
     class OpenStackCommon
       class Real
 
-        def list_users_for_tenant(tenant_id)
+        def list_users_for_tenant(tenant_id, limit = nil, marker = nil)
+          params = Hash.new
+          params['limit']  = limit  if limit
+          params['marker'] = marker if marker
+
           request(
-            :expects => [200, 204],
             :method  => 'GET',
-            :path    => "/tenants/#{tenant_id}/users"
+            :expects => [200, 203],
+            :path    => "/tenants/#{tenant_id}/users",
+            :query   => params
           )
         end
-
-        # class Mock
-        #   def list_users(tenant_id = nil)
-        #     users = self.data[:users].values
-        #
-        #     if tenant_id
-        #       users = users.select {
-        #         |user| user['tenantId'] == tenant_id
-        #       }
-        #     end
-        #
-        #
-        #     Excon::Response.new(
-        #       :body   => { 'users' => users },
-        #       :status => 200
-        #     )
-        #   end
-        # end # class Mock
 
       end # Real
 

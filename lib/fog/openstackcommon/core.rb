@@ -1,10 +1,12 @@
 require 'multi_json'
 require 'fog/core'
+require 'fog/openstackcommon/errors'
+
+include Fog::OpenStackCommon::Errors
 
 module Fog
   module OpenStackCommon
     extend Fog::Provider
-    extend self
 
     service(:identity,      'Identity')
 #     service(:compute ,      'Compute')
@@ -15,7 +17,7 @@ module Fog
 #     service(:metering,      'Metering')
 #     service(:orchestration, 'Orchestration')
 
-    def authenticate(options, connection_options = {})
+    def self.authenticate(options, connection_options = {})
       Fog::Identity.new(options, connection_options = {})
     end
 

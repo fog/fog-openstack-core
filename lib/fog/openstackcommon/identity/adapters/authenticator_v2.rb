@@ -6,9 +6,8 @@ module Fog
     module Authentication
       module Adapters
         module AuthenticatorV2
-          extend self
 
-          def authenticate(options, connection_options = {})
+          def self.authenticate(options, connection_options = {})
             # puts "===== Fog::OpenStackCommon::Authentication::Adapters::AuthenticatorV2.authenticate ====="
 
             # puts "OPTIONS:"
@@ -81,7 +80,7 @@ module Fog
 
           private
 
-          def new_connection(uri, connection_options = {}, body = {})
+          def self.new_connection(uri, connection_options = {}, body = {})
             # puts "===== new_connection ====="
 
             # Fog::Connection.new(
@@ -97,7 +96,7 @@ module Fog
               })
           end
 
-          def get_service(body, service_type=[], service_name=nil)
+          def self.get_service(body, service_type=[], service_name=nil)
             # puts "===== get_service ====="
 
             body['access']['serviceCatalog'].detect do |s|
@@ -109,20 +108,20 @@ module Fog
             end
           end
 
-          def get_tenant_name(response)
+          def self.get_tenant_name(response)
             body = MultiJson.decode(response.body)
             raise Fog::Errors::NotFound.new('No Tenant Found') if body['tenants'].empty?
             body['tenants'].first['name']
           end
 
-          def get_endpoints(endpoints)
+          def self.get_endpoints(endpoints)
             ep = endpoints.select { |endpoint| endpoint['region'] == openstack_region }
             if ep.empty?
               raise Fog::Errors::NotFound.new("No endpoints available for region '#{openstack_region}'")
             end
           end
 
-          def ensure_service_available(service, service_catalog, service_type)
+          def self.ensure_service_available(service, service_catalog, service_type)
             unless service
               available = service_catalog.map { |endpoint| endpoint['type'] }.sort.join ', '
               missing = service_type.join ', '
@@ -130,14 +129,14 @@ module Fog
             end
           end
 
-          def raise_error_if_multiple_endpoints(endpoints)
+          def self.raise_error_if_multiple_endpoints(endpoints)
             if endpoints.count > 1
               regions = endpoints.map{ |e| e['region'] }.uniq.join(',')
               raise Fog::Errors::NotFound.new("Multiple regions available choose one of these '#{regions}'")
             end
           end
 
-          def request_tokens(options, connection_options = {})
+          def self.request_tokens(options, connection_options = {})
             # puts "===== request_tokens ====="
             # puts "options:"
             # puts options.to_yaml

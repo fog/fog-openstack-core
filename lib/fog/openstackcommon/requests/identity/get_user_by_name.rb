@@ -5,8 +5,8 @@ module Fog
 
         def get_user_by_name(name)
           request(
-            :expects  => [200, 203],
             :method   => 'GET',
+            :expects  => [200, 203],
             :path     => "/users?name=#{name}"
           )
         end
