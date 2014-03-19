@@ -21,8 +21,8 @@ module Fog
 
     def authenticate(options, connection_options = {})
       version = Discovery.new('identity')
-      class_name = "Fog::Identity::V#{version}".constantize
-      class_name.send(new, options, connection_options)
+      klass = Module.const_get("Fog::Identity::V#{version}")
+      klass.new(options, connection_options)
     end
 
   end
