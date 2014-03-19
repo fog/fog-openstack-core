@@ -17,7 +17,7 @@ module Fog
         def save
           # raise Fog::Errors::Error.new('Resaving an existing object may create a duplicate') if persisted?
           requires :name, :tenant_id, :password
-          enabled = true if enabled.nil?
+          enabled ||= true
           persisted? ? update : create
         end
 
