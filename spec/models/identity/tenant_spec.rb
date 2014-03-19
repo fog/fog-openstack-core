@@ -19,7 +19,11 @@ describe "models" do
           :name => fake_name,
           :description => fake_description,
           :enabled => fake_enabled
-        } 
+        }
+      }
+
+      let(:fake_tenant) {
+        Fog::Identity::OpenStackCommon::Tenant.new(options.merge!('id' => fake_id))
       }
 
       let(:fake_tenant_response) {
@@ -33,7 +37,7 @@ describe "models" do
         service_mock.expect(:nil?, false, [])
       end
 
-      describe "#initialize" do
+      describe "new tenant" do
 
         it "throws exception when name is missing" do
           proc {
@@ -56,84 +60,98 @@ describe "models" do
           service_mock.verify
         end
 
-      end
-
-      describe "#update" do
-
-        let(:fake_tenant) {
-          Fog::Identity::OpenStackCommon::Tenant.new(options.merge!('id' => fake_id))
-        }
-
-        it "updates name" do
-          new_name = { 'name' => 'new-name' }
-          service_mock.expect(:update_tenant, fake_tenant_response, [fake_tenant.id, new_name])
-
-          fake_tenant.update(new_name)
-          service_mock.verify
-        end
-
-        it "updates description" do
-          new_description = { 'description' => 'test123' }
-          service_mock.expect(:update_tenant, fake_tenant_response, [fake_tenant.id, new_description])
-
-          fake_tenant.update(new_description)
-          service_mock.verify
-        end
-
-        it "updates enabled" do
-          new_enabled = { 'enabled' => false }
-          service_mock.expect(:update_tenant, fake_tenant_response, [fake_tenant.id, new_enabled])
-
-          fake_tenant.update(new_enabled)
-          service_mock.verify
-        end
-
-      end
+      end # new tenant
 
 
-      describe "#destroy" do
+      describe "existing tenant" do
 
-        let(:fake_tenant) {
-          Fog::Identity::OpenStackCommon::Tenant.new(options.merge!('id' => fake_id))
-        }
+        describe "update" do
 
-        it "calls destroy" do
-          service_mock.expect(:delete_tenant, true, [fake_tenant.id])
+          let(:expected_options) { options.clone }
 
-          fake_tenant.destroy
-          service_mock.verify
-        end
+          it "name" do
+            expected_options.delete(:service)
+            expected_options.merge!(:name => 'new-name')
+            expected_options.merge!(:id => fake_id)
 
-      end
+            service_mock.expect(
+              :update_tenant,
+              fake_tenant_response,
+              [fake_tenant.id, expected_options]
+            )
+
+            fake_tenant.name = expected_options[:name]
+            fake_tenant.save
+            service_mock.verify
+          end
+
+          it "description" do
+            expected_options.delete(:service)
+            expected_options.merge!(:description => 'test123')
+            expected_options.merge!(:id => fake_id)
+
+            service_mock.expect(
+              :update_tenant,
+              fake_tenant_response,
+              [fake_tenant.id, expected_options]
+            )
+
+            fake_tenant.description = expected_options[:description]
+            fake_tenant.save
+            service_mock.verify
+          end
+
+          it "enabled" do
+            expected_options.delete(:service)
+            expected_options.merge!(:enabled => false)
+            expected_options.merge!(:id => fake_id)
+
+            service_mock.expect(
+              :update_tenant,
+              fake_tenant_response,
+              [fake_tenant.id, expected_options]
+            )
+
+            fake_tenant.enabled = expected_options[:enabled]
+            fake_tenant.save
+            service_mock.verify
+          end
+
+        end # update
+
+        describe "#destroy" do
+
+          it "calls destroy" do
+            service_mock.expect(:delete_tenant, true, [fake_tenant.id])
+
+            fake_tenant.destroy
+            service_mock.verify
+          end
+
+        end  #destroy
 
 
-      describe "#users" do
+        describe "#users" do
 
-        let(:fake_tenant) {
-          Fog::Identity::OpenStackCommon::Tenant.new(options.merge!('id' => fake_id))
-        }
+          it "calls users" do
+            service_mock.expect(:users, {}, [{:tenant_id => fake_tenant.id}])
 
-        it "calls users" do
-          service_mock.expect(:users, {}, [{:tenant_id => fake_tenant.id}])
+            fake_tenant.users
+            service_mock.verify
+          end
 
-          fake_tenant.users
-          service_mock.verify
-        end
-
-      end
+        end #users
 
 
-      describe "#to_s" do
+        describe "#to_s" do
 
-        let(:fake_tenant) {
-          Fog::Identity::OpenStackCommon::Tenant.new(options.merge!('id' => fake_id))
-        }
+          it "returns name" do
+            fake_tenant.to_s.must_equal fake_name
+          end
 
-        it "returns name" do
-          fake_tenant.to_s.must_equal fake_name
-        end
+        end #to_s
 
-      end
+      end # update
 
     end
   end

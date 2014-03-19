@@ -13,7 +13,7 @@ describe "models" do
       let(:service_mock) { Minitest::Mock.new }
 
       let(:fake_id) { "1234567890" }
-      let(:fake_name) { "John Smith #{Time.now.to_i}" }
+      let(:fake_name) { "John-Smith-#{Time.now.to_i}" }
       let(:fake_password) { 'password' }
       let(:fake_email) { 'jsmith@acme.com' }
       let(:fake_tenant_id) { 'tenant12345' }
@@ -22,12 +22,17 @@ describe "models" do
 
       let(:options) {
         { :service => service_mock,
-          'name' => fake_name,
-          'password' => fake_password,
-          'email' => fake_email,
-          'tenant_id' => fake_tenant_id,
-          'enabled' => fake_enabled
+          :name => fake_name,
+          :password => fake_password,
+          :email => fake_email,
+          :tenant_id => fake_tenant_id,
+          :enabled => fake_enabled
         }
+      }
+
+      let(:fake_user) {
+        Fog::Identity::OpenStackCommon::User.new(
+          options.merge!('id' => fake_id))
       }
 
       let(:fake_user_response) {
@@ -45,7 +50,7 @@ describe "models" do
 
         it "throws exception when name is missing" do
           proc {
-            options.delete('name')
+            options.delete(:name)
             new_user = Fog::Identity::OpenStackCommon::User.new(options)
             service_mock.expect(
               :create_user,
@@ -59,7 +64,7 @@ describe "models" do
 
         it "throws exception when password is missing" do
           proc {
-            options.delete('password')
+            options.delete(:password)
             new_user = Fog::Identity::OpenStackCommon::User.new(options)
             service_mock.expect(
               :create_user,
@@ -73,7 +78,7 @@ describe "models" do
 
         it "throws exception when tenant id is missing" do
           proc {
-            options.delete('tenant_id')
+            options.delete(:tenant_id)
             new_user = Fog::Identity::OpenStackCommon::User.new(options)
             service_mock.expect(
               :create_user,
@@ -86,7 +91,7 @@ describe "models" do
         end
 
         it "sets enabled to true when enabled is missing" do
-          options.delete('enabled')
+          options.delete(:enabled)
           new_user = Fog::Identity::OpenStackCommon::User.new(options)
           service_mock.expect(
             :create_user,
@@ -110,111 +115,74 @@ describe "models" do
 
       end
 
+      describe "create" do
 
-      describe "#save" do
+        let(:unsaved_user) { Fog::Identity::OpenStackCommon::User.new(options) }
 
-        describe "with a new user" do
-
-          let(:unsaved_user) { Fog::Identity::OpenStackCommon::User.new(options) }
-
-          it "creates user" do
-            service_mock.expect(
-              :create_user,
-              fake_user_response,
-              [fake_name, fake_password, fake_email, fake_tenant_id, fake_enabled])
-
-            unsaved_user.save
-            service_mock.verify
-          end
-
-        end
-
-        describe "with an existing user" do
-
-          let(:fake_user) {
-            Fog::Identity::OpenStackCommon::User.new(
-              options.merge!('id' => fake_id))
-          }
-
-          it "updates user" do
-            service_mock.expect(
-              :update_user,
-              fake_user_response,
-              [fake_user.id, {}])
-
-            fake_user.save
-            service_mock.verify
-          end
-
-        end
-
-      end # save
-
-
-      describe "#update_password" do
-
-        let(:fake_user) {
-          Fog::Identity::OpenStackCommon::User.new(
-            options.merge!('id' => fake_id))
-        }
-
-        it "calls update_password" do
-          new_password = "secret"
-          params_hash = {'password' => new_password}
+        it "creates user" do
           service_mock.expect(
-            :update_user,
+            :create_user,
             fake_user_response,
-            [fake_user.id, params_hash])
+            [fake_name, fake_password, fake_email, fake_tenant_id, fake_enabled])
 
-          fake_user.update_password(new_password)
+          unsaved_user.save
           service_mock.verify
         end
 
-      end
+      end # create
 
 
-      describe "#update_tenant" do
+      describe "update" do
 
-        let(:fake_user) {
-          Fog::Identity::OpenStackCommon::User.new(
-            options.merge!('id' => fake_id))
-        }
+        let(:expected_options) { options.clone }
 
-        it "calls update_tenant" do
-          new_tenant = "NewTenant"
-          params_hash = {'tenantId' => new_tenant}
+        it "password" do
+          expected_options.delete(:service)
+          expected_options.merge!(:password => 'secret')
+          expected_options.merge!(:id => fake_id)
+
           service_mock.expect(
             :update_user,
             fake_user_response,
-            [fake_user.id, params_hash])
+            [fake_user.id, expected_options]
+          )
 
-          fake_user.update_tenant(new_tenant)
+          fake_user.password = expected_options[:password]
+          fake_user.save
           service_mock.verify
         end
 
-      end
+        it "tenant" do
+          expected_options.delete(:service)
+          expected_options.merge!(:tenant_id => 'NewTenant')
+          expected_options.merge!(:id => fake_id)
 
-
-      describe "#update_enabled" do
-
-        let(:fake_user) {
-          Fog::Identity::OpenStackCommon::User.new(options.merge!('id' => fake_id))
-        }
-
-        it "calls enable_user" do
-          enabled = false
-          params_hash = {'enabled' => enabled}
           service_mock.expect(
             :update_user,
             fake_user_response,
-            [fake_user.id, params_hash])
+            [fake_user.id, expected_options])
 
-          fake_user.update_enabled(enabled)
+          fake_user.tenant_id = expected_options[:tenant_id]
+          fake_user.save
           service_mock.verify
         end
 
-      end
+        it "enabled" do
+          expected_options.delete(:service)
+          expected_options.merge!(:enabled => false)
+          expected_options.merge!(:id => fake_id)
 
+          service_mock.expect(
+            :update_user,
+            fake_user_response,
+            [fake_user.id, expected_options])
+
+          fake_user.enabled = expected_options[:enabled]
+          fake_user.save
+          service_mock.verify
+        end
+
+      end # update
 
       describe "#destroy" do
 
@@ -259,9 +227,6 @@ describe "models" do
       describe "#roles" do
 
         let(:fake_user) {
-          puts ""
-          puts "ROLES: #{options.to_s}"
-          puts ""
           Fog::Identity::OpenStackCommon::User.new(
             options.merge!('id' => fake_id))
         }

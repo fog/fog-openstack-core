@@ -15,19 +15,6 @@ module Fog
           persisted? ? update : create
         end
 
-        def create
-          data = service.create_tenant(attributes)
-          merge_attributes(data.body['tenant'])
-          true
-        end
-
-        def update(options = {})
-          requires :id
-          data = service.update_tenant(self.id, options || attributes)
-          merge_attributes(data.body['tenant'])
-          true
-        end
-
         def destroy
           requires :id
           service.delete_tenant(self.id)
@@ -41,6 +28,21 @@ module Fog
 
         def to_s
           self.name
+        end
+
+        private
+
+        def create
+          data = service.create_tenant(attributes)
+          merge_attributes(data.body['tenant'])
+          true
+        end
+
+        def update
+          requires :id
+          data = service.update_tenant(self.id, attributes)
+          merge_attributes(data.body['tenant'])
+          true
         end
 
       end # class Tenant

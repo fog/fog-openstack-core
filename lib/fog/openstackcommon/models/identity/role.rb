@@ -9,9 +9,7 @@ module Fog
 
         def save
           requires :name
-          data = service.create_role(name)
-          merge_attributes(data.body['role'])
-          true
+          persisted? ? update : create
         end
 
         def destroy
@@ -20,14 +18,18 @@ module Fog
           true
         end
 
-        def add_to_user(user_id, tenant_id)
-          requires :id
-          service.add_role_to_user_on_tenant(tenant_id, user_id, self.id)
+        private
+
+        def create
+          data = service.create_role(name)
+          merge_attributes(data.body['role'])
+          true
         end
 
-        def remove_from_user(user_id, tenant_id)
-          requires :id
-          service.delete_role_from_user_on_tenant(tenant_id, user_id, self.id)
+        # api doesnt support update at this time, but need
+        # to protect against updates
+        def update
+          false
         end
 
       end # class Role

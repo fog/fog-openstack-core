@@ -3,12 +3,15 @@ module Fog
     class OpenStackCommon
       class Real
 
-        def update_user(user_id, options = {})
-          options.merge!('id' => user_id)
+        def update_user(id, options = {})
+          # Identity service expects to see tenant id as 'tenantId'
+          tenantId = options.delete(:tenant_id) || options.delete('tenant_id')
+          options.merge!('id' => id, 'tenantId' => tenantId)
+
           request(
             :method   => 'PUT',
             :expects  => 200,
-            :path     => "/users/#{user_id}",
+            :path     => "/users/#{id}",
             :body     => MultiJson.encode({ 'user' => options })
           )
         end

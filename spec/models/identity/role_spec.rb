@@ -89,39 +89,6 @@ describe "models" do
 
       end
 
-
-      describe "#add_to_user" do
-
-        let(:fake_role) {
-          Fog::Identity::OpenStackCommon::Role.new(options.merge!('id' => fake_id))
-        }
-
-        it "adds role to user" do
-          service_mock.expect(:add_role_to_user_on_tenant, fake_role_response, [fake_id, fake_id, fake_id])
-
-          fake_role.add_to_user(fake_id, fake_id)
-          service_mock.verify
-        end
-
-      end
-
-
-      describe "#remove_from_user" do
-
-        let(:fake_role) {
-          Fog::Identity::OpenStackCommon::Role.new(options.merge!('id' => fake_id))
-        }
-
-        it "removes role from user" do
-          service_mock.expect(:delete_role_from_user_on_tenant, fake_role_response, [fake_id, fake_id, fake_id])
-
-          fake_role.remove_from_user(fake_id, fake_id)
-          service_mock.verify
-          service_mock.verify
-        end
-
-      end
-
     end
   end
 end
