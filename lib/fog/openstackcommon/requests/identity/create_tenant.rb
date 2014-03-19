@@ -3,7 +3,7 @@ module Fog
     class OpenStackCommon
       class Real
         def create_tenant(attributes={})
-          attributes = {} if attributes.nil?
+          attributes ||= {}
           request(
             :method  => 'POST',
             :expects => [200, 201, 202],
