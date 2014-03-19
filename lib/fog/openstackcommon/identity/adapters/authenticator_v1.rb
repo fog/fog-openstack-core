@@ -5,9 +5,8 @@ module Fog
     module Authentication
       module Adapters
         module AuthenticatorV1
-          extend self
 
-          def authenticate(options, connection_options = {})
+          def self.authenticate(options, connection_options = {})
 
             uri = options[:openstack_auth_uri]
             connection = Fog::Connection.new(uri.to_s, false, connection_options)

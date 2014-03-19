@@ -1,5 +1,4 @@
 module Common
-  extend self
 
   # CGI.escape, but without special treatment on spaces
   def self.escape(str,extra_exclude_chars = '')
