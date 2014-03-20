@@ -6,7 +6,7 @@ module Fog
     module V2
       class OpenStackCommon
         class Users < Fog::Collection
-          model Fog::Identity::OpenStackCommon::User
+          model Fog::Identity::V2::OpenStackCommon::User
 
           attribute :tenant_id
 
