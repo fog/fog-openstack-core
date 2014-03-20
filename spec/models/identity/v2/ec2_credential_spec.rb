@@ -75,7 +75,7 @@ describe "models" do
         describe "#destroy" do
 
           let(:fake_credential) {
-            Fog::Identity::OpenStackCommon::V2::Ec2Credential.new(options.merge!('access' => fake_access))
+            Fog::Identity::V2::OpenStackCommon::Ec2Credential.new(options.merge!('access' => fake_access))
           }
 
           it "calls destroy" do
