@@ -1,5 +1,6 @@
-require_relative '../../../../spec_helper'
-require_relative '../../../../support/spec_helpers'
+require_relative '../../../spec_helper'
+require_relative '../../../support/spec_helpers'
+
 include SpecHelpers
 
 require 'fog/openstackcommon'
@@ -9,7 +10,7 @@ describe "requests" do
     describe "v2" do
       describe "role operations" do
 
-        let(:service) { Fog::Identity::V2.new(admin_options_hash) }
+        let(:service) { Fog::Identity.new(admin_options_hash) }
 
         describe "#create_role", :vcr do
 

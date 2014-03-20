@@ -1,5 +1,5 @@
-require_relative '../../../../spec_helper'
-require_relative '../../../../support/spec_helpers'
+require_relative '../../../spec_helper'
+require_relative '../../../support/spec_helpers'
 include SpecHelpers
 
 require 'fog/openstackcommon'

@@ -1,12 +1,12 @@
-require_relative '../../../../spec_helper'
-require_relative '../../../../support/spec_helpers'
+require_relative '../../../spec_helper'
+require_relative '../../../support/spec_helpers'
 include SpecHelpers
 
 require 'fog/openstackcommon'
 
 describe "requests" do
   describe "identity" do
-    descrive "v2" do
+    describe "v2" do
       describe "endpoint operations" do
 
         let(:valid_options) { admin_options_hash }
