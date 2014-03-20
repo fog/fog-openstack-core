@@ -10,7 +10,7 @@ module Fog
     extend Fog::Provider
 
     service(:identity_v2,      'Identity')
-#     service(:compute ,      'Compute')
+    # service(:compute ,      'Compute')
 #     service(:image,         'Image')
 #     service(:network,       'Network')
 #     service(:storage,       'Storage')
@@ -19,12 +19,16 @@ module Fog
 #     service(:orchestration, 'Orchestration')
 
     def self.authenticate(options, connection_options = {})
-      # Fog::Identity.new(options, connection_options = {})
-      version = Discovery.locate(
-        :service => 'identity', :url => 'http://devstack.local:5000'
-      )
-      klass = Module.const_get("Fog::Identity::V#{version}")
-      klass.new(options, connection_options)
+      Fog::Identity::OpenStackCommon::Real.new(options)  #, connection_options = {})
+
+      # version = Discovery.locate(
+      #   :service => 'identity', :url => 'http://devstack.local:5000'
+      # )
+      # puts ""
+      # puts "VERSION: #{version}"
+      # puts ""
+      # klass = Module.const_get("Fog::Identity::V#{version}")
+      # klass.new(options, connection_options)
     end
 
   end   # OpenStackCommon
