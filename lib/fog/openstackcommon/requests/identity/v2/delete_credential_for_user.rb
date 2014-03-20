@@ -1,5 +1,3 @@
-# require 'multi_json'
-#
 # module Fog
 #   module Identity
 #     class OpenStackCommon

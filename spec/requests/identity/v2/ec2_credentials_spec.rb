@@ -1,5 +1,5 @@
-require_relative '../../spec_helper'
-require_relative '../../support/spec_helpers'
+require_relative '../../../spec_helper'
+require_relative '../../../support/spec_helpers'
 include SpecHelpers
 
 require 'fog/openstackcommon'
@@ -10,7 +10,7 @@ describe "requests" do
 
       let(:admin_options) { admin_options_hash }
 
-      let(:service) { Fog::Identity.new(admin_options) }
+      let(:service) { Fog::Identity::V2.new(admin_options) }
 
       describe "#list_ec2_credentials" do
 

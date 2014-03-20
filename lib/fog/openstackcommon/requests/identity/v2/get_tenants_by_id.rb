@@ -1,20 +1,22 @@
 module Fog
   module Identity
-    class OpenStackCommon
-      class Real
+    module V2
+      class OpenStackCommon
+        class Real
 
-        def get_tenants_by_id(tenant_id)
-          request(
-            :method   => 'GET',
-            :expects  => [200, 204],
-            :path     => "/tenants/#{tenant_id}"
-          )
+          def get_tenants_by_id(tenant_id)
+            request(
+              :method   => 'GET',
+              :expects  => [200, 204],
+              :path     => "/tenants/#{tenant_id}"
+            )
+          end
+
         end
 
-      end
-
-      class Mock
-      end
-    end # OpenStackCommon
+        class Mock
+        end
+      end # OpenStackCommon
+    end # V2
   end # Identity
 end # Fog
