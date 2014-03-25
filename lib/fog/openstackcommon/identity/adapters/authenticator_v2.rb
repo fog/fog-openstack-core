@@ -116,7 +116,7 @@ module Fog
           end
 
           def self.get_endpoints(endpoints)
-            ep = Array(endpoints.select { |endpoint| endpoint['region'] == @openstack_region }).select{|endpoint| endpoint["versionId"] == "2.0"}
+            ep = Array(endpoints.select { |endpoint| endpoint['region'] == @openstack_region && endpoint["versionId"] == "2.0"  })
             if ep.empty?
               raise Fog::Errors::NotFound.new("No endpoints available for region '#{@openstack_region}'")
             end
