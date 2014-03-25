@@ -60,7 +60,7 @@ module Fog
             identity_service = get_service(body, service_type) if service_type
             tenant = body['access']['token']['tenant']
             user = body['access']['user']
-            management_url = service['endpoints'].detect{|s| s[endpoint_type]}[endpoint_type]
+            management_url = service['endpoints'].detect{|s| s[endpoint_type]}[endpoint_type] if service['endpoints'].any?{|s| s[endpoint_type]}
             identity_url   = identity_service['endpoints'].detect{|s| s['publicURL']}['publicURL'] if identity_service
 
             return {
