@@ -9,7 +9,11 @@ describe "requests" do
     describe "v2" do
       describe "service operations" do
 
-        let(:service) { Fog::Identity::V2.new(admin_options_hash) }
+        let(:admin_options) { admin_options_hash }
+
+        let(:service) {
+          Fog::Identity::V2::OpenStackCommon.new(admin_options)
+        }
 
         describe "#list_services" do
           it { skip("Choosing to NotImplement for now.") }

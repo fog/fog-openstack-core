@@ -9,7 +9,11 @@ describe "requests" do
     describe "v2" do
       describe "user operations" do
 
-        let(:service) { Fog::Identity::V2.new(admin_options_hash) }
+        let(:admin_options) { admin_options_hash }
+
+        let(:service) {
+          Fog::Identity::V2::OpenStackCommon.new(admin_options)
+        }
 
         describe "#list_users" do
 
@@ -71,19 +75,19 @@ describe "requests" do
 
           end
 
-          describe "readonly attribs" do
-
-            it "when updating tenantId" do
-              proc {
-                service.update_user(@user_id, { 'tenantId' => "tenantId-#{Time.now.to_i}"})
-              }.must_raise Fog::Identity::OpenStackCommon::NotFound
-            end
-
-            # Although the user id is a readonly attribute, no need to write a spec against
-            # the id because it is set with the 'update_user' request (update_user.rb); as a
-            # result, the user will *never* be able to update the id.
-
-          end
+          # describe "readonly attribs" do
+          #
+          #   it "when updating tenant_id" do
+          #     proc {
+          #       service.update_user(@user_id, { 'tenant_id' => "dummy-tenantId"})
+          #     }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+          #   end
+          #
+          #   # Although the user id is a readonly attribute, no need to write a spec against
+          #   # the id because it is set with the 'update_user' request (update_user.rb); as a
+          #   # result, the user will *never* be able to update the id.
+          #
+          # end
 
         end
 
@@ -99,7 +103,7 @@ describe "requests" do
           it "when invalid username specified", :vcr do
             proc {
               service.get_user_by_name("nonexistentuser12345")
-            }.must_raise Fog::Identity::OpenStackCommon::NotFound
+            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
           end
 
         end
@@ -115,7 +119,7 @@ describe "requests" do
           it "when invalid id specified", :vcr do
             proc {
               service.get_user_by_id("nonexistentuser12345")
-            }.must_raise Fog::Identity::OpenStackCommon::NotFound
+            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
           end
 
         end
@@ -139,7 +143,7 @@ describe "requests" do
           it "when invalid user id specified", :vcr do
             proc {
               service.delete_user("1234567890")
-            }.must_raise Fog::Identity::OpenStackCommon::NotFound
+            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
           end
         end
 

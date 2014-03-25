@@ -10,7 +10,11 @@ describe "requests" do
     describe "v2" do
       describe "role operations" do
 
-        let(:service) { Fog::Identity.new(admin_options_hash) }
+        let(:admin_options) { admin_options_hash }
+
+        let(:service) {
+          Fog::Identity::V2::OpenStackCommon.new(admin_options)
+        }
 
         describe "#create_role", :vcr do
 
@@ -44,7 +48,7 @@ describe "requests" do
             it "returns not found error", :vcr do
               proc {
                 service.get_role("nonexistentrole12345")
-              }.must_raise Fog::Identity::OpenStackCommon::NotFound
+              }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
             end
           end
 
@@ -64,7 +68,7 @@ describe "requests" do
             it "returns not found error", :vcr do
               proc {
                 service.delete_role("nonexistentrole12345")
-              }.must_raise Fog::Identity::OpenStackCommon::NotFound
+              }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
             end
           end
 
