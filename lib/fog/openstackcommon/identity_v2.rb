@@ -230,7 +230,7 @@ module Fog
             # puts "@openstack_current_user_id: #{@openstack_current_user_id}"
 
             #TODO why is this the default?  this seems rare
-            @openstack_endpoint_type = options[:openstack_endpoint_type] || 'publicURL'
+            @openstack_endpoint_type = options[:openstack_endpoint_type] || 'adminURL'
             # puts "@openstack_endpoint_type: #{@openstack_endpoint_type}"
 
             @current_user = options[:current_user]
