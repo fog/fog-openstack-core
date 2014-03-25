@@ -29,9 +29,6 @@ module Fog
             service_name          = options[:openstack_service_name]
             # puts "service_name: #{service_name}"
 
-            identity_service_type = options[:openstack_identity_service_type]
-            # puts "identity_service_type: #{identity_service_type}"
-
             endpoint_type         = (options[:openstack_endpoint_type] || 'adminURL').to_s
             # puts "endpoint_type: #{endpoint_type}"
 
@@ -60,10 +57,10 @@ module Fog
 
             raise_error_if_multiple_endpoints(service['endpoints'])
 
-            identity_service = get_service(body, identity_service_type) if identity_service_type
+            identity_service = get_service(body, service_type) if service_type
             tenant = body['access']['token']['tenant']
             user = body['access']['user']
-            management_url = service['endpoints'].detect{|s| s[endpoint_type]}[endpoint_type]
+            management_url = service['endpoints'].detect{|s| s[endpoint_type]}[endpoint_type] if service['endpoints'].any?{|s| s[endpoint_type]}
             identity_url   = identity_service['endpoints'].detect{|s| s['publicURL']}['publicURL'] if identity_service
 
             return {
@@ -116,7 +113,7 @@ module Fog
           end
 
           def self.get_endpoints(endpoints)
-            ep = Array(endpoints.select { |endpoint| endpoint['region'] == @openstack_region }).select{|endpoint| endpoint["versionId"] == "2.0"}
+            ep = Array(endpoints.select { |endpoint| endpoint['region'] == @openstack_region && endpoint["versionId"] == "2.0"  })
             if ep.empty?
               raise Fog::Errors::NotFound.new("No endpoints available for region '#{@openstack_region}'")
             end

@@ -5,7 +5,7 @@ module Fog
   module Identity
     module V2
       class OpenStackCommon < Fog::Service
-        requires :openstack_auth_url
+        requires :openstack_auth_url, :openstack_region
         recognizes :openstack_auth_token, :openstack_management_url, :persistent,
                     :openstack_service_type, :openstack_service_name, :openstack_tenant,
                     :openstack_api_key, :openstack_username, :openstack_current_user_id,
@@ -230,7 +230,7 @@ module Fog
             # puts "@openstack_current_user_id: #{@openstack_current_user_id}"
 
             #TODO why is this the default?  this seems rare
-            @openstack_endpoint_type = options[:openstack_endpoint_type] || 'publicURL'
+            @openstack_endpoint_type = options[:openstack_endpoint_type] || 'adminURL'
             # puts "@openstack_endpoint_type: #{@openstack_endpoint_type}"
 
             @current_user = options[:current_user]
