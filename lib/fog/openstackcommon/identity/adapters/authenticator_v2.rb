@@ -29,9 +29,6 @@ module Fog
             service_name          = options[:openstack_service_name]
             # puts "service_name: #{service_name}"
 
-            identity_service_type = options[:openstack_identity_service_type]
-            # puts "identity_service_type: #{identity_service_type}"
-
             endpoint_type         = (options[:openstack_endpoint_type] || 'adminURL').to_s
             # puts "endpoint_type: #{endpoint_type}"
 
@@ -60,7 +57,7 @@ module Fog
 
             raise_error_if_multiple_endpoints(service['endpoints'])
 
-            identity_service = get_service(body, identity_service_type) if identity_service_type
+            identity_service = get_service(body, service_type) if service_type
             tenant = body['access']['token']['tenant']
             user = body['access']['user']
             management_url = service['endpoints'].detect{|s| s[endpoint_type]}[endpoint_type]
