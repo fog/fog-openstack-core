@@ -229,7 +229,8 @@ module Fog
             @openstack_current_user_id = options[:openstack_current_user_id]
             # puts "@openstack_current_user_id: #{@openstack_current_user_id}"
 
-            @openstack_endpoint_type = options[:openstack_endpoint_type] || 'adminURL'
+            #TODO why is this the default?  this seems rare
+            @openstack_endpoint_type = options[:openstack_endpoint_type] || 'publicURL'
             # puts "@openstack_endpoint_type: #{@openstack_endpoint_type}"
 
             @current_user = options[:current_user]
@@ -243,6 +244,8 @@ module Fog
 
             @persistent = options[:persistent] || false
             # puts "@persistent: #{@persistent}"
+
+            @openstack_region = options[:openstack_region]
           end
 
           def init_auth_options
@@ -253,7 +256,8 @@ module Fog
               :openstack_tenant   => @openstack_tenant,
               :openstack_service_type => @openstack_service_type,
               :openstack_service_name => @openstack_service_name,
-              :openstack_endpoint_type => @openstack_endpoint_type
+              :openstack_endpoint_type => @openstack_endpoint_type,
+              :openstack_region => @openstack_region
             }
           end
 

@@ -7,6 +7,7 @@ module Fog
       module Adapters
         module AuthenticatorV2
 
+
           def self.authenticate(options, connection_options = {})
             # puts "===== Fog::OpenStackCommon::Authentication::Adapters::AuthenticatorV2.authenticate ====="
 
@@ -31,10 +32,10 @@ module Fog
             identity_service_type = options[:openstack_identity_service_type]
             # puts "identity_service_type: #{identity_service_type}"
 
-            endpoint_type         = (options[:openstack_endpoint_type] || 'publicURL').to_s
+            endpoint_type         = (options[:openstack_endpoint_type] || 'adminURL').to_s
             # puts "endpoint_type: #{endpoint_type}"
 
-            openstack_region      = options[:openstack_region]
+            @openstack_region     = options[:openstack_region]
             # puts "openstack_region: #{openstack_region}"
 
             body = request_tokens(options, connection_options)
@@ -51,7 +52,7 @@ module Fog
               service = get_service(body, service_type, service_name)
             end
 
-            if openstack_region
+            if @openstack_region
               service['endpoints'] = get_endpoints(service['endpoints'])
             end
 
@@ -115,10 +116,11 @@ module Fog
           end
 
           def self.get_endpoints(endpoints)
-            ep = endpoints.select { |endpoint| endpoint['region'] == openstack_region }
+            ep = Array(endpoints.select { |endpoint| endpoint['region'] == @openstack_region }).select{|endpoint| endpoint["versionId"] == "2.0"}
             if ep.empty?
-              raise Fog::Errors::NotFound.new("No endpoints available for region '#{openstack_region}'")
+              raise Fog::Errors::NotFound.new("No endpoints available for region '#{@openstack_region}'")
             end
+            ep
           end
 
           def self.ensure_service_available(service, service_catalog, service_type)
