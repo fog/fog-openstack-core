@@ -46,7 +46,7 @@ module Fog
         service_name = service_identifier.capitalize
         version = options[:version] || DEFAULT_VERSION
 
-        klass_name = "#{BASE_PROVIDER}::#{service_name}V#{version}::Real"
+        klass_name = "#{BASE_PROVIDER}::#{service_name}V#{version}"
         puts "KLASS NAME: #{klass_name}"
         #klass = Module.const_get(klass_name)
         klass = klass_name.to_class

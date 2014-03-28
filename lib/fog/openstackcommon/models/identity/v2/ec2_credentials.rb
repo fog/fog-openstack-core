@@ -5,7 +5,7 @@ module Fog
   module OpenStackCommon
     class IdentityV2
       class Ec2Credentials < Fog::Collection
-        model Fog::Identity::V2::OpenStackCommon::Ec2Credentials
+        model Fog::OpenStackCommon::IdentityV2::Ec2Credentials
 
         attribute :user
 

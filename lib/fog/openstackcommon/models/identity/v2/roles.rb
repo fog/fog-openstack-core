@@ -5,7 +5,7 @@ module Fog
   module OpenStackCommon
     class IdentityV2
       class Roles < Fog::Collection
-        model Fog::Identity::V2::OpenStackCommon::Role
+        model Fog::OpenStackCommon::IdentityV2::Role
 
         def all
           load(service.list_roles.body['roles'])

@@ -3,6 +3,8 @@ module Fog
     class IdentityV2
       class Real
 
+        require 'pry'
+        binding.pry
         def create_token(username, password, tenant_name=nil)
           data = {
             'auth' => {

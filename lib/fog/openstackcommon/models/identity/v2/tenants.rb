@@ -5,7 +5,7 @@ module Fog
   module OpenStackCommon
     class IdentityV2
       class Tenants < Fog::Collection
-        model Fog::Identity::V2::OpenStackCommon::Tenant
+        model Fog::OpenStackCommon::IdentityV2::Tenant
 
         def all
           load(service.list_tenants.body['tenants'])
