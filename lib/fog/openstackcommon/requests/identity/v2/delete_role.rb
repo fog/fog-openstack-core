@@ -1,35 +1,20 @@
 module Fog
-  module Identity
-    module V2
-      class OpenStackCommon
-        class Real
+  module OpenStackCommon
+    class IdentityV2
+      class Real
 
-          def delete_role(role_id)
-            request(
-              :method => 'DELETE',
-              :expects => [200, 204],
-              :path   => "/OS-KSADM/roles/#{role_id}"
-            )
-          end
-
-          # class Mock
-          #   def delete_role(role_id)
-          #     response = Excon::Response.new
-          #     if self.data[:roles][role_id]
-          #       self.data[:roles].delete(role_id)
-          #       response.status = 204
-          #       response
-          #     else
-          #       raise Fog::Identity::OpenStackCommon::NotFound
-          #     end
-          #   end
-          # end
-
-        end # Real
-
-        class Mock
+        def delete_role(role_id)
+          request(
+            :method => 'DELETE',
+            :expects => [200, 204],
+            :path   => "/v2.0/OS-KSADM/roles/#{role_id}"
+          )
         end
-      end # OpenStackCommon
-    end # V2
-  end # Identity
+
+      end # Real
+
+      class Mock
+      end
+    end # IdentityV2
+  end # OpenStackCommon
 end # Fog

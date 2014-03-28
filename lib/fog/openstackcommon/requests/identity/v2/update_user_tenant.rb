@@ -1,24 +1,22 @@
 module Fog
-  module Identity
-    module V2
-      class OpenStackCommon
-        class Real
+  module OpenStackCommon
+    class IdentityV2
+      class Real
 
-          def update_user_tenant(user_id, options = {})
-            options.merge('id' => user_id)
-            request(
-              :method   => 'PUT',
-              :expects  => 200,
-              :path     => "/users/#{user_id}",
-              :body     => MultiJson.encode({ 'user' => options })
-            )
-          end
-
-        end # Real
-
-        class Mock
+        def update_user_tenant(user_id, options = {})
+          options.merge('id' => user_id)
+          request(
+            :method   => 'PUT',
+            :expects  => 200,
+            :path     => "/v2.0/users/#{user_id}",
+            :body     => MultiJson.encode({ 'user' => options })
+          )
         end
-      end # OpenStackCommon
-    end # V2
-  end # Identity
+
+      end # Real
+
+      class Mock
+      end
+    end # IdentityV2
+  end # OpenStackCommon
 end # Fog

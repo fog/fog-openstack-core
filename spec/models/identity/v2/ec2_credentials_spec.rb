@@ -14,7 +14,7 @@ describe "models" do
 
         let(:fake_id) { "1234567890" }
 
-        let(:fake_user){ Fog::Identity::V2::OpenStackCommon::User.new(
+        let(:fake_user){ Fog::IdentityV2::OpenStackCommon::User.new(
           :service => service_mock,
           'id' => fake_id,
           'name' => "John Smith #{Time.now.to_i}",
@@ -31,7 +31,7 @@ describe "models" do
         }
 
         let(:fake_credentials_collection) {
-          Fog::Identity::V2::OpenStackCommon::Ec2Credentials.new(options)
+          Fog::IdentityV2::OpenStackCommon::Ec2Credentials.new(options)
         }
 
         let(:fake_credentials_response) {

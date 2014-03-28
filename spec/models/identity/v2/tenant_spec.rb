@@ -24,7 +24,7 @@ describe "models" do
         }
 
         let(:fake_tenant) {
-          Fog::Identity::V2::OpenStackCommon::Tenant.new(options.merge!('id' => fake_id))
+          Fog::IdentityV2::OpenStackCommon::Tenant.new(options.merge!('id' => fake_id))
         }
 
         let(:fake_tenant_response) {
@@ -43,7 +43,7 @@ describe "models" do
           it "throws exception when name is missing" do
             proc {
               options.delete(:name)
-              new_tenant = Fog::Identity::V2::OpenStackCommon::Tenant.new(options)
+              new_tenant = Fog::IdentityV2::OpenStackCommon::Tenant.new(options)
               options.delete(:service)
               service_mock.expect(:create_tenant, fake_tenant_response, [options])
 
@@ -53,7 +53,7 @@ describe "models" do
           end
 
           it "creates tenant when name is specified" do
-            new_tenant = Fog::Identity::V2::OpenStackCommon::Tenant.new(options)
+            new_tenant = Fog::IdentityV2::OpenStackCommon::Tenant.new(options)
             options.delete(:service)
             service_mock.expect(:create_tenant, fake_tenant_response, [options])
 

@@ -3,14 +3,13 @@ module Fog
     class IdentityV2
       class Real
 
-        def create_token(username, password, tenant_name=nil)
+        def rescope_token(tenant_name, token)
           data = {
             'auth' => {
-              'passwordCredentials' => {
-                'username' => username,
-                'password' => password
-              },
-              'tenantName' => tenant_name
+              'tenantName' => tenant_name,
+              'token' => {
+                 'id' => token
+              }
             }
           }
 

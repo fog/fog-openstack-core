@@ -1,22 +1,20 @@
 module Fog
-  module Identity
-    module V2
-      class OpenStackCommon
-        class Real
+  module OpenStackCommon
+    class IdentityV2
+      class Real
 
-          def list_roles_for_user_on_tenant(tenant_id, user_id)
-            request(
-              :method   => 'GET',
-              :expects  => 200,
-              :path     => "/tenants/#{tenant_id}/users/#{user_id}/roles"
-            )
-          end
-
+        def list_roles_for_user_on_tenant(tenant_id, user_id)
+          request(
+            :method   => 'GET',
+            :expects  => 200,
+            :path     => "/v2.0/tenants/#{tenant_id}/users/#{user_id}/roles"
+          )
         end
 
-        class Mock
-        end
-      end # OpenStackCommon
-    end # V2
-  end # Identity
+      end
+
+      class Mock
+      end
+    end # IdentityV2
+  end # OpenStackCommon
 end # Fog

@@ -17,7 +17,7 @@ describe "models" do
         }
 
         let(:fake_roles_collection) {
-          Fog::Identity::V2::OpenStackCommon::Roles.new(options)
+          Fog::IdentityV2::OpenStackCommon::Roles.new(options)
         }
 
         let(:fake_roles_response) {

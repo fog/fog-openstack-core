@@ -19,3 +19,5 @@ end
 
 MinitestVcr::Spec.configure!
 Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
+
+VCR.turn_off!(:ignore_cassettes => true)

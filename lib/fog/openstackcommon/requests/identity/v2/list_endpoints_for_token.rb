@@ -1,22 +1,20 @@
 module Fog
-  module Identity
-    module V2
-      class OpenStackCommon
-        class Real
+  module OpenStackCommon
+    class IdentityV2
+      class Real
 
-          def list_endpoints_for_token(token_id)
-            request(
-              :method   => 'GET',
-              :expects  => [200, 203],
-              :path     => "/tokens/#{token_id}/endpoints"
-            )
-          end
-
+        def list_endpoints_for_token(token_id)
+          request(
+            :method   => 'GET',
+            :expects  => [200, 203],
+            :path     => "/v2.0/tokens/#{token_id}/endpoints"
+          )
         end
 
-        class Mock
-        end
-      end # OpenStackCommon
-    end # V2
-  end # Identity
+      end
+
+      class Mock
+      end
+    end # IdentityV2
+  end # OpenStackCommon
 end # Fog

@@ -39,7 +39,7 @@ describe "models" do
           it "throws exception when user_id is missing" do
             proc {
               options.delete(:user_id)
-              new_credential = Fog::Identity::V2::OpenStackCommon::Ec2Credential.new(options)
+              new_credential = Fog::IdentityV2::OpenStackCommon::Ec2Credential.new(options)
               options.delete(:service)
               service_mock.expect(:create_ec2_credential, {}, [fake_user_id, fake_tenant_id])
 
@@ -51,7 +51,7 @@ describe "models" do
           it "throws exception when tenant_id is missing" do
             proc {
               options.delete(:tenant_id)
-              new_credential = Fog::Identity::V2::OpenStackCommon::Ec2Credential.new(options)
+              new_credential = Fog::IdentityV2::OpenStackCommon::Ec2Credential.new(options)
               options.delete(:service)
               service_mock.expect(:create_ec2_credential, {}, [fake_user_id, fake_tenant_id])
 
@@ -61,7 +61,7 @@ describe "models" do
           end
 
           it "creates credential when user_id, tenant_id specified" do
-            new_credential = Fog::Identity::V2::OpenStackCommon::Ec2Credential.new(options)
+            new_credential = Fog::IdentityV2::OpenStackCommon::Ec2Credential.new(options)
             options.delete(:service)
             service_mock.expect(:create_ec2_credential, fake_credential_response, [new_credential.user_id, new_credential.tenant_id])
 
@@ -75,7 +75,7 @@ describe "models" do
         describe "#destroy" do
 
           let(:fake_credential) {
-            Fog::Identity::V2::OpenStackCommon::Ec2Credential.new(options.merge!('access' => fake_access))
+            Fog::IdentityV2::OpenStackCommon::Ec2Credential.new(options.merge!('access' => fake_access))
           }
 
           it "calls destroy" do

@@ -1,27 +1,25 @@
 module Fog
-  module Identity
-    module V2
-      class OpenStackCommon
-        class Real
+  module OpenStackCommon
+    class IdentityV2
+      class Real
 
-          def list_tenants(limit = nil, marker = nil)
-            params = Hash.new
-            params['limit']  = limit  if limit
-            params['marker'] = marker if marker
+        def list_tenants(limit = nil, marker = nil)
+          params = Hash.new
+          params['limit']  = limit  if limit
+          params['marker'] = marker if marker
 
-            request(
-              :method  => 'GET',
-              :expects => [200, 204],
-              :path    => "/tenants",
-              :query   => params
-            )
-          end
-
+          request(
+            :method  => 'GET',
+            :expects => [200, 204],
+            :path    => "/v2.0/tenants",
+            :query   => params
+          )
         end
 
-        class Mock
-        end
-      end # OpenStackCommon
-    end # V2
-  end # Identity
+      end
+
+      class Mock
+      end
+    end # IdentityV2
+  end # OpenStackCommon
 end # Fog
