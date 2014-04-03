@@ -12,7 +12,8 @@ module Fog
             :method   => 'PUT',
             :expects  => 200,
             :path     => "/v2.0/users/#{id}",
-            :body     => MultiJson.encode({ 'user' => options })
+            :body     => MultiJson.encode({ 'user' => options }), 
+            :admin    => true
           )
         end
 

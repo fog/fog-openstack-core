@@ -12,7 +12,7 @@ describe "requests" do
         let(:admin_options) { admin_options_hash }
 
         let(:service) {
-          Fog::Identity::V2::OpenStackCommon.new(admin_options)
+          Fog::OpenStackCommon::IdentityV2.new(admin_options)
         }
 
         describe "#create_token", :vcr do
@@ -48,7 +48,7 @@ describe "requests" do
             tenant_id = "dummy"
             proc {
               service.check_token(token_id, tenant_id)
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
         end
@@ -67,7 +67,7 @@ describe "requests" do
             tenant_id = "dummy"
             proc {
               service.validate_token(token_id, tenant_id)
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
         end

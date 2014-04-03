@@ -5,9 +5,10 @@ module Fog
 
         def delete_user(user_id)
           request(
-            :method => 'DELETE',
+            :method  => 'DELETE',
             :expects => [200, 204],
-            :path   => "/v2.0/users/#{user_id}"
+            :path    => "/v2.0/users/#{user_id}",
+            :admin   => true
           )
         end
 

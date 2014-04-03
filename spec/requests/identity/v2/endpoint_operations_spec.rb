@@ -11,7 +11,7 @@ describe "requests" do
 
         let(:valid_options) { admin_options_hash }
 
-        let(:service) { Fog::Identity::V2::OpenStackCommon.new(admin_options) }
+        let(:service) { Fog::OpenStackCommon::IdentityV2.new(admin_options) }
 
         describe "#list_endpoints" do
           it { skip("Choosing to NotImplement for now.") }

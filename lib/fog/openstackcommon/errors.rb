@@ -27,6 +27,8 @@ module Fog
 
       class ServiceUnavailable < ServiceError; end
 
+      class NotFound < ServiceError; end
+
       class BadRequest < ServiceError
 
         attr_reader :validation_errors

@@ -17,7 +17,7 @@ describe "models" do
         }
 
         let(:fake_tenants_collection) {
-          Fog::Identity::V2::OpenStackCommon::Tenants.new(options)
+          Fog::OpenStackCommon::IdentityV2::Tenants.new(options)
         }
 
         let(:fake_tenants_response) {

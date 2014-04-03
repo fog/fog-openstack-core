@@ -1,19 +1,18 @@
-require 'fog/openstackcommon/service_catalog_v2'
 require 'fog/openstackcommon/request_common'
-# require 'fog/openstackcommon/models/identity/v2/users'
+require 'fog/openstackcommon/service_catalog'
 
 module Fog
   module OpenStackCommon
     class IdentityV2 < Fog::Service
 
-      requires :openstack_auth_url,
-               :openstack_username,
-               :openstack_api_key
-      recognizes :openstack_auth_token, :openstack_management_url,
+      requires :openstack_auth_url
+      recognizes :openstack_username, :openstack_api_key,
+                 :openstack_auth_token, :openstack_management_url,
                  :persistent, :openstack_endpoint_type,
                  :openstack_service_type, :openstack_service_name,
                  :openstack_tenant, :current_tenant,
-                 :openstack_current_user_id, :current_user
+                 :openstack_current_user_id, :current_user,
+                 :openstack_region
 
       model_path 'fog/openstackcommon/models/identity/v2'
       model       :tenant
@@ -125,13 +124,12 @@ module Fog
       class Real
         include Fog::OpenStackCommon::RequestCommon
 
-        attr_reader :service_catalog, :auth_token
+        attr_reader :service_catalog, :auth_token, :response_hash
 
         def initialize(params={})
-          puts "\nIDENTITY V2 INITIALIZE"
-          puts "PARAMS: #{params.to_yaml}"
+          @options = params.clone
 
-          apply_options(params)
+          # get an initial connection to Identity on port 5000 to auth
           @service = Fog::Core::Connection.new(
             @options[:openstack_auth_url].to_s,
             @options[:persistent] || false,
@@ -141,109 +139,135 @@ module Fog
           authenticate
         end
 
+        # distinguish between admin/non-admin requests and handle accordingly
         def request(params)
-          puts "\nREQUEST"
-          my_request(@service, params, @openstack_auth_uri)
+          # determine if this is an admin request
+          admin = params.delete(:admin)
+
+          if admin
+            # create the admin service connection if necessary
+            @admin_service ||= admin_connection(:keystone, @options[:openstack_region].to_sym)
+            base_request(@admin_service, params)
+          else
+            base_request(@service, params)
+          end
+
         end
 
         private
 
+        # Get an admin connection to Identity
+        def admin_connection(service_name, region)
+
+          # get the admin url
+          url = @service_catalog.get_endpoint(service_name, region, :admin)
+
+          Fog::Core::Connection.new(
+            url,
+            @options[:persistent] || false,
+            @options[:service_options] || {}
+          )
+        end
+
+
         def authenticate
-          puts "\nAUTHENTICATE"
-          return rescope_token if @auth_token
+          return auth_rescope if @options[:openstack_auth_token]
           return auth_with_credentials_and_tenant if @options[:openstack_tenant]
           return auth_with_credentials
         end
 
-        def rescope_token
-          puts "\nRESCOPE"
+        def auth_rescope
+          # puts "\nRESCOPE"
           data = rescope_token(@options[:openstack_tenant],
-                               @auth_token )
+                               @options[:openstack_auth_token] )
 
-          # Set a few ivars we might need
-          set_ivars(data.body)
-          data
+          # puts "DATA --> #{data.to_yaml}"
+
+          @auth_token = data.body['access']['token']['id']
+
+          @service_catalog =
+            ServiceCatalog.from_response(self, data.body)
+
+          @response_hash = {
+            :user                     => data.body['access']['user'],
+            :tenant                   => data.body['access']['token']['tenant'],
+            # :identity_public_endpoint => nil,
+            # :server_management_url    => nil,
+            :token                    => @auth_token,
+            :expires                  => data.body['access']['token']['expires'],
+            :current_user_id          => data.body['access']['user'],
+            :unscoped_token           => nil
+          }
+
+          self
         end
 
         def auth_with_credentials_and_tenant
-          puts "\nAUTH WITH CREDS AND TENANT"
+          # puts "\nAUTH WITH CREDS AND TENANT"
+          validate_credentials(@options[:openstack_username],
+                              @options[:openstack_api_key])
+
           data = create_token(@options[:openstack_username],
                               @options[:openstack_api_key],
                               @options[:openstack_tenant] )
-          # Set a few ivars we might need
-          set_ivars(data.body)
-          data
+
+          # puts "DATA --> #{data.to_yaml}"
+
+          @auth_token = data.body['access']['token']['id']
+
+          @service_catalog =
+            ServiceCatalog.from_response(self, data.body)
+
+          @response_hash = {
+            :user                     => data.body['access']['user'],
+            :tenant                   => data.body['access']['token']['tenant'],
+            # :identity_public_endpoint => nil,
+            # :server_management_url    => nil,
+            :token                    => @auth_token,
+            :expires                  => data.body['access']['token']['expires'],
+            :current_user_id          => data.body['access']['user'],
+            :unscoped_token           => nil
+          }
+
+          self
         end
 
         def auth_with_credentials
-          puts "\nAUTH WITH CREDS"
-          puts "------------------------------"
-          # puts "\n\nSELF: #{self.to_yaml}"
-          # puts "\n\nSELF METHODS: #{self.methods.sort}"
-          # puts "\n\nSELF SINGLETON_METHODS: #{self.singleton_methods.sort}"
-          # puts "\n\nSELF PRIVATE_METHODS: #{self.private_methods.sort}"
-          # puts "------------------------------"
-          # puts "\n\nF::OSC:IV2 methods: #{Fog::OpenStackCommon::IdentityV2.methods.to_yaml}"
-          # puts "\n\nF::OSC:IV2 ivars: #{Fog::OpenStackCommon::IdentityV2.instance_variables}"
-          # puts "\n\nF::OSC:IV2 cvars: #{Fog::OpenStackCommon::IdentityV2.class_methods}"
-          # puts "\n\nF::OSC:IV2 requests: #{Fog::OpenStackCommon::IdentityV2.requests}"
-          # puts "------------------------------"
-          # puts "\n\nSELF KLASS methods: #{self.class.methods.to_yaml}"
-          # puts "------------------------------"
-          # puts "\n\nSELF ivars: #{self.instance_variables}"
-          # puts "\n\nSELF cvars: #{self.class.class_variables}"
-          puts "------------------------------"
-
-          # x = Fog::OpenStackCommon::IdentityV2::Users.new({:service => @service, :tenant_id => "admin"}).all
-          # self.users.all
-
+          # puts "\nAUTH WITH CREDS"
+          validate_credentials(@options[:openstack_username],
+                              @options[:openstack_api_key])
           data = create_token(@options[:openstack_username],
-                                   @options[:openstack_api_key])
-          # Set a few ivars we might need
-          set_ivars(data.body)
+                              @options[:openstack_api_key])
 
-          response_hash(data)
-        end
+          # puts "DATA --> #{data.to_yaml}"
 
-        def apply_options(options)
-          puts "\nAPPLY OPTIONS"
-          @options = options.clone
-          puts "\nOPTIONS: #{@options.to_yaml}"
-          puts "\nURL: #{@options[:openstack_auth_url].to_s}"
-          @openstack_auth_uri = URI.parse(@options[:openstack_auth_url].to_s)
-          puts "\nURI: #{@openstack_auth_uri}"
-        end
+          @unscoped_token = data.body['access']['token']['id']
+          @auth_token = @unscoped_token
 
-        def set_ivars(body)
-          puts "\nDATA: #{body.to_yaml}"
+          @service_catalog = nil
 
-          @token = body['access']['token']
-          puts "\nTOKEN: #{@token.to_yaml}"
-
-          if @token.has_key?('tenant')
-            @tenant = @token['tenant']
-            puts "\nTENANT: #{@tenant.to_yaml}"
-          end
-
-          @auth_token = @token['id']
-          puts "\nAUTH TOKEN: #{@auth_token}"
-
-          @service_catalog =
-            Fog::OpenStackCommon::ServiceCatalog.from_response(self, body)
-          puts "\nSERVICE CATALOG: #{@service_catalog.to_yaml}"
-        end
-
-        def response_hash(data)
-          {
-            :user                     => nil,
-            :tenant                   => nil,
-            :identity_public_endpoint => nil,
-            :server_management_url    => nil,
+          @response_hash = {
+            :user                     => data.body['access']['user'],
+            :tenant                   => [],
+            # :identity_public_endpoint => nil,
+            # :server_management_url    => nil,
             :token                    => nil,
-            :expires                  => nil,
-            :current_user_id          => nil,
-            :unscoped_token           => nil
+            :expires                  => data.body['access']['token']['expires'],
+            :current_user_id          => data.body['access']['user'],
+            :unscoped_token           => @unscoped_token
           }
+
+          self
+        end
+
+        def validate_credentials(username, api_key)
+          missing_creds = Array.new
+          missing_creds << :openstack_username unless username
+          missing_creds << :openstack_api_key  unless api_key
+          unless missing_creds.empty?
+            raise ArgumentError,
+                  "Missing required arguments: #{missing_creds.join(', ')}"
+          end
         end
 
       end  # Real

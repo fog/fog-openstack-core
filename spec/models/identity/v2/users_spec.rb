@@ -20,7 +20,7 @@ describe "models" do
         }
 
         let(:fake_users_collection) {
-          Fog::Identity::V2::OpenStackCommon::Users.new(options)
+          Fog::OpenStackCommon::IdentityV2::Users.new(options)
         }
 
         let(:fake_users_response) {

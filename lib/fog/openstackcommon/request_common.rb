@@ -1,31 +1,37 @@
+require 'fog/openstackcommon/errors'
+
 module Fog
   module OpenStackCommon
     module RequestCommon
 
-      def my_request(service, params, uri)
+      def base_request(service, params)
 
-        puts "\n===== base_request ====="
-        puts "SERVICE: #{service}"
-        puts "PARAMS: #{params.to_yaml}"
+        # puts "\n===== base_request ====="
+        # puts "SERVICE: #{service}"
+        # puts "PARAMS: #{params.to_yaml}"
 
-        first_attempt = true
+        # first_attempt = true
         begin
-          puts "BEGIN ---"
-          response = service.request(request_params(params, uri))
+          # puts "Beginning BASE_REQUEST ---"
+          rp = request_params(params)
+          # puts "PARAMS: #{rp.to_yaml}"
+
+          # Call the service and get response back
+          response = service.request(rp)
         rescue Excon::Errors::Conflict => error
-          puts "Conflict"
+          # puts "Conflict"
           raise Fog::OpenStackCommon::Errors::Conflict.slurp(error)
         rescue Excon::Errors::BadRequest => error
-          puts "Bad Request"
+          # puts "Bad Request"
           raise Fog::OpenStackCommon::Errors::BadRequest.slurp(error)
-        rescue Excon::Errors::Unauthorized => error
-          puts "Unauthorized"
-          raise error unless first_attempt
-          first_attempt = false
+        # rescue Excon::Errors::Unauthorized => error
+          # puts "Unauthorized"
+          # raise error unless first_attempt
+          # first_attempt = false
           # authenticate
-          retry
+          # retry
         rescue Excon::Errors::HTTPStatusError => error
-          puts "HTTP Status Error"
+          # puts "HTTP Status Error"
           raise case error
           when Excon::Errors::NotFound
             raise Fog::OpenStackCommon::Errors::NotFound.slurp(error)
@@ -37,52 +43,33 @@ module Fog
           response.body = MultiJson.decode(response.body)
         end
 
-        puts "RESPONSE: "
-        puts "#{response.to_yaml}"
+        # puts "RESPONSE: "
+        # puts "#{response.to_yaml}"
 
         response
 
       end  # self.request
 
-      def request_params(params, uri)
-        puts "\nINSIDE REQUEST_PARAMS"
-        puts "#{params.to_yaml}"
-        puts "#{uri}"
-
-        # uri = params.delete(:uri)
-        path = "#{uri.path}"
-        # path = params[:uri].path
-
-        puts "PATH:"
-        puts "#{path}"
-
+      def request_params(params)
         params.merge({
           :headers  => headers(params),
-          :path     => path
+          :path     => params[:path]
         })
       end
 
-
-      # ToDo: (Chris) Need to set the X-Auth-Token header
-      #       after initial auth for all subsequent calls.
-      #       Initial auth fails with this header specified
-      #       without a value.
       def headers(options={})
-        puts "\nINSIDE HEADERS"
+        # puts "\nINSIDE HEADERS"
+        # puts "OPTIONS: #{options.to_yaml}"
 
-        { 'Content-Type' => 'application/json',
-          'Accept' => 'application/json'
-          # ,
-          # 'X-Auth-Token' => auth_token
-        }.merge(options[:headers] || {})
+        headers =
+          { 'Content-Type' => 'application/json',
+            'Accept' => 'application/json'
+          }.merge(options[:headers] || {})
+        headers.merge!('X-Auth-Token' => @auth_token) if @auth_token
+
+        # puts "HEADERS FINAL ===> #{headers.to_yaml}"
+        headers
       end
-
-      # def self.auth_token
-      #   puts "\nINSIDE AUTH_TOKEN"
-      #
-      #   # @auth_token || @identity_service.auth_token
-      #   nil
-      # end
 
     end # BaseRequest
   end # OpenStackCommon

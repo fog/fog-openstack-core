@@ -1,6 +1,8 @@
 module Fog
   module OpenStackCommon
-    class ServiceCatalogV2
+    class ServiceCatalog
+
+      attr_reader :catalog, :service
 
       def initialize(attributes)
         @service = attributes.delete(:service)
@@ -15,27 +17,28 @@ module Fog
         catalog.collect {|s| s["name"]}
       end
 
-      def get_endpoints(service_name, service_net=false)
+      def get_endpoints(service_name, url_type=:public)
         h = catalog.find {|service| service["name"] == service_name.to_s}
+        # puts "H --> #{h.to_yaml}"
         return {} unless h
-        key = network_type_key(service_net)
+        key = network_type_key(url_type)
         h["endpoints"].select {|e| e[key]}
       end
 
-      def display_service_regions(service_name, service_net=false)
-        endpoints = get_endpoints(service_name, service_net)
+      def display_service_regions(service_name, url_type=:public)
+        endpoints = get_endpoints(service_name, url_type)
         regions = endpoints.collect do |e|
           e["region"] ? ":#{e["region"].downcase}" : ":global"
         end
         regions.join(", ")
       end
 
-      def get_endpoint(service_name, region=nil, service_net=false)
+      def get_endpoint(service_name, region=nil, url_type=:public)
         service_region = region_key(region)
 
-        network_type = network_type_key(service_net)
+        network_type = network_type_key(url_type)
 
-        endpoints = get_endpoints(service_name, service_net)
+        endpoints = get_endpoints(service_name, url_type)
         raise "Unable to locate endpoint for service #{service_name}" if endpoints.empty?
 
         if endpoints.size > 1 && region.nil?
@@ -66,8 +69,11 @@ module Fog
 
       private
 
-      def network_type_key(service_net)
-        service_net ? "internalURL" : "publicURL"
+      def network_type_key(url_type)
+        # service_net ? "internalURL" : "publicURL"
+        return "adminURL" if url_type == :admin
+        return "internalURL" if url_type == :internal
+        "publicURL"
       end
 
       def matching_region?(h, region)

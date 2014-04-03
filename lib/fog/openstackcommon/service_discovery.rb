@@ -33,10 +33,6 @@ module Fog
 
         @service_identifier = service.to_s
 
-        puts "ServiceDiscovery (initialize)"
-        puts "SID: #{@service_identifier}"
-        puts "PARAMS: #{params.to_yaml}"
-
         validate
         @options = params.dup
       end
@@ -47,8 +43,6 @@ module Fog
         version = options[:version] || DEFAULT_VERSION
 
         klass_name = "#{BASE_PROVIDER}::#{service_name}V#{version}"
-        puts "KLASS NAME: #{klass_name}"
-        #klass = Module.const_get(klass_name)
         klass = klass_name.to_class
         klass.new(options)
       end
@@ -56,10 +50,6 @@ module Fog
       private
 
       def validate
-        puts "VALIDATE"
-        puts "VS: #{VALID_SERVICES.to_s}"
-        puts "SERVICE: #{service_identifier}"
-
         # raise an error unless valid service name/id passed in
         unless VALID_SERVICES.include?(service_identifier)
           raise Fog::OpenStackCommon::ServiceError

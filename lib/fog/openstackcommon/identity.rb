@@ -9,20 +9,17 @@ module Fog
     class Identity
 
       def initialize(options, connection_options = {})
+        @service = initialize_service(options, connection_options)
+        @service.response_hash
+      end
 
-        puts "IDENTITY (initialize)"
+      private
 
+      def initialize_service(options, connection_options = {})
         opts = options.dup  # dup options so no wonky side effects
         opts.merge!(:connection_options => connection_options)
 
-        puts "OPTIONS #{opts}"
-
-        service_discovery =
-          Fog::OpenStackCommon::ServiceDiscovery.new("identity", opts)
-
-        puts "SERVICE_DISCOVERY: #{service_discovery.to_yaml}"
-
-        # returns a service instance
+        service_discovery = ServiceDiscovery.new("identity", opts)
         service_discovery.discover
       end
 

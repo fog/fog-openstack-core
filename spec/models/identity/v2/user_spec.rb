@@ -32,7 +32,7 @@ describe "models" do
         }
 
         let(:fake_user) {
-          Fog::Identity::V2::OpenStackCommon::User.new(
+          Fog::OpenStackCommon::IdentityV2::User.new(
             options.merge!('id' => fake_id))
         }
 
@@ -52,7 +52,7 @@ describe "models" do
           it "throws exception when name is missing" do
             proc {
               options.delete(:name)
-              new_user = Fog::Identity::V2::OpenStackCommon::User.new(options)
+              new_user = Fog::OpenStackCommon::IdentityV2::User.new(options)
               service_mock.expect(
                 :create_user,
                 {},
@@ -66,7 +66,7 @@ describe "models" do
           it "throws exception when password is missing" do
             proc {
               options.delete(:password)
-              new_user = Fog::Identity::V2::OpenStackCommon::User.new(options)
+              new_user = Fog::OpenStackCommon::IdentityV2::User.new(options)
               service_mock.expect(
                 :create_user,
                 {},
@@ -80,7 +80,7 @@ describe "models" do
           it "throws exception when tenant id is missing" do
             proc {
               options.delete(:tenant_id)
-              new_user = Fog::Identity::V2::OpenStackCommon::User.new(options)
+              new_user = Fog::OpenStackCommon::IdentityV2::User.new(options)
               service_mock.expect(
                 :create_user,
                 {},
@@ -93,7 +93,7 @@ describe "models" do
 
           it "sets enabled to true when enabled is missing" do
             options.delete(:enabled)
-            new_user = Fog::Identity::V2::OpenStackCommon::User.new(options)
+            new_user = Fog::OpenStackCommon::IdentityV2::User.new(options)
             service_mock.expect(
               :create_user,
               fake_user_response,
@@ -104,7 +104,7 @@ describe "models" do
           end
 
           it "creates user when name, password and tenant_id specified" do
-            new_user = Fog::Identity::V2::OpenStackCommon::User.new(options)
+            new_user = Fog::OpenStackCommon::IdentityV2::User.new(options)
             service_mock.expect(
               :create_user,
               fake_user_response,
@@ -118,7 +118,7 @@ describe "models" do
 
         describe "create" do
 
-          let(:unsaved_user) { Fog::Identity::V2::OpenStackCommon::User.new(options) }
+          let(:unsaved_user) { Fog::OpenStackCommon::IdentityV2::User.new(options) }
 
           it "creates user" do
             service_mock.expect(
@@ -188,7 +188,7 @@ describe "models" do
         describe "#destroy" do
 
           let(:fake_user) {
-            Fog::Identity::V2::OpenStackCommon::User.new(
+            Fog::OpenStackCommon::IdentityV2::User.new(
               options.merge!('id' => fake_id))
           }
 
@@ -208,7 +208,7 @@ describe "models" do
         describe "#ec2_credentials" do
 
           let(:fake_user) {
-            Fog::Identity::V2::OpenStackCommon::User.new(
+            Fog::OpenStackCommon::IdentityV2::User.new(
               options.merge!('id' => fake_id))
           }
 
@@ -228,7 +228,7 @@ describe "models" do
         describe "#roles" do
 
           let(:fake_user) {
-            Fog::Identity::V2::OpenStackCommon::User.new(
+            Fog::OpenStackCommon::IdentityV2::User.new(
               options.merge!('id' => fake_id))
           }
 
@@ -256,7 +256,7 @@ describe "models" do
           let(:fake_tenant) { OpenStruct.new({'id' => fake_tenant_id }) }
           let(:fake_role) { OpenStruct.new({'id' => fake_role_id }) }
           let(:fake_user) {
-            Fog::Identity::V2::OpenStackCommon::User.new(
+            Fog::OpenStackCommon::IdentityV2::User.new(
               options.merge!('id' => fake_id))
           }
 
@@ -277,7 +277,7 @@ describe "models" do
           let(:fake_tenant) { OpenStruct.new({'id' => fake_tenant_id }) }
           let(:fake_role) { OpenStruct.new({'id' => fake_role_id }) }
           let(:fake_user) {
-            Fog::Identity::V2::OpenStackCommon::User.new(
+            Fog::OpenStackCommon::IdentityV2::User.new(
               options.merge!('id' => fake_id))
           }
 

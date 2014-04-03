@@ -12,7 +12,7 @@ describe "requests" do
         let(:admin_options) { admin_options_hash }
 
         let(:service) {
-          Fog::Identity::V2::OpenStackCommon.new(admin_options)
+          Fog::OpenStackCommon::IdentityV2.new(admin_options)
         }
 
         describe "#list_ec2_credentials" do
@@ -27,7 +27,7 @@ describe "requests" do
           it "with an invalid user_id", :vcr do
             proc {
               service.list_ec2_credentials(1234567890)
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
         end #list_ec2_credentials
@@ -45,13 +45,13 @@ describe "requests" do
           it "with an invalid user_id", :vcr do
             proc {
               service.create_ec2_credential("abcdefghijklmnopqrstuvwxyz", tenant_id)
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
           it "with an invalid tenant_id", :vcr do
             proc {
               service.create_ec2_credential(user_id, "abcdefghijklmnopqrstuvwxyz")
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
         end #create_ec2_credential
@@ -69,13 +69,13 @@ describe "requests" do
           it "with an invalid user_id", :vcr do
             proc {
               service.get_ec2_credential("abcdefghijklmnopqrstuvwxyz", access_key)
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
           it "with an invalid access_key", :vcr do
             proc {
               service.get_ec2_credential(user_id, "abcdefghijklmnopqrstuvwxyz")
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
         end #get_ec2_credential
@@ -97,13 +97,13 @@ describe "requests" do
               results = service.create_ec2_credential(user_id, tenant_id)
               access_key = results.body['credential']['access']
               service.delete_ec2_credential("abcdefghijklmnopqrstuvwxyz", access_key)
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
           it "with an invalid access_key", :vcr do
             proc {
               service.delete_ec2_credential(user_id, "abcdefghijklmnopqrstuvwxyz")
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
         end #delete_ec2_credential

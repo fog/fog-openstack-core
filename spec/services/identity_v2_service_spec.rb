@@ -1,112 +1,218 @@
 require_relative '../spec_helper'
-require_relative '../support/spec_helpers'
-include SpecHelpers
 
 require 'fog/openstackcommon'
 
 describe "services" do
   describe "identity_v2" do
 
-    let(:credentials_hash) {
-      admin_options_hash
+    let(:credentials_tenant_hash) {
+      {
+        :openstack_auth_url => "http://devstack.local:5000",
+        :openstack_username => "admin",
+        :openstack_api_key => "stack",
+        :openstack_tenant => "admin",
+        :openstack_region => "regionone"
+      }
     }
 
-    let(:credentials_tenant_hash) {
-      hash = credentials_hash.clone
-      hash.merge!(:openstack_tenant => "admin")
-      hash
+    let(:credentials_hash) {
+      {
+        :openstack_auth_url => "http://devstack.local:5000",
+        :openstack_username => "admin",
+        :openstack_api_key => "stack",
+        # :openstack_tenant => "admin",
+        :openstack_region => "regionone"
+      }
     }
 
     let(:auth_token_hash) {
       {
+        :openstack_auth_url => "http://devstack.local:5000",
         :openstack_tenant => "admin",
-        :auth_token => nil
+        :openstack_region => "regionone",
+        :openstack_auth_token => nil,
+        # :service_options => {:proxy => 'http://localhost:8888'}
       }
     }
 
-    describe "#initialize", :vcr do
+    describe "#initialize" do
 
       describe "#rescope_token" do
+
+        describe "invalid auth token", :vcr do
+
+          it "raises an Unauthorized exception" do
+            auth_token_hash[:openstack_auth_token] = "invalid-token"
+            proc {
+              service =
+                Fog::OpenStackCommon::IdentityV2.new(auth_token_hash)
+            }.must_raise Excon::Errors::Unauthorized
+          end
+
+        end
+
+        describe "valid auth token", :vcr do
+
+          # 1 - get a valid (unscoped) auth token
+          let(:valid_token) {
+            service = Fog::OpenStackCommon::IdentityV2.new(credentials_hash)
+            service.auth_token
+          }
+
+          # 2 - authenticate based on the valid auth token + tenant
+          it "must not be nil" do
+            hash = auth_token_hash.clone
+            hash[:openstack_auth_token] = valid_token
+            svc = Fog::OpenStackCommon::IdentityV2.new(hash)
+
+            svc.auth_token.wont_be_nil
+          end
+        end
+
       end  #rescope_token
 
       describe "#auth_with_credentials_and_tenant" do
+
+        describe "with valid credentials", :vcr do
+
+          let(:service) { Fog::OpenStackCommon::IdentityV2.new(credentials_tenant_hash) }
+
+          it "returns a service reference" do
+            service.must_be_instance_of Fog::OpenStackCommon::IdentityV2::Real
+          end
+
+          [ :service_catalog, :auth_token, :response_hash ].each do |attrib|
+            it { service.must_respond_to attrib }
+          end
+
+        end   # with valid credentials
+
+        describe "with invalid credentials", :vcr do
+
+          it "a missing url raises an ArgumentError" do
+            invalid_options = credentials_tenant_hash.clone
+            invalid_options[:openstack_auth_url] = nil
+
+            proc {
+              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+            }.must_raise ArgumentError
+          end
+
+          it "a missing username raises an ArgumentError" do
+            invalid_options = credentials_tenant_hash.clone
+            invalid_options[:openstack_username] = nil
+
+            proc {
+              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+            }.must_raise ArgumentError
+          end
+
+          it "a missing password/apikey raises an ArgumentError" do
+            invalid_options = credentials_tenant_hash.clone
+            invalid_options[:openstack_api_key] = nil
+
+            proc {
+              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+            }.must_raise ArgumentError
+          end
+
+          it "an invalid username raises an Unauthorized exception" do
+            invalid_options = credentials_tenant_hash
+            invalid_options[:openstack_username] = "none"
+
+            proc {
+              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+            }.must_raise Excon::Errors::Unauthorized
+          end
+
+          it "an invalid password raises an Unauthorized exception" do
+            invalid_options = credentials_tenant_hash
+            invalid_options[:openstack_api_key] = "none"
+
+            proc {
+              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+            }.must_raise Excon::Errors::Unauthorized
+          end
+
+          it "an invalid tenant raises an Unauthorized exception" do
+            invalid_options = credentials_tenant_hash
+            invalid_options[:openstack_tenant] = "none"
+
+            proc {
+              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+            }.must_raise Excon::Errors::Unauthorized
+          end
+
+        end # with invalid credentials
+
       end  #auth_with_credentials_and_tenant
 
       describe "#auth_with_credentials" do
 
-        describe "with valid credentials" do
+        describe "with valid credentials", :vcr do
 
-          # let(:service) { Fog::OpenStackCommon::IdentityV2.new(credentials_hash) }
-          let(:service) { Fog::OpenStackCommon::Identity.new(credentials_hash) }
+          let(:service) { Fog::OpenStackCommon::IdentityV2.new(credentials_hash) }
 
-          it "return service reference" do
-            # service.must_be_instance_of Fog::OpenStackCommon::IdentityV2::Real
-            service.must_be_instance_of Hash
+          it "returns a service reference" do
+            service.must_be_instance_of Fog::OpenStackCommon::IdentityV2::Real
           end
 
-          # [ :service_catalog, :auth_token ].each do |attrib|
-          #   it { service.must_respond_to attrib }
-          # end
+          [ :service_catalog, :auth_token, :response_hash ].each do |attrib|
+            it { service.must_respond_to attrib }
+          end
 
         end   # with valid credentials
 
-        # describe "with invalid credentials" do
-        #
-        #   it "a missing url raises an Unauthorized exception" do
-        #     invalid_url_options = credentials_hash
-        #     invalid_url_options[:openstack_auth_url] = nil
-        #     proc {
-        #       Fog::OpenStackCommon::IdentityV2.new(invalid_url_options)
-        #     }.must_raise Excon::Errors::Unauthorized
-        #   end
-        #
-        #   it "an invalid username raises an Unauthorized exception" do
-        #     invalid_username_options = credentials_hash
-        #     invalid_username_options[:openstack_username] = "none"
-        #     proc {
-        #       Fog::OpenStackCommon::IdentityV2.new(invalid_username_options)
-        #     }.must_raise Excon::Errors::Unauthorized
-        #   end
-        #
-        #   it "an invalid password raises an Unauthorized exception" do
-        #     invalid_password_options = credentials_hash
-        #     invalid_password_options[:openstack_api_key] = "none"
-        #     proc {
-        #       Fog::OpenStackCommon::IdentityV2.new(invalid_password_options)
-        #     }.must_raise Excon::Errors::Unauthorized
-        #   end
-        #
-        # end # with invalid credentials
+        describe "with invalid credentials", :vcr do
+
+          it "a missing url raises an ArgumentError" do
+            invalid_options = credentials_hash.clone
+            invalid_options[:openstack_auth_url] = nil
+
+            proc {
+              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+            }.must_raise ArgumentError
+          end
+
+          it "a missing username raises an ArgumentError" do
+            invalid_options = credentials_hash.clone
+            invalid_options[:openstack_username] = nil
+
+            proc {
+              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+            }.must_raise ArgumentError
+          end
+
+          it "a missing password/apikey raises an ArgumentError" do
+            invalid_options = credentials_hash.clone
+            invalid_options[:openstack_api_key] = nil
+
+            proc {
+              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+            }.must_raise ArgumentError
+          end
+
+          it "an invalid username raises an Unauthorized exception" do
+            invalid_options = credentials_hash.clone
+            invalid_options[:openstack_username] = "none"
+
+            proc {
+              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+            }.must_raise Excon::Errors::Unauthorized
+          end
+
+          it "an invalid password raises an Unauthorized exception" do
+            invalid_options = credentials_hash.clone
+            invalid_options[:openstack_api_key] = "none"
+
+            proc {
+              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+            }.must_raise Excon::Errors::Unauthorized
+          end
+
+        end # with invalid credentials
 
       end  #auth_with_credentials
-
-
-        # describe "token" do
-        #   describe "invalid auth", :vcr do
-        #     it "raises an Unauthorized exception" do
-        #       invalid_auth_token_options = admin_options
-        #       invalid_auth_token_options[:openstack_auth_token] = "abcdefghijklmnopqrstuvwxys0123456789"
-        #       proc {
-        #         Fog::Identity.new(invalid_auth_token_options)
-        #       }.must_raise Excon::Errors::Unauthorized
-        #     end
-        #   end
-        #
-        #   describe "valid auth", :vcr do
-        #     let(:connection) {
-        #       Fog::Identity.new(admin_options)
-        #     }
-        #
-        #     # 1 - get the valid auth token out of the initial connection
-        #     # 2 - authenticate based on the valid auth token to ensure it works
-        #     it "must not be nil" do
-        #       valid_auth_token_options = admin_options
-        #       valid_auth_token_options[:openstack_auth_token] = connection.auth_token
-        #       Fog::Identity.new(admin_options).wont_be_nil
-        #     end
-        #
-        #   end
-        # end
 
     end # initialize
 

@@ -12,7 +12,7 @@ describe "requests" do
         let(:admin_options) { admin_options_hash }
 
         let(:service) {
-          Fog::Identity::V2::OpenStackCommon.new(admin_options)
+          Fog::OpenStackCommon::IdentityV2.new(admin_options)
         }
 
         describe "#create_tenant" do
@@ -37,7 +37,7 @@ describe "requests" do
             it "raises an exception", :vcr do
               proc {
                 service.create_tenant({})
-              }.must_raise Fog::Identity::V2::OpenStackCommon::BadRequest
+              }.must_raise Fog::OpenStackCommon::IdentityV2::BadRequest
             end
 
           end
@@ -47,7 +47,7 @@ describe "requests" do
             it "raises an exception", :vcr do
               proc {
                 service.create_tenant({'name' => nil, 'description' => "azahabada#{Time.now.to_i}"})
-              }.must_raise Fog::Identity::V2::OpenStackCommon::BadRequest
+              }.must_raise Fog::OpenStackCommon::IdentityV2::BadRequest
             end
 
           end
@@ -57,7 +57,7 @@ describe "requests" do
             it "raises an exception", :vcr do
               proc {
                 service.create_tenant(nil)
-              }.must_raise Fog::Identity::V2::OpenStackCommon::BadRequest
+              }.must_raise Fog::OpenStackCommon::IdentityV2::BadRequest
             end
 
           end
@@ -97,7 +97,7 @@ describe "requests" do
               name = {'name' => "new-name#{Time.now.to_i}"}
               proc {
                 service.update_tenant('bogus-tenant-id', name)
-              }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+              }.must_raise Fog::OpenStackCommon::Errors::NotFound
             end
           end
         end
@@ -113,7 +113,7 @@ describe "requests" do
           it "when invalid tenant id specified", :vcr do
             proc {
               service.delete_tenant("abcdefghijklmnopqrstuvwxyz")
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
         end
@@ -163,7 +163,7 @@ describe "requests" do
           it "when invalid name specified", :vcr do
             proc {
               service.get_tenants_by_name("missingtenant12345")
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
         end
@@ -181,7 +181,7 @@ describe "requests" do
           it "when invalid tenant id specified", :vcr do
             proc {
               service.get_tenants_by_id("123456789")
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
         end
@@ -209,7 +209,7 @@ describe "requests" do
             proc {
               user_id = list.body['users'].first['id']
               service.list_roles_for_user_on_tenant("1234567890", user_id)
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
         end
@@ -225,7 +225,7 @@ describe "requests" do
           it "when invalid tenant id specified", :vcr do
             proc {
               service.list_users_for_tenant("123456789")
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
         end
@@ -267,7 +267,7 @@ describe "requests" do
               user_id = users_list.first['id']
 
               service.delete_role_from_user_on_tenant(tenant_id, user_id, 'bogus-role-id')
-            }.must_raise Fog::Identity::V2::OpenStackCommon::NotFound
+            }.must_raise Fog::OpenStackCommon::Errors::NotFound
           end
 
         end
