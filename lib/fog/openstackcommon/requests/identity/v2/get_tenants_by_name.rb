@@ -4,6 +4,7 @@ module Fog
       class Real
 
         def get_tenants_by_name(name, limit = nil, marker = nil)
+
           params = Hash.new
           params['name']   = name
           params['limit']  = limit  if limit
@@ -13,7 +14,8 @@ module Fog
             :method   => 'GET',
             :expects  => [200],
             :path     => "/v2.0/tenants",
-            :query    => params
+            :query    => params,
+            :admin    => true
           )
         end
 
