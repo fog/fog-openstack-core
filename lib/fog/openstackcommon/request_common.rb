@@ -10,11 +10,12 @@ module Fog
         # puts "SERVICE: #{service}"
         # puts "PARAMS: #{params.to_yaml}"
 
-        # first_attempt = true
+        first_attempt = true
         begin
-          # puts "Beginning BASE_REQUEST ---"
+          puts "Beginning BASE_REQUEST ---"
           rp = request_params(params)
-          # puts "PARAMS: #{rp.to_yaml}"
+
+          puts "PARAMS: #{rp.to_yaml}"
 
           # Call the service and get response back
           response = service.request(rp)
@@ -24,12 +25,12 @@ module Fog
         rescue Excon::Errors::BadRequest => error
           # puts "Bad Request"
           raise Fog::OpenStackCommon::Errors::BadRequest.slurp(error)
-        # rescue Excon::Errors::Unauthorized => error
+        rescue Excon::Errors::Unauthorized => error
           # puts "Unauthorized"
-          # raise error unless first_attempt
-          # first_attempt = false
+          raise error unless first_attempt
+          first_attempt = false
           # authenticate
-          # retry
+          retry
         rescue Excon::Errors::HTTPStatusError => error
           # puts "HTTP Status Error"
           raise case error
