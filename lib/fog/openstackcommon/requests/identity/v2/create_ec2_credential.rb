@@ -28,7 +28,8 @@ module Fog
             :method  => 'POST',
             :expects => [200, 202],
             :path    => "/v2.0/users/#{user_id}/credentials/OS-EC2",
-            :body    => MultiJson.encode(data)
+            :body    => MultiJson.encode(data),
+            :admin   => true
           )
         end
 

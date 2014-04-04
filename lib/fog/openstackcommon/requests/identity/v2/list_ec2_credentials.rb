@@ -24,7 +24,8 @@ module Fog
           request(
             :method  => 'GET',
             :expects => [200, 202],
-            :path    => "/v2.0/users/#{user_id}/credentials/OS-EC2"
+            :path    => "/v2.0/users/#{user_id}/credentials/OS-EC2",
+            :admin   => true
           )
         end
 

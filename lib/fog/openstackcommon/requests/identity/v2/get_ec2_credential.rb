@@ -25,7 +25,8 @@ module Fog
           request(
             :method  => 'GET',
             :expects => [200, 202],
-            :path    => "/v2.0/users/#{user_id}/credentials/OS-EC2/#{access}"
+            :path    => "/v2.0/users/#{user_id}/credentials/OS-EC2/#{access}",
+            :admin   => true
           )
         rescue Excon::Errors::Unauthorized
           raise Fog::Identity::OpenStackCommon::NotFound
