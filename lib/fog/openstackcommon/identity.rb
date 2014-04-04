@@ -20,7 +20,7 @@ module Fog
         opts.merge!(:connection_options => connection_options)
 
         service_discovery = ServiceDiscovery.new("identity", opts)
-        service_discovery.discover
+        service_discovery.call
       end
 
     end # Identity

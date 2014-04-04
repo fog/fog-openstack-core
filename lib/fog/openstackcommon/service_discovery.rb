@@ -38,7 +38,7 @@ module Fog
       end
 
       # factory - return the service object ready to be used
-      def discover
+      def call
         service_name = service_identifier.capitalize
         version = options[:version] || DEFAULT_VERSION
 
