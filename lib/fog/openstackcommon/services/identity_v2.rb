@@ -181,7 +181,7 @@ module Fog
                                @options[:openstack_auth_token] )
 
           # puts "DATA --> #{data.to_yaml}"
-
+          @unscoped_token = nil
           @auth_token = data.body['access']['token']['id']
 
           @service_catalog =
@@ -212,6 +212,7 @@ module Fog
 
           # puts "DATA --> #{data.to_yaml}"
 
+          @unscoped_token = nil
           @auth_token = data.body['access']['token']['id']
 
           @service_catalog =
