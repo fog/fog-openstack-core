@@ -5,9 +5,10 @@ module Fog
 
         def delete_role(role_id)
           request(
-            :method => 'DELETE',
+            :method  => 'DELETE',
             :expects => [200, 204],
-            :path   => "/v2.0/OS-KSADM/roles/#{role_id}"
+            :path    => "/v2.0/OS-KSADM/roles/#{role_id}",
+            :admin   => true
           )
         end
 
