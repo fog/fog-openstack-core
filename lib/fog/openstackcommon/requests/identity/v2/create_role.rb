@@ -10,10 +10,11 @@ module Fog
             }
           }
           request(
-            :method   => 'POST',
-            :expects  => [200, 202],
-            :path   => '/v2.0/OS-KSADM/roles',
-            :body     => MultiJson.encode(data)
+            :method  => 'POST',
+            :expects => [200, 202],
+            :path    => '/v2.0/OS-KSADM/roles',
+            :body    => MultiJson.encode(data),
+            :admin   => true
           )
         end
 

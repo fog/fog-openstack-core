@@ -7,7 +7,8 @@ module Fog
           request(
             :method  => 'DELETE',
             :expects => [200, 204],
-            :path    => "/v2.0/tenants/#{id}"
+            :path    => "/v2.0/tenants/#{id}",
+            :admin   => true
           )
         end
 

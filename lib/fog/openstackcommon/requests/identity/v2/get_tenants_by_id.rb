@@ -7,7 +7,8 @@ module Fog
           request(
             :method   => 'GET',
             :expects  => [200, 204],
-            :path     => "/v2.0/tenants/#{tenant_id}"
+            :path     => "/v2.0/tenants/#{tenant_id}",
+            :admin    => true
           )
         end
 

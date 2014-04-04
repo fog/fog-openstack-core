@@ -9,7 +9,8 @@ module Fog
             :method  => 'POST',
             :expects => [200],
             :path    => "/v2.0/tenants/#{id}",
-            :body    => MultiJson.encode({ 'tenant' => attributes })
+            :body    => MultiJson.encode({ 'tenant' => attributes }),
+            :admin   => true
           )
         end # def update_tenant
 

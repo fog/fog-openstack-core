@@ -8,7 +8,8 @@ module Fog
             :method  => 'POST',
             :expects => [200, 201, 202],
             :path    => '/v2.0/tenants',
-            :body    =>  MultiJson.encode({'tenant' => attributes})
+            :body    =>  MultiJson.encode({'tenant' => attributes}),
+            :admin   => true
           )
         end
       end # Real

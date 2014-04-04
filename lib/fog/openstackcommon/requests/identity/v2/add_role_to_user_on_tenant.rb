@@ -7,7 +7,8 @@ module Fog
           request(
             :method   => 'PUT',
             :expects  => [200,201],
-            :path     => "/v2.0/tenants/#{tenant_id}/users/#{user_id}/roles/OS-KSADM/#{role_id}"
+            :path     => "/v2.0/tenants/#{tenant_id}/users/#{user_id}/roles/OS-KSADM/#{role_id}",
+            :admin    => true
           )
         end
 

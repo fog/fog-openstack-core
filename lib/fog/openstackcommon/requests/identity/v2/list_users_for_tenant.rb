@@ -12,7 +12,8 @@ module Fog
             :method  => 'GET',
             :expects => [200, 203],
             :path    => "/v2.0/tenants/#{tenant_id}/users",
-            :query   => params
+            :query   => params,
+            :admin   => true
           )
         end
 
