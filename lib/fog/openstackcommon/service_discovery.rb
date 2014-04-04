@@ -43,7 +43,7 @@ module Fog
         version = options[:version] || DEFAULT_VERSION
 
         klass_name = "#{BASE_PROVIDER}::#{service_name}V#{version}"
-        klass = klass_name.to_class
+        klass = Fog::OpenStackCommon::Common.string_to_class(klass_name)
         klass.new(options)
       end
 
