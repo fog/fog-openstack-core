@@ -4,11 +4,10 @@ module Fog
       class Real
 
         def add_role_to_user_on_tenant(tenant_id, user_id, role_id)
-          request(
+          admin_request(
             :method   => 'PUT',
             :expects  => [200,201],
-            :path     => "/v2.0/tenants/#{tenant_id}/users/#{user_id}/roles/OS-KSADM/#{role_id}",
-            :admin    => true
+            :path     => "/v2.0/tenants/#{tenant_id}/users/#{user_id}/roles/OS-KSADM/#{role_id}", 
           )
         end
 

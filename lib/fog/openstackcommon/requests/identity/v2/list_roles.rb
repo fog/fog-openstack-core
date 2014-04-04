@@ -4,11 +4,10 @@ module Fog
       class Real
 
         def list_roles
-          request(
+          admin_request(
             :method  => 'GET',
             :expects => 200,
             :path    => '/v2.0/OS-KSADM/roles',
-            :admin   => true
           )
         end
 

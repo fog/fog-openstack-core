@@ -4,11 +4,10 @@ module Fog
       class Real
 
         def list_roles_for_user_on_tenant(tenant_id, user_id)
-          request(
+          admin_request(
             :method   => 'GET',
             :expects  => 200,
             :path     => "/v2.0/tenants/#{tenant_id}/users/#{user_id}/roles",
-            :admin => true
           )
         end
 

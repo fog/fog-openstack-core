@@ -4,11 +4,10 @@ module Fog
       class Real
 
         def list_users
-          request(
+          admin_request(
             :method  => 'GET',
             :expects => [200, 204],
             :path    => '/v2.0/users',
-            :admin   => true
           )
         end
 

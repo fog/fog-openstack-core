@@ -4,11 +4,10 @@ module Fog
       class Real
 
         def delete_role(role_id)
-          request(
+          admin_request(
             :method  => 'DELETE',
             :expects => [200, 204],
             :path    => "/v2.0/OS-KSADM/roles/#{role_id}",
-            :admin   => true
           )
         end
 

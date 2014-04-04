@@ -4,11 +4,10 @@ module Fog
       class Real
 
         def get_tenants_by_id(tenant_id)
-          request(
+          admin_request(
             :method   => 'GET',
             :expects  => [200, 204],
             :path     => "/v2.0/tenants/#{tenant_id}",
-            :admin    => true
           )
         end
 

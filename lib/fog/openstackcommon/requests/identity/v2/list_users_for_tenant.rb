@@ -8,12 +8,11 @@ module Fog
           params['limit']  = limit  if limit
           params['marker'] = marker if marker
 
-          request(
+          admin_request(
             :method  => 'GET',
             :expects => [200, 203],
             :path    => "/v2.0/tenants/#{tenant_id}/users",
             :query   => params,
-            :admin   => true
           )
         end
 

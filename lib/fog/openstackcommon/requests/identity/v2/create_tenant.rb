@@ -4,12 +4,11 @@ module Fog
       class Real
         def create_tenant(attributes={})
           attributes ||= {}
-          request(
+          admin_request(
             :method  => 'POST',
             :expects => [200, 201, 202],
             :path    => '/v2.0/tenants',
             :body    =>  MultiJson.encode({'tenant' => attributes}),
-            :admin   => true
           )
         end
       end # Real

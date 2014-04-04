@@ -5,12 +5,11 @@ module Fog
 
         def enable_user(user_id, enabled)
           patch = { 'user' => { 'enabled' => enabled } }
-          request(
+          admin_request(
             :method   => 'PUT',
             :expects  => 200,
             :path     => "/v2.0/users/#{user_id}",
             :body     => MultiJson.encode(patch),
-            :admin    => true
           )
         end
 

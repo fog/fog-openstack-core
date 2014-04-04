@@ -7,11 +7,15 @@ module Fog
 
       requires :openstack_auth_url
       recognizes :openstack_username, :openstack_api_key,
-                 :openstack_auth_token, :openstack_management_url,
-                 :persistent, :openstack_endpoint_type,
-                 :openstack_service_type, :openstack_service_name,
-                 :openstack_tenant, :current_tenant,
-                 :openstack_current_user_id, :current_user,
+                 :openstack_auth_token,
+                #  :openstack_management_url,
+                 :persistent,
+                #  :openstack_endpoint_type,
+                #  :openstack_service_type,
+                # :openstack_service_name,
+                 :openstack_tenant,
+                #  :current_tenant,
+                #  :openstack_current_user_id, :current_user,
                  :openstack_region
 
       model_path 'fog/openstackcommon/models/identity/v2'
@@ -139,19 +143,14 @@ module Fog
           authenticate
         end
 
-        # distinguish between admin/non-admin requests and handle accordingly
         def request(params)
-          # determine if this is an admin request
-          admin = params.delete(:admin)
+          base_request(@service, params)
+        end
 
-          if admin
-            # create the admin service connection if necessary
-            @admin_service ||= admin_connection(:keystone, @options[:openstack_region].to_sym)
-            base_request(@admin_service, params)
-          else
-            base_request(@service, params)
-          end
-
+        def admin_request(params)
+          # create the admin service connection if necessary
+          @admin_service ||= admin_connection(:keystone, @options[:openstack_region].to_sym)
+          base_request(@admin_service, params)
         end
 
         private

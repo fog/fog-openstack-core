@@ -7,12 +7,11 @@ module Fog
           params = Hash.new
           params['belongsTo'] = tenant_id if tenant_id
 
-          request(
+          admin_request(
             :method   => 'HEAD',
             :expects  => [200, 203, 204],
             :path     => "/v2.0/tokens/#{token_id}",
-            :query    => params,
-            :admin    => true
+            :query    => params, 
           )
         end
 

@@ -9,12 +9,11 @@ module Fog
               'name' => name
             }
           }
-          request(
+          admin_request(
             :method  => 'POST',
             :expects => [200, 202],
             :path    => '/v2.0/OS-KSADM/roles',
             :body    => MultiJson.encode(data),
-            :admin   => true
           )
         end
 

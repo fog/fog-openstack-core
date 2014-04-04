@@ -21,11 +21,10 @@ module Fog
         #       * 'tenant_id'<~String>: The tenant id
 
         def list_ec2_credentials(user_id)
-          request(
+          admin_request(
             :method  => 'GET',
             :expects => [200, 202],
             :path    => "/v2.0/users/#{user_id}/credentials/OS-EC2",
-            :admin   => true
           )
         end
 

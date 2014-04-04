@@ -24,12 +24,11 @@ module Fog
 
         def create_ec2_credential(user_id, tenant_id)
           data = { 'tenant_id' => tenant_id }
-          request(
+          admin_request(
             :method  => 'POST',
             :expects => [200, 202],
             :path    => "/v2.0/users/#{user_id}/credentials/OS-EC2",
             :body    => MultiJson.encode(data),
-            :admin   => true
           )
         end
 

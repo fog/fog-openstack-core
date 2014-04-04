@@ -22,14 +22,11 @@ module Fog
         #       * 'tenant_id'<~String>: The tenant id
 
         def get_ec2_credential(user_id, access)
-          request(
+          admin_request(
             :method  => 'GET',
             :expects => [200, 202],
             :path    => "/v2.0/users/#{user_id}/credentials/OS-EC2/#{access}",
-            :admin   => true
           )
-        rescue Excon::Errors::Unauthorized
-          raise Fog::Identity::OpenStackCommon::NotFound
         end
 
       end
