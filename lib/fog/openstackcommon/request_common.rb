@@ -12,10 +12,10 @@ module Fog
 
         first_attempt = true
         begin
-          puts "Beginning BASE_REQUEST ---"
+          # puts "Beginning BASE_REQUEST ---"
           rp = request_params(params)
 
-          puts "PARAMS: #{rp.to_yaml}"
+          # puts "PARAMS: #{rp.to_yaml}"
 
           # Call the service and get response back
           response = service.request(rp)
