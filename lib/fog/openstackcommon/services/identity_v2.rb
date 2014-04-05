@@ -7,16 +7,8 @@ module Fog
 
       requires :openstack_auth_url
       recognizes :openstack_username, :openstack_api_key,
-                 :openstack_auth_token,
-                #  :openstack_management_url,
-                 :persistent,
-                #  :openstack_endpoint_type,
-                #  :openstack_service_type,
-                # :openstack_service_name,
-                 :openstack_tenant,
-                #  :current_tenant,
-                #  :openstack_current_user_id, :current_user,
-                 :openstack_region
+                 :openstack_auth_token, :persistent,
+                 :openstack_tenant, :openstack_region
 
       model_path 'fog/openstackcommon/models/identity/v2'
       model       :tenant
@@ -128,7 +120,8 @@ module Fog
       class Real
         include Fog::OpenStackCommon::RequestCommon
 
-        attr_reader :service_catalog, :auth_token, :response_hash
+        attr_reader :service_catalog, :token, :auth_token, :unscoped_token,
+                    :current_tenant, :current_user
 
         def initialize(params={})
           @options = params.clone
@@ -176,33 +169,25 @@ module Fog
         end
 
         def auth_rescope
-          # puts "\nRESCOPE"
           data = rescope_token(@options[:openstack_tenant],
                                @options[:openstack_auth_token] )
 
-          # puts "DATA --> #{data.to_yaml}"
-          @unscoped_token = nil
-          @auth_token = data.body['access']['token']['id']
+          access_hash = data.body.delete('access')
 
           @service_catalog =
-            ServiceCatalog.from_response(self, data.body)
+            ServiceCatalog.from_response(self, access_hash.delete("serviceCatalog"))
 
-          @response_hash = {
-            :user                     => data.body['access']['user'],
-            :tenant                   => data.body['access']['token']['tenant'],
-            # :identity_public_endpoint => nil,
-            # :server_management_url    => nil,
-            :token                    => @auth_token,
-            :expires                  => data.body['access']['token']['expires'],
-            :current_user_id          => data.body['access']['user'],
-            :unscoped_token           => nil
-          }
+          @current_tenant = access_hash['token'].delete('tenant')
+          @token = access_hash.delete('token')
+          @current_user = access_hash.delete('user')
+
+          @unscoped_token = nil
+          @auth_token = @token['id']
 
           self
         end
 
         def auth_with_credentials_and_tenant
-          # puts "\nAUTH WITH CREDS AND TENANT"
           validate_credentials(@options[:openstack_username],
                               @options[:openstack_api_key])
 
@@ -210,52 +195,35 @@ module Fog
                               @options[:openstack_api_key],
                               @options[:openstack_tenant] )
 
-          # puts "DATA --> #{data.to_yaml}"
-
-          @unscoped_token = nil
-          @auth_token = data.body['access']['token']['id']
+          access_hash = data.body.delete('access')
 
           @service_catalog =
-            ServiceCatalog.from_response(self, data.body)
+            ServiceCatalog.from_response(self, access_hash.delete("serviceCatalog"))
+          @current_tenant = access_hash['token'].delete('tenant')
+          @token = access_hash.delete('token')
+          @current_user = access_hash.delete('user')
 
-          @response_hash = {
-            :user                     => data.body['access']['user'],
-            :tenant                   => data.body['access']['token']['tenant'],
-            # :identity_public_endpoint => nil,
-            # :server_management_url    => nil,
-            :token                    => @auth_token,
-            :expires                  => data.body['access']['token']['expires'],
-            :current_user_id          => data.body['access']['user'],
-            :unscoped_token           => nil
-          }
+          @unscoped_token = nil
+          @auth_token = @token['id']
 
           self
         end
 
         def auth_with_credentials
-          # puts "\nAUTH WITH CREDS"
           validate_credentials(@options[:openstack_username],
                               @options[:openstack_api_key])
           data = create_token(@options[:openstack_username],
                               @options[:openstack_api_key])
 
-          # puts "DATA --> #{data.to_yaml}"
-
-          @unscoped_token = data.body['access']['token']['id']
-          @auth_token = @unscoped_token
+          access_hash = data.body.delete('access')
 
           @service_catalog = nil
+          @current_tenant = nil
+          @token = access_hash.delete('token')
+          @current_user = access_hash.delete('user')
 
-          @response_hash = {
-            :user                     => data.body['access']['user'],
-            :tenant                   => [],
-            # :identity_public_endpoint => nil,
-            # :server_management_url    => nil,
-            :token                    => nil,
-            :expires                  => data.body['access']['token']['expires'],
-            :current_user_id          => data.body['access']['user'],
-            :unscoped_token           => @unscoped_token
-          }
+          @unscoped_token = @token['id']
+          @auth_token = @unscoped_token
 
           self
         end

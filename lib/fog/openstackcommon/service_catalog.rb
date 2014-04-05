@@ -64,7 +64,7 @@ module Fog
       end
 
       def self.from_response(service, hash)
-        ServiceCatalog.new :service => service, :catalog => hash["access"]["serviceCatalog"]
+        ServiceCatalog.new :service => service, :catalog => hash
       end
 
       private
