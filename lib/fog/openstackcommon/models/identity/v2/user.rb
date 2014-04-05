@@ -14,7 +14,7 @@ module Fog
 
         def save
           requires :name, :tenant_id, :password
-          self.enabled ||= true
+          self.enabled = true if self.enabled.nil?
           persisted? ? update : create
         end
 

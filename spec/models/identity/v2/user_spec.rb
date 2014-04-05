@@ -98,7 +98,7 @@ describe "models" do
           service_mock.expect(
             :create_user,
             fake_user_response,
-            [fake_name, fake_password, fake_email, fake_tenant_id, nil])
+            [fake_name, fake_password, fake_email, fake_tenant_id, true])
 
           new_user.save
           service_mock.verify
