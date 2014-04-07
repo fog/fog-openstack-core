@@ -3,7 +3,7 @@
 # Initially, this class will be used for identity, but no reason it shouldnt
 # be used for service/version discovery across all services in the catalog.
 
-require 'fog/openstackcommon'
+# require 'fog/openstackcommon'
 
 module Fog
   module OpenStackCommon

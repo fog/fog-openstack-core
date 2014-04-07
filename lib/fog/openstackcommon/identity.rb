@@ -9,8 +9,7 @@ module Fog
     class Identity
 
       def initialize(options, connection_options = {})
-        @service = initialize_service(options, connection_options)
-        @service.response_hash
+        initialize_service(options, connection_options)
       end
 
       private
