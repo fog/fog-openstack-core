@@ -22,6 +22,11 @@ describe "models" do
         }
       }
 
+      let(:fake_role) {
+        Fog::OpenStackCommon::IdentityV2::Role.new(
+          options.merge!('id' => fake_id))
+      }
+
       let(:fake_role_response) {
         response = OpenStruct.new
         response.body = {'role' => {}}
@@ -69,6 +74,20 @@ describe "models" do
 
             unsaved_role.save
             service_mock.verify
+          end
+
+        end
+
+        describe "with an existing role" do
+
+          it "throws an exception if update is attempted" do
+            proc {
+              service_mock.expect(:save)
+
+              fake_role.name = "Name that will never be set"
+              fake_role.save
+              service_mock.verify
+            }.must_raise ArgumentError
           end
 
         end

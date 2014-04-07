@@ -26,10 +26,8 @@ module Fog
           true
         end
 
-        # api doesnt support update at this time, but need
-        # to protect against updates
         def update
-          false
+          raise "The Role model doesn't support Update operation."
         end
 
       end # Role
