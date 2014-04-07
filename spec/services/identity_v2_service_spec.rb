@@ -81,7 +81,8 @@ describe "services" do
             service.must_be_instance_of Fog::OpenStackCommon::IdentityV2::Real
           end
 
-          [ :service_catalog, :auth_token, :response_hash ].each do |attrib|
+          [ :service_catalog, :token, :auth_token, :unscoped_token,
+            :current_tenant, :current_user ].each do |attrib|
             it { service.must_respond_to attrib }
           end
 
@@ -157,7 +158,8 @@ describe "services" do
             service.must_be_instance_of Fog::OpenStackCommon::IdentityV2::Real
           end
 
-          [ :service_catalog, :auth_token, :response_hash ].each do |attrib|
+          [ :service_catalog, :token, :auth_token, :unscoped_token,
+            :current_tenant, :current_user ].each do |attrib|
             it { service.must_respond_to attrib }
           end
 
