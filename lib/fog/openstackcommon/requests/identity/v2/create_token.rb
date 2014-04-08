@@ -1,33 +1,33 @@
 module Fog
-  module Identity
-    module V2
-      class OpenStackCommon
-        class Real
+  module OpenStackCommon
+    class IdentityV2
+      class Real
 
-          def create_token(username, password, tenant_name=nil)
-            data = {
-              'auth' => {
-                'passwordCredentials' => {
-                  'username' => username,
-                  'password' => password
-                },
-                'tenantName' => tenant_name
+        # require 'pry'
+        # binding.pry
+        def create_token(username, password, tenant_name=nil)
+          data = {
+            'auth' => {
+              'tenantName' => tenant_name,
+              'passwordCredentials' => {
+                'username' => username,
+                'password' => password
               }
             }
+          }
 
-            request(
-              :method   => 'POST',
-              :expects  => [200, 202],
-              :path     => '/tokens',
-              :body     => MultiJson.encode(data)
-            )
-          end
-
-        end # Real
-
-        class Mock
+          request(
+            :method   => 'POST',
+            :expects  => [200, 202],
+            :path     => '/v2.0/tokens',
+            :body     => MultiJson.encode(data)
+          )
         end
-      end # OpenStackCommon
-    end # V2
-  end # Identity
+
+      end # Real
+
+      class Mock
+      end
+    end # IdentityV2
+  end # OpenStackCommon
 end # Fog

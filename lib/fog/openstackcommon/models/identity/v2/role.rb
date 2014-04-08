@@ -1,40 +1,36 @@
 require 'fog/core/model'
 
 module Fog
-  module Identity
-    module V2
-      class OpenStackCommon
-        class Role < Fog::Model
-          identity :id
-          attribute :name
+  module OpenStackCommon
+    class IdentityV2
+      class Role < Fog::Model
+        identity :id
+        attribute :name
 
-          def save
-            requires :name
-            persisted? ? update : create
-          end
+        def save
+          requires :name
+          persisted? ? update : create
+        end
 
-          def destroy
-            requires :id
-            service.delete_role(id)
-            true
-          end
+        def destroy
+          requires :id
+          service.delete_role(id)
+          true
+        end
 
-          private
+        private
 
-          def create
-            data = service.create_role(name)
-            merge_attributes(data.body['role'])
-            true
-          end
+        def create
+          data = service.create_role(name)
+          merge_attributes(data.body['role'])
+          true
+        end
 
-          # api doesnt support update at this time, but need
-          # to protect against updates
-          def update
-            false
-          end
+        def update
+          raise "The Role model doesn't support Update operation."
+        end
 
-        end # class Role
-      end # class OpenStack
-    end # V2
-  end # module Identity
-end # module Fog
+      end # Role
+    end # IdentityV2
+  end # OpenStackCommon
+end # Fog

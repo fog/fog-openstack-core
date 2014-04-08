@@ -1,24 +1,22 @@
 module Fog
-  module Identity
-    module V2
-      class OpenStackCommon
-        class Real
+  module OpenStackCommon
+    class IdentityV2
+      class Real
 
-          def enable_user(user_id, enabled)
-            patch = { 'user' => { 'enabled' => enabled } }
-            request(
-              :method   => 'PUT',
-              :expects  => 200,
-              :path     => "/users/#{user_id}",
-              :body     => MultiJson.encode(patch)
-            )
-          end
-
+        def enable_user(user_id, enabled)
+          patch = { 'user' => { 'enabled' => enabled } }
+          admin_request(
+            :method   => 'PUT',
+            :expects  => 200,
+            :path     => "/v2.0/users/#{user_id}",
+            :body     => MultiJson.encode(patch),
+          )
         end
 
-        class Mock
-        end
-      end # OpenStackCommon
-    end # V2
-  end # Identity
+      end
+
+      class Mock
+      end
+    end # IdentityV2
+  end # OpenStackCommon
 end # Fog

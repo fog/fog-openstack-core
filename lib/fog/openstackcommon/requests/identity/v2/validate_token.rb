@@ -1,22 +1,24 @@
 module Fog
-  module Identity
-    module V2
-      class OpenStackCommon
-        class Real
+  module OpenStackCommon
+    class IdentityV2
+      class Real
 
-          def validate_token(token_id, tenant_id)
-            request(
-              :expects  => [200, 203],
-              :method   => 'GET',
-              :path     => "/tokens/#{token_id}?belongsTo=#{tenant_id}"
-            )
-          end
+        def validate_token(token_id, tenant_id)
+          params = Hash.new
+          params['belongsTo'] = tenant_id
 
+          admin_request(
+            :expects  => [200, 203],
+            :method   => 'GET',
+            :path     => "/v2.0/tokens/#{token_id}",
+            :query    => params,
+          )
         end
 
-        class Mock
-        end
-      end # OpenStackCommon
-    end # V2
-  end # Identity
+      end
+
+      class Mock
+      end
+    end # IdentityV2
+  end # OpenStackCommon
 end # Fog

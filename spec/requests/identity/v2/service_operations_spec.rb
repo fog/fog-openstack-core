@@ -12,7 +12,7 @@ describe "requests" do
         let(:admin_options) { admin_options_hash }
 
         let(:service) {
-          Fog::Identity::V2::OpenStackCommon.new(admin_options)
+          Fog::OpenStackCommon::IdentityV2.new(admin_options)
         }
 
         describe "#list_services" do

@@ -1,27 +1,25 @@
 module Fog
-  module Identity
-    module V2
-      class OpenStackCommon
-        class Real
+  module OpenStackCommon
+    class IdentityV2
+      class Real
 
-          def update_user(id, options = {})
-            # Identity service expects to see tenant id as 'tenantId'
-            tenantId = options.delete(:tenant_id) || options.delete('tenant_id')
-            options.merge!('id' => id, 'tenantId' => tenantId)
+        def update_user(id, options = {})
+          # Identity service expects to see tenant id as 'tenantId'
+          tenantId = options.delete(:tenant_id) || options.delete('tenant_id')
+          options.merge!('id' => id, 'tenantId' => tenantId)
 
-            request(
-              :method   => 'PUT',
-              :expects  => 200,
-              :path     => "/users/#{id}",
-              :body     => MultiJson.encode({ 'user' => options })
-            )
-          end
-
-        end # Real
-
-        class Mock
+          admin_request(
+            :method   => 'PUT',
+            :expects  => 200,
+            :path     => "/v2.0/users/#{id}",
+            :body     => MultiJson.encode({ 'user' => options }), 
+          )
         end
-      end # OpenStackCommon
-    end # V2
-  end # Identity
+
+      end # Real
+
+      class Mock
+      end
+    end # IdentityV2
+  end # OpenStackCommon
 end # Fog
