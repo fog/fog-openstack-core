@@ -115,6 +115,7 @@ module Fog
 
       # minimal requirement
       class Mock
+        def initialize(params); end
       end
 
       class Real
