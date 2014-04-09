@@ -130,7 +130,7 @@ module Fog
           @service = Fog::Core::Connection.new(
             @options[:openstack_auth_url].to_s,
             @options[:persistent] || false,
-            @options[:service_options] || {}
+            @options[:connection_options] || {}
           )
 
           authenticate
