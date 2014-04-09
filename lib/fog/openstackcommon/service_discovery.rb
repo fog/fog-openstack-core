@@ -11,7 +11,7 @@ module Fog
 
       # ToDo - should be able to gather this from classname and remove this
       BASE_PROVIDER = "Fog::OpenStackCommon"
-      VALID_SERVICES = ["identity"]
+      VALID_SERVICES = ["identity", "compute"]
       # ToDo - This should be specific to service
       DEFAULT_VERSION = "2"
 

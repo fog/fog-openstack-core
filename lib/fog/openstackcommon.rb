@@ -9,6 +9,8 @@ require 'fog/openstackcommon/services/identity_v1'
 require 'fog/openstackcommon/services/identity_v2'
 
 # COMPUTE
+require 'fog/openstackcommon/compute'
+require 'fog/openstackcommon/services/compute_v2'
 
 # STORAGE
 
