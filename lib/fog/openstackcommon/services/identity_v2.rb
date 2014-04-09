@@ -146,6 +146,10 @@ module Fog
           base_request(@admin_service, params)
         end
 
+        def reload
+          @service.reset
+        end
+
         private
 
         # Get an admin connection to Identity
