@@ -174,8 +174,8 @@ module Fog
 
       class Real
 
-        attr_reader :service_catalog, :token, :auth_token, :unscoped_token,
-                    :current_tenant, :current_user
+        # attr_reader :service_catalog, :token, :auth_token, :unscoped_token,
+        #             :current_tenant, :current_user
 
         def initialize(options={})
           @service = Fog::OpenStackCommon::Identity.new(options)
