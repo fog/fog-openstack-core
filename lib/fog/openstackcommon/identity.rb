@@ -9,7 +9,7 @@ module Fog
     class Identity
 
       def initialize(options, connection_options = {})
-        initialize_service(options, options[:connection_options} || connection_options)
+        initialize_service(options, options[:connection_options] || connection_options)
       end
 
       private
