@@ -157,7 +157,7 @@ module Fog
           Fog::Core::Connection.new(
             url,
             @options[:persistent] || false,
-            @options[:service_options] || {}
+            @options[:connection_options] || {}
           )
         end
 
