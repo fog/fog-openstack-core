@@ -112,7 +112,6 @@ module Fog
       # <@dolphm>	 wchrisj: you're not the only one to be confused by it :(
       # ---- 3/6/2014 ----
 
-
       # minimal requirement
       class Mock
       end
