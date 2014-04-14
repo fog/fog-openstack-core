@@ -112,7 +112,6 @@ module Fog
       # <@dolphm>	 wchrisj: you're not the only one to be confused by it :(
       # ---- 3/6/2014 ----
 
-
       # minimal requirement
       class Mock
         def initialize(params); end
@@ -131,7 +130,7 @@ module Fog
           @service = Fog::Core::Connection.new(
             @options[:openstack_auth_url].to_s,
             @options[:persistent] || false,
-            @options[:service_options] || {}
+            @options[:connection_options] || {}
           )
 
           authenticate
@@ -158,7 +157,7 @@ module Fog
           Fog::Core::Connection.new(
             url,
             @options[:persistent] || false,
-            @options[:service_options] || {}
+            @options[:connection_options] || {}
           )
         end
 

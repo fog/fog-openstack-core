@@ -41,8 +41,9 @@ module Fog
       def call
         service_name = service_identifier.capitalize
         version = options[:version] || DEFAULT_VERSION
+        base_provider = options.delete(:base_provider) || BASE_PROVIDER
 
-        klass_name = "#{BASE_PROVIDER}::#{service_name}V#{version}"
+        klass_name = "#{base_provider}::#{service_name}V#{version}"
         klass = Fog::OpenStackCommon::Common.string_to_class(klass_name)
         klass.new(options)
       end
