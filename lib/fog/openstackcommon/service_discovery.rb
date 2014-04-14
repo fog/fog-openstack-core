@@ -40,7 +40,7 @@ module Fog
       # factory - return the service object ready to be used
       def call
         service_name = service_identifier.capitalize
-        version = options[:version] || DEFAULT_VERSION
+        version = options.delete(:version) || DEFAULT_VERSION
         base_provider = options.delete(:base_provider) || BASE_PROVIDER
 
         klass_name = "#{base_provider}::#{service_name}V#{version}"
