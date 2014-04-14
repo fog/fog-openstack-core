@@ -17,7 +17,6 @@ module Fog
       def self.initialize_service(options, connection_options = {})
         opts = options.dup  # dup options so no wonky side effects
         opts.merge!(:connection_options => connection_options)
-
         service_discovery = ServiceDiscovery.new("identity", opts)
         service_discovery.call
       end
