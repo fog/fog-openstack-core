@@ -2,7 +2,7 @@ require_relative '../../../spec_helper'
 require_relative '../../../support/spec_helpers'
 include SpecHelpers
 
-require 'fog/openstackcommon'
+require 'fog/OpenStackCore'
 
 describe "requests" do
   describe "identity_v2" do
@@ -10,7 +10,7 @@ describe "requests" do
 
       let(:admin_options) { admin_options_hash }
 
-      let(:service) { Fog::OpenStackCommon::IdentityV2.new(admin_options) }
+      let(:service) { Fog::OpenStackCore::IdentityV2.new(admin_options) }
 
       describe "#list_users" do
 
@@ -77,7 +77,7 @@ describe "requests" do
           it "when updating tenant_id" do
             proc {
               service.update_user(@user_id, { 'tenant_id' => "dummy-tenantId"})
-            }.must_raise Fog::OpenStackCommon::Errors::NotFound
+            }.must_raise Fog::OpenStackCore::Errors::NotFound
           end
 
           # Although the user id is a readonly attribute, no need to write a spec against
@@ -100,7 +100,7 @@ describe "requests" do
         it "when invalid username specified", :vcr do
           proc {
             service.get_user_by_name("nonexistentuser12345")
-          }.must_raise Fog::OpenStackCommon::Errors::NotFound
+          }.must_raise Fog::OpenStackCore::Errors::NotFound
         end
 
       end
@@ -116,7 +116,7 @@ describe "requests" do
         it "when invalid id specified", :vcr do
           proc {
             service.get_user_by_id("nonexistentuser12345")
-          }.must_raise Fog::OpenStackCommon::Errors::NotFound
+          }.must_raise Fog::OpenStackCore::Errors::NotFound
         end
 
       end
@@ -140,7 +140,7 @@ describe "requests" do
         it "when invalid user id specified", :vcr do
           proc {
             service.delete_user("1234567890")
-          }.must_raise Fog::OpenStackCommon::Errors::NotFound
+          }.must_raise Fog::OpenStackCore::Errors::NotFound
         end
       end
 

@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-require 'fog/openstackcommon'
+require 'fog/OpenStackCore'
 
 describe "services" do
   describe "identity_v2" do
@@ -45,7 +45,7 @@ describe "services" do
             auth_token_hash[:openstack_auth_token] = "invalid-token"
             proc {
               service =
-                Fog::OpenStackCommon::IdentityV2.new(auth_token_hash)
+                Fog::OpenStackCore::IdentityV2.new(auth_token_hash)
             }.must_raise Excon::Errors::Unauthorized
           end
 
@@ -55,7 +55,7 @@ describe "services" do
 
           # 1 - get a valid (unscoped) auth token
           let(:valid_token) {
-            service = Fog::OpenStackCommon::IdentityV2.new(credentials_hash)
+            service = Fog::OpenStackCore::IdentityV2.new(credentials_hash)
             service.auth_token
           }
 
@@ -63,7 +63,7 @@ describe "services" do
           it "must not be nil" do
             hash = auth_token_hash.clone
             hash[:openstack_auth_token] = valid_token
-            svc = Fog::OpenStackCommon::IdentityV2.new(hash)
+            svc = Fog::OpenStackCore::IdentityV2.new(hash)
 
             svc.auth_token.wont_be_nil
           end
@@ -75,10 +75,10 @@ describe "services" do
 
         describe "with valid credentials", :vcr do
 
-          let(:service) { Fog::OpenStackCommon::IdentityV2.new(credentials_tenant_hash) }
+          let(:service) { Fog::OpenStackCore::IdentityV2.new(credentials_tenant_hash) }
 
           it "returns a service reference" do
-            service.must_be_instance_of Fog::OpenStackCommon::IdentityV2::Real
+            service.must_be_instance_of Fog::OpenStackCore::IdentityV2::Real
           end
 
           [ :service_catalog, :token, :auth_token, :unscoped_token,
@@ -95,7 +95,7 @@ describe "services" do
             invalid_options[:openstack_auth_url] = nil
 
             proc {
-              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+              Fog::OpenStackCore::IdentityV2.new(invalid_options)
             }.must_raise ArgumentError
           end
 
@@ -104,7 +104,7 @@ describe "services" do
             invalid_options[:openstack_username] = nil
 
             proc {
-              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+              Fog::OpenStackCore::IdentityV2.new(invalid_options)
             }.must_raise ArgumentError
           end
 
@@ -113,7 +113,7 @@ describe "services" do
             invalid_options[:openstack_api_key] = nil
 
             proc {
-              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+              Fog::OpenStackCore::IdentityV2.new(invalid_options)
             }.must_raise ArgumentError
           end
 
@@ -122,7 +122,7 @@ describe "services" do
             invalid_options[:openstack_username] = "none"
 
             proc {
-              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+              Fog::OpenStackCore::IdentityV2.new(invalid_options)
             }.must_raise Excon::Errors::Unauthorized
           end
 
@@ -131,7 +131,7 @@ describe "services" do
             invalid_options[:openstack_api_key] = "none"
 
             proc {
-              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+              Fog::OpenStackCore::IdentityV2.new(invalid_options)
             }.must_raise Excon::Errors::Unauthorized
           end
 
@@ -140,7 +140,7 @@ describe "services" do
             invalid_options[:openstack_tenant] = "none"
 
             proc {
-              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+              Fog::OpenStackCore::IdentityV2.new(invalid_options)
             }.must_raise Excon::Errors::Unauthorized
           end
 
@@ -152,10 +152,10 @@ describe "services" do
 
         describe "with valid credentials", :vcr do
 
-          let(:service) { Fog::OpenStackCommon::IdentityV2.new(credentials_hash) }
+          let(:service) { Fog::OpenStackCore::IdentityV2.new(credentials_hash) }
 
           it "returns a service reference" do
-            service.must_be_instance_of Fog::OpenStackCommon::IdentityV2::Real
+            service.must_be_instance_of Fog::OpenStackCore::IdentityV2::Real
           end
 
           [ :service_catalog, :token, :auth_token, :unscoped_token,
@@ -172,7 +172,7 @@ describe "services" do
             invalid_options[:openstack_auth_url] = nil
 
             proc {
-              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+              Fog::OpenStackCore::IdentityV2.new(invalid_options)
             }.must_raise ArgumentError
           end
 
@@ -181,7 +181,7 @@ describe "services" do
             invalid_options[:openstack_username] = nil
 
             proc {
-              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+              Fog::OpenStackCore::IdentityV2.new(invalid_options)
             }.must_raise ArgumentError
           end
 
@@ -190,7 +190,7 @@ describe "services" do
             invalid_options[:openstack_api_key] = nil
 
             proc {
-              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+              Fog::OpenStackCore::IdentityV2.new(invalid_options)
             }.must_raise ArgumentError
           end
 
@@ -199,7 +199,7 @@ describe "services" do
             invalid_options[:openstack_username] = "none"
 
             proc {
-              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+              Fog::OpenStackCore::IdentityV2.new(invalid_options)
             }.must_raise Excon::Errors::Unauthorized
           end
 
@@ -208,7 +208,7 @@ describe "services" do
             invalid_options[:openstack_api_key] = "none"
 
             proc {
-              Fog::OpenStackCommon::IdentityV2.new(invalid_options)
+              Fog::OpenStackCore::IdentityV2.new(invalid_options)
             }.must_raise Excon::Errors::Unauthorized
           end
 

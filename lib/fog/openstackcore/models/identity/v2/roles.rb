@@ -1,11 +1,11 @@
 require 'fog/core/collection'
-require 'fog/openstackcommon/models/identity/v2/role'
+require 'fog/OpenStackCore/models/identity/v2/role'
 
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     class IdentityV2
       class Roles < Fog::Collection
-        model Fog::OpenStackCommon::IdentityV2::Role
+        model Fog::OpenStackCore::IdentityV2::Role
 
         def all
           load(service.list_roles.body['roles'])
@@ -13,5 +13,5 @@ module Fog
 
       end
     end # IdentityV2
-  end # OpenStackCommon
+  end # OpenStackCore
 end # module Fog

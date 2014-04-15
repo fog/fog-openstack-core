@@ -1,6 +1,6 @@
 # module Fog
 #   module Identity
-#     class OpenStackCommon
+#     class OpenStackCore
 #       class Real
 #
 #         # def get_user_credentials(user_id, credential_type)
@@ -17,6 +17,6 @@
 #
 #       class Mock
 #       end
-#     end # OpenStackCommon
+#     end # OpenStackCore
 #   end # Identity
 # end # Fog

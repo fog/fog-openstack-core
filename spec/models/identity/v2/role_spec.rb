@@ -1,9 +1,9 @@
 require_relative '../../../spec_helper'
 
-require 'fog/openstackcommon'
-require 'fog/openstackcommon/models/identity/v2/role'
-require 'fog/openstackcommon/models/identity/v2/user'
-require 'fog/openstackcommon/models/identity/v2/tenant'
+require 'fog/OpenStackCore'
+require 'fog/OpenStackCore/models/identity/v2/role'
+require 'fog/OpenStackCore/models/identity/v2/user'
+require 'fog/OpenStackCore/models/identity/v2/tenant'
 
 require 'ostruct'
 
@@ -23,7 +23,7 @@ describe "models" do
       }
 
       let(:fake_role) {
-        Fog::OpenStackCommon::IdentityV2::Role.new(
+        Fog::OpenStackCore::IdentityV2::Role.new(
           options.merge!('id' => fake_id))
       }
 
@@ -44,7 +44,7 @@ describe "models" do
         it "throws exception when name is missing" do
           proc {
             options.delete('name')
-            new_role = Fog::OpenStackCommon::IdentityV2::Role.new(options)
+            new_role = Fog::OpenStackCore::IdentityV2::Role.new(options)
             service_mock.expect(:create_role, {}, [nil])
 
             new_role.save
@@ -53,7 +53,7 @@ describe "models" do
         end
 
         it "creates role when name specified" do
-          new_role = Fog::OpenStackCommon::IdentityV2::Role.new(options)
+          new_role = Fog::OpenStackCore::IdentityV2::Role.new(options)
           service_mock.expect(:create_role, fake_role_response, [fake_name])
 
           new_role.save
@@ -67,7 +67,7 @@ describe "models" do
 
         describe "with a new role" do
 
-          let(:unsaved_role) { Fog::OpenStackCommon::IdentityV2::Role.new(options) }
+          let(:unsaved_role) { Fog::OpenStackCore::IdentityV2::Role.new(options) }
 
           it "creates role" do
             service_mock.expect(:create_role, fake_role_response, [fake_name])
@@ -98,7 +98,7 @@ describe "models" do
       describe "#destroy" do
 
         let(:fake_role) {
-          Fog::OpenStackCommon::IdentityV2::Role.new(options.merge!('id' => fake_id))
+          Fog::OpenStackCore::IdentityV2::Role.new(options.merge!('id' => fake_id))
         }
 
         it "calls destroy" do

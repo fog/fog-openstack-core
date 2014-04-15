@@ -1,5 +1,5 @@
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     class ServiceCatalog
 
       attr_reader :catalog, :service
@@ -86,5 +86,5 @@ module Fog
       end
 
     end # ServiceCatalog
-  end # OpenStackCommon
+  end # OpenStackCore
 end # Fog

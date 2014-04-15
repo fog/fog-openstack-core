@@ -3,14 +3,14 @@
 # Initially, this class will be used for identity, but no reason it shouldnt
 # be used for service/version discovery across all services in the catalog.
 
-# require 'fog/openstackcommon'
+# require 'fog/OpenStackCore'
 
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     class ServiceDiscovery
 
       # ToDo - should be able to gather this from classname and remove this
-      BASE_PROVIDER = "Fog::OpenStackCommon"
+      BASE_PROVIDER = "Fog::OpenStackCore"
       VALID_SERVICES = ["identity"]
       # ToDo - This should be specific to service
       DEFAULT_VERSION = "2"
@@ -44,7 +44,7 @@ module Fog
         base_provider = options.delete(:base_provider) || BASE_PROVIDER
 
         klass_name = "#{base_provider}::#{service_name}V#{version}"
-        klass = Fog::OpenStackCommon::Common.string_to_class(klass_name)
+        klass = Fog::OpenStackCore::Common.string_to_class(klass_name)
         klass.new(options)
       end
 
@@ -53,7 +53,7 @@ module Fog
       def validate
         # raise an error unless valid service name/id passed in
         unless VALID_SERVICES.include?(service_identifier)
-          raise Fog::OpenStackCommon::ServiceError
+          raise Fog::OpenStackCore::ServiceError
         end
       end
 

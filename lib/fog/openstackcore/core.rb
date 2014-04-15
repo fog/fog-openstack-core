@@ -1,9 +1,9 @@
-require 'fog/openstackcommon/errors'
+require 'fog/OpenStackCore/errors'
 
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     extend Fog::Provider
-    include Fog::OpenStackCommon::Errors
+    include Fog::OpenStackCore::Errors
 
     service(:identity,     'Identity')
     # service(:compute ,      'Compute')
@@ -14,5 +14,5 @@ module Fog
     # service(:metering,      'Metering')
     # service(:orchestration, 'Orchestration')
 
-  end   # OpenStackCommon
+  end   # OpenStackCore
 end   # FOG

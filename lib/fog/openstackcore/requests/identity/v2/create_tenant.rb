@@ -1,5 +1,5 @@
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     class IdentityV2
       class Real
         def create_tenant(attributes={})
@@ -16,5 +16,5 @@ module Fog
       class Mock
       end
     end # IdentityV2
-  end # OpenStackCommon
+  end # OpenStackCore
 end # Fog

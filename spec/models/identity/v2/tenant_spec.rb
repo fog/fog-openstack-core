@@ -1,7 +1,7 @@
 require_relative '../../../spec_helper'
 
-require 'fog/openstackcommon'
-require 'fog/openstackcommon/models/identity/v2/tenant'
+require 'fog/OpenStackCore'
+require 'fog/OpenStackCore/models/identity/v2/tenant'
 
 require 'ostruct'
 
@@ -25,7 +25,7 @@ describe "models" do
       }
 
       let(:fake_tenant) {
-        Fog::OpenStackCommon::IdentityV2::Tenant.new(options.merge!('id' => fake_id))
+        Fog::OpenStackCore::IdentityV2::Tenant.new(options.merge!('id' => fake_id))
       }
 
       let(:fake_tenant_response) {
@@ -44,7 +44,7 @@ describe "models" do
         it "throws exception when name is missing" do
           proc {
             options.delete(:name)
-            new_tenant = Fog::OpenStackCommon::IdentityV2::Tenant.new(options)
+            new_tenant = Fog::OpenStackCore::IdentityV2::Tenant.new(options)
             options.delete(:service)
             service_mock.expect(:create_tenant, fake_tenant_response, [options])
 
@@ -54,7 +54,7 @@ describe "models" do
         end
 
         it "creates tenant when name is specified" do
-          new_tenant = Fog::OpenStackCommon::IdentityV2::Tenant.new(options)
+          new_tenant = Fog::OpenStackCore::IdentityV2::Tenant.new(options)
           options.delete(:service)
           service_mock.expect(:create_tenant, fake_tenant_response, [options])
 

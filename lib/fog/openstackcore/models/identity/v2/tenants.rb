@@ -1,11 +1,11 @@
 require 'fog/core/collection'
-require 'fog/openstackcommon/models/identity/v2/tenant'
+require 'fog/OpenStackCore/models/identity/v2/tenant'
 
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     class IdentityV2
       class Tenants < Fog::Collection
-        model Fog::OpenStackCommon::IdentityV2::Tenant
+        model Fog::OpenStackCore::IdentityV2::Tenant
 
         def all
           load(service.list_tenants.body['tenants'])
@@ -18,5 +18,5 @@ module Fog
 
       end # Tenants
     end # IdentityV2
-  end # OpenStackCommon
+  end # OpenStackCore
 end # module Fog

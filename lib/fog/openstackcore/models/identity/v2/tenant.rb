@@ -1,7 +1,7 @@
 require 'fog/core/model'
 
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     class IdentityV2
       class Tenant < Fog::Model
         identity :id
@@ -47,5 +47,5 @@ module Fog
 
       end # Tenant
     end # IdentityV2
-  end # OpenStackCommon
+  end # OpenStackCore
 end # Fog

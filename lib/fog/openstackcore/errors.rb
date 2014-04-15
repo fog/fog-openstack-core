@@ -1,5 +1,5 @@
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     module Errors
       class ServiceError < Fog::Errors::Error
 
@@ -46,5 +46,5 @@ module Fog
       end # BadRequest
 
     end # Errors
-  end # OpenStackCommon
+  end # OpenStackCore
 end # Fog

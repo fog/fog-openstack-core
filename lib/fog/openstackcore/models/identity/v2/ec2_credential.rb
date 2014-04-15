@@ -1,7 +1,7 @@
 require 'fog/core/model'
 
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     class IdentityV2
       class Ec2Credential < Fog::Model
         identity :access, :aliases => 'access_key'

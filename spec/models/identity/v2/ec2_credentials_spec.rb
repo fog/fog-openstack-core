@@ -1,9 +1,9 @@
 require_relative '../../../spec_helper'
 
-require 'fog/openstackcommon'
-require 'fog/openstackcommon/models/identity/v2/user'
-require 'fog/openstackcommon/models/identity/v2/ec2_credential'
-require 'fog/openstackcommon/models/identity/v2/ec2_credentials'
+require 'fog/OpenStackCore'
+require 'fog/OpenStackCore/models/identity/v2/user'
+require 'fog/OpenStackCore/models/identity/v2/ec2_credential'
+require 'fog/OpenStackCore/models/identity/v2/ec2_credentials'
 
 describe "models" do
   describe "identity_v2" do
@@ -13,7 +13,7 @@ describe "models" do
 
       let(:fake_id) { "1234567890" }
 
-      let(:fake_user){ Fog::OpenStackCommon::IdentityV2::User.new(
+      let(:fake_user){ Fog::OpenStackCore::IdentityV2::User.new(
         :service => service_mock,
         'id' => fake_id,
         'name' => "John Smith #{Time.now.to_i}",
@@ -30,7 +30,7 @@ describe "models" do
       }
 
       let(:fake_credentials_collection) {
-        Fog::OpenStackCommon::IdentityV2::Ec2Credentials.new(options)
+        Fog::OpenStackCore::IdentityV2::Ec2Credentials.new(options)
       }
 
       let(:fake_credentials_response) {

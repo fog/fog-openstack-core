@@ -1,6 +1,6 @@
 # module Fog
 #   module Identity
-#     class OpenStackCommon
+#     class OpenStackCore
 #       class Real
 #
 #         def add_credential_to_user(user_id)
@@ -15,6 +15,6 @@
 #
 #       class Mock
 #       end
-#     end # OpenStackCommon
+#     end # OpenStackCore
 #   end # Identity
 # end # Fog

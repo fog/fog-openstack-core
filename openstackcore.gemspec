@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require './lib/fog/openstackcommon/version'
+require './lib/fog/OpenStackCore/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "openstackcommon"
-  spec.version       = Fog::OpenStackCommon::VERSION
+  spec.name          = "OpenStackCore"
+  spec.version       = Fog::OpenStackCore::VERSION
   spec.platform      = Gem::Platform::RUBY
   spec.authors       = ["Evan Light", "Kyle Rames", "Chris Johnson", "Mike Hagedorn"]
   spec.email         = ["evan@tripledogdare.net", "kyle.rames@rackspace.com", "wchrisjohnson@gmail.com", "mike.hagedorn@hp.com"]

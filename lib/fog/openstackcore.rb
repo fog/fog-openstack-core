@@ -1,12 +1,12 @@
 # CORE
 require 'fog/core'
-require 'fog/openstackcommon/core'
-require 'fog/openstackcommon/common'
+require 'fog/OpenStackCore/core'
+require 'fog/OpenStackCore/common'
 
 # IDENTITY
-require 'fog/openstackcommon/identity'
-require 'fog/openstackcommon/services/identity_v1'
-require 'fog/openstackcommon/services/identity_v2'
+require 'fog/OpenStackCore/identity'
+require 'fog/OpenStackCore/services/identity_v1'
+require 'fog/OpenStackCore/services/identity_v2'
 
 # COMPUTE
 

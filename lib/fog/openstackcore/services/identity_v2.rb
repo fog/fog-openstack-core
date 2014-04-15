@@ -1,8 +1,8 @@
-require 'fog/openstackcommon/request_common'
-require 'fog/openstackcommon/service_catalog'
+require 'fog/OpenStackCore/request_common'
+require 'fog/OpenStackCore/service_catalog'
 
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     class IdentityV2 < Fog::Service
 
       requires :openstack_auth_url
@@ -10,7 +10,7 @@ module Fog
                  :openstack_auth_token, :persistent,
                  :openstack_tenant, :openstack_region
 
-      model_path 'fog/openstackcommon/models/identity/v2'
+      model_path 'fog/OpenStackCore/models/identity/v2'
       model       :tenant
       collection  :tenants
       model       :user
@@ -20,7 +20,7 @@ module Fog
       model       :ec2_credential
       collection  :ec2_credentials
 
-      request_path 'fog/openstackcommon/requests/identity/v2'
+      request_path 'fog/OpenStackCore/requests/identity/v2'
 
       ## EC2 Credentials
       request :list_ec2_credentials
@@ -118,7 +118,7 @@ module Fog
       end
 
       class Real
-        include Fog::OpenStackCommon::RequestCommon
+        include Fog::OpenStackCore::RequestCommon
 
         attr_reader :service_catalog, :token, :auth_token, :unscoped_token,
                     :current_tenant, :current_user
@@ -241,5 +241,5 @@ module Fog
       end  # Real
 
     end  # IdentityV2
-  end   # OpenStackCommon
+  end   # OpenStackCore
 end   # Fog

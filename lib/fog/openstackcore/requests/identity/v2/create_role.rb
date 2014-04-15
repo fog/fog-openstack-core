@@ -1,5 +1,5 @@
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     class IdentityV2
       class Real
 
@@ -36,5 +36,5 @@ module Fog
       class Mock
       end
     end # IdentityV2
-  end # OpenStackCommon
+  end # OpenStackCore
 end # Fog

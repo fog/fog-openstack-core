@@ -1,11 +1,11 @@
 require 'fog/core/collection'
-require 'fog/openstackcommon/models/identity/v2/user'
+require 'fog/OpenStackCore/models/identity/v2/user'
 
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     class IdentityV2
       class Users < Fog::Collection
-        model Fog::OpenStackCommon::IdentityV2::User
+        model Fog::OpenStackCore::IdentityV2::User
 
         attribute :tenant_id
 
@@ -21,5 +21,5 @@ module Fog
 
       end # Users
     end # IdentityV2
-  end # OpenStackCommon
+  end # OpenStackCore
 end # Fog

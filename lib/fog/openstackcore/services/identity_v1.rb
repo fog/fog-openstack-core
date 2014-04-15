@@ -1,5 +1,5 @@
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     class IdentityV1 < Fog::Service
 
       requires :openstack_auth_url,
@@ -11,7 +11,7 @@ module Fog
                   :openstack_endpoint_type,
                   :current_user, :current_tenant
 
-      request_path 'fog/openstackcommon/requests/identity/v1'
+      request_path 'fog/OpenStackCore/requests/identity/v1'
 
       ## Token Operations
       request :create_token
@@ -117,5 +117,5 @@ module Fog
       end  # Real
 
     end  # IdentityV1
-  end   # OpenStackCommon
+  end   # OpenStackCore
 end   # Fog

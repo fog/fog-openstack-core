@@ -1,7 +1,7 @@
-require 'fog/openstackcommon/errors'
+require 'fog/OpenStackCore/errors'
 
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     module RequestCommon
 
       def base_request(service, params)
@@ -21,10 +21,10 @@ module Fog
           response = service.request(rp)
         rescue Excon::Errors::Conflict => error
           # puts "Conflict"
-          raise Fog::OpenStackCommon::Errors::Conflict.slurp(error)
+          raise Fog::OpenStackCore::Errors::Conflict.slurp(error)
         rescue Excon::Errors::BadRequest => error
           # puts "Bad Request"
-          raise Fog::OpenStackCommon::Errors::BadRequest.slurp(error)
+          raise Fog::OpenStackCore::Errors::BadRequest.slurp(error)
         rescue Excon::Errors::Unauthorized => error
           # puts "Unauthorized"
           raise error unless first_attempt
@@ -35,7 +35,7 @@ module Fog
           # puts "HTTP Status Error"
           raise case error
           when Excon::Errors::NotFound
-            raise Fog::OpenStackCommon::Errors::NotFound.slurp(error)
+            raise Fog::OpenStackCore::Errors::NotFound.slurp(error)
           else
             error
           end
@@ -73,5 +73,5 @@ module Fog
       end
 
     end # BaseRequest
-  end # OpenStackCommon
+  end # OpenStackCore
 end # Fog

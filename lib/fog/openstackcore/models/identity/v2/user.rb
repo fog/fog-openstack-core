@@ -1,7 +1,7 @@
 require 'fog/core/model'
 
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     class IdentityV2
       class User < Fog::Model
         identity :id
@@ -61,5 +61,5 @@ module Fog
 
       end # User
     end # IdentityV2
-  end # OpenStackCommon
+  end # OpenStackCore
 end # module Fog

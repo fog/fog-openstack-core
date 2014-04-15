@@ -1,5 +1,5 @@
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     module Common
 
       def self.string_to_class(string)
@@ -9,5 +9,5 @@ module Fog
       end
 
     end # Common
-  end # OpenStackCommon
+  end # OpenStackCore
 end # Fog

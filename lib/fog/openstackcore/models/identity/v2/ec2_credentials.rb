@@ -1,11 +1,11 @@
 require 'fog/core/collection'
-require 'fog/openstackcommon/models/identity/v2/ec2_credential'
+require 'fog/OpenStackCore/models/identity/v2/ec2_credential'
 
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     class IdentityV2
       class Ec2Credentials < Fog::Collection
-        model Fog::OpenStackCommon::IdentityV2::Ec2Credentials
+        model Fog::OpenStackCore::IdentityV2::Ec2Credentials
 
         attribute :user
 
@@ -29,6 +29,6 @@ module Fog
         end
 
       end  # Ec2Credentials
-    end  # OpenStackCommon
+    end  # OpenStackCore
   end  # IdentityV2
 end  # Fog

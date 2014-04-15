@@ -1,6 +1,6 @@
 # module Fog
 #   module Identity
-#     class OpenStackCommon
+#     class OpenStackCore
 #       class Real
 #
 #         def delete_credential_for_user(user_id, credential_type)
@@ -11,6 +11,6 @@
 #
 #       class Mock
 #       end
-#     end # OpenStackCommon
+#     end # OpenStackCore
 #   end # Identity
 # end # Fog
