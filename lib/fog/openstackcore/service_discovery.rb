@@ -8,15 +8,46 @@
 module Fog
   module OpenStackCore
     class ServiceDiscovery
-
       # ToDo - should be able to gather this from classname and remove this
       BASE_PROVIDER = "Fog::OpenStackCore"
-      VALID_SERVICES = ["identity"]
+
       # ToDo - This should be specific to service
       DEFAULT_VERSION = "2"
 
       attr_accessor :service_identifier  # :identity, :compute, etc.
       attr_accessor :options  # passed in (params)
+      
+      def self.register_service(klass)
+        assert_namespace_of klass
+        @valid_services ||= {}
+        @valid_services[registry_name_for(klass)] = klass
+      end
+
+      def self.unregister_service(klass)
+        @valid_services ||= {}
+        @valid_services.delete(registry_name_for(klass))
+      end
+
+      def self.valid_services
+        @valid_services ||= {}
+        @valid_services.dup
+      end
+
+      def self.assert_namespace_of(klass)
+        scope = klass.to_s.split(/::/)
+        if scope[0] != "Fog" && scope[1] != "OpenStackCore"
+          raise Fog::OpenStackCore::ServiceError, "#{klass} is not in Fog::OpenStackCore"
+        end
+      end
+
+      def self.class_name_for(klass)
+        klass.to_s.split(/::/).last
+      end
+
+      def self.registry_name_for(klass)
+        class_name_for(klass).downcase
+      end
+
 
       # -- params --
       # service identifier (used to look up service in catalog), required
@@ -44,7 +75,13 @@ module Fog
         base_provider = options.delete(:base_provider) || BASE_PROVIDER
 
         klass_name = "#{base_provider}::#{service_name}V#{version}"
-        klass = Fog::OpenStackCore::Common.string_to_class(klass_name)
+        klass = 
+          begin
+            Fog::OpenStackCore::Common.string_to_class(klass_name)
+          rescue NameError
+            require "fog/openstackcore/services/#{service_name}_v#{version}"
+            Fog::OpenStackCore::Common.string_to_class(klass_name)
+          end
         klass.new(options)
       end
 
@@ -52,7 +89,7 @@ module Fog
 
       def validate
         # raise an error unless valid service name/id passed in
-        unless VALID_SERVICES.include?(service_identifier)
+        unless self.class.valid_services.include?(service_identifier)
           raise Fog::OpenStackCore::ServiceError
         end
       end
