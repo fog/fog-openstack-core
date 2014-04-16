@@ -1,4 +1,4 @@
-# Factory for Fog::OpenStackCore services.  Services must explicitly register 
+# Factory for Fog::OpenStackCore services.  Services must explicitly register
 # with ServiceDiscovery in order to be available for use.
 #
 # Initially, this class will be used for identity, but no reason it shouldnt
@@ -15,7 +15,7 @@ module Fog
       attr_accessor :service_identifier  # :identity, :compute, etc.
       attr_accessor :options  # passed in (params)
 
-      # Registers a class as a Fog::Service to be discoverable through 
+      # Registers a class as a Fog::Service to be discoverable through
       # ServiceDiscovery
       # @param klass [Class] The Service to register
       def self.register_service(klass)
@@ -31,14 +31,14 @@ module Fog
         @valid_services.delete(registry_name_for(klass))
       end
 
-      # @return [Hash] The registered Service classes keyed by their 
+      # @return [Hash] The registered Service classes keyed by their
       # ServiceDiscovery identitier
       def self.valid_services
         @valid_services ||= {}
         @valid_services.dup
       end
 
-      # @params service [String] The name of the service to discover upon. 
+      # @params service [String] The name of the service to discover upon.
       # This is a downcased String, e.g. "identity" or "storage"
       # @param params [Hash] Optional parameters including:
       # * url of service
@@ -60,11 +60,11 @@ module Fog
       # @return [Fog::Service] Instance of the appropriate type of service
       def call
         service_name = service_identifier.capitalize
-        version = options[:version] || DEFAULT_VERSION
+        version = options.delete(:version) || DEFAULT_VERSION
         base_provider = options.delete(:base_provider) || BASE_PROVIDER
 
         klass_name = "#{base_provider}::#{service_name}V#{version}"
-        klass = 
+        klass =
           begin
             Fog::OpenStackCore::Common.string_to_class(klass_name)
           rescue NameError
