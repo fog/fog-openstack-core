@@ -3,7 +3,7 @@ require_relative '../../../support/spec_helpers'
 
 include SpecHelpers
 
-require 'fog/openstackcommon'
+require 'fog/openstackcore'
 
 describe "requests" do
   describe "identity_v2" do
@@ -12,7 +12,7 @@ describe "requests" do
       let(:admin_options) { admin_options_hash }
 
       let(:service) {
-        Fog::OpenStackCommon::IdentityV2.new(admin_options)
+        Fog::OpenStackCore::IdentityV2.new(admin_options)
       }
 
       describe "#create_role", :vcr do
@@ -47,7 +47,7 @@ describe "requests" do
           it "returns not found error", :vcr do
             proc {
               service.get_role("nonexistentrole12345")
-            }.must_raise Fog::OpenStackCommon::Errors::NotFound
+            }.must_raise Fog::OpenStackCore::Errors::NotFound
           end
         end
 
@@ -67,7 +67,7 @@ describe "requests" do
           it "returns not found error", :vcr do
             proc {
               service.delete_role("nonexistentrole12345")
-            }.must_raise Fog::OpenStackCommon::Errors::NotFound
+            }.must_raise Fog::OpenStackCore::Errors::NotFound
           end
         end
 

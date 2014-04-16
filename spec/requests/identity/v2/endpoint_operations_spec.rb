@@ -2,7 +2,7 @@ require_relative '../../../spec_helper'
 require_relative '../../../support/spec_helpers'
 include SpecHelpers
 
-require 'fog/openstackcommon'
+require 'fog/openstackcore'
 
 describe "requests" do
   describe "identity" do
@@ -11,7 +11,7 @@ describe "requests" do
 
         let(:valid_options) { admin_options_hash }
 
-        let(:service) { Fog::OpenStackCommon::IdentityV2.new(admin_options) }
+        let(:service) { Fog::OpenStackCore::IdentityV2.new(admin_options) }
 
         describe "#list_endpoints" do
           it { skip("Choosing to NotImplement for now.") }

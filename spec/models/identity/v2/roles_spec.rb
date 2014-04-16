@@ -1,7 +1,7 @@
 require_relative '../../../spec_helper'
 
-require 'fog/openstackcommon'
-require 'fog/openstackcommon/models/identity/v2/roles'
+require 'fog/openstackcore'
+require 'fog/openstackcore/models/identity/v2/roles'
 
 require 'ostruct'
 
@@ -18,7 +18,7 @@ describe "models" do
       }
 
       let(:fake_roles_collection) {
-        Fog::OpenStackCommon::IdentityV2::Roles.new(options)
+        Fog::OpenStackCore::IdentityV2::Roles.new(options)
       }
 
       let(:fake_roles_response) {
