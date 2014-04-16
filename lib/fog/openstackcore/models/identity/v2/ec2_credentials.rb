@@ -1,5 +1,5 @@
 require 'fog/core/collection'
-require 'fog/OpenStackCore/models/identity/v2/ec2_credential'
+require 'fog/openstackcore/models/identity/v2/ec2_credential'
 
 module Fog
   module OpenStackCore

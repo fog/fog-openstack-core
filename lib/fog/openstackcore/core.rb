@@ -1,4 +1,4 @@
-require 'fog/OpenStackCore/errors'
+require 'fog/openstackcore/errors'
 
 module Fog
   module OpenStackCore

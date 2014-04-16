@@ -1,9 +1,9 @@
 require_relative '../../../spec_helper'
 
-require 'fog/OpenStackCore'
-require 'fog/OpenStackCore/models/identity/v2/role'
-require 'fog/OpenStackCore/models/identity/v2/user'
-require 'fog/OpenStackCore/models/identity/v2/tenant'
+require 'fog/openstackcore'
+require 'fog/openstackcore/models/identity/v2/role'
+require 'fog/openstackcore/models/identity/v2/user'
+require 'fog/openstackcore/models/identity/v2/tenant'
 
 require 'ostruct'
 

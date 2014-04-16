@@ -11,7 +11,7 @@ module Fog
                   :openstack_endpoint_type,
                   :current_user, :current_tenant
 
-      request_path 'fog/OpenStackCore/requests/identity/v1'
+      request_path 'fog/openstackcore/requests/identity/v1'
 
       ## Token Operations
       request :create_token

@@ -3,7 +3,7 @@ require_relative '../../../support/spec_helpers'
 
 include SpecHelpers
 
-require 'fog/OpenStackCore'
+require 'fog/openstackcore'
 
 describe "requests" do
   describe "identity_v2" do

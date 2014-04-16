@@ -1,5 +1,5 @@
 require 'fog/core/collection'
-require 'fog/OpenStackCore/models/identity/v2/user'
+require 'fog/openstackcore/models/identity/v2/user'
 
 module Fog
   module OpenStackCore

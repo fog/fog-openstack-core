@@ -1,7 +1,7 @@
 require_relative '../../../spec_helper'
 
-require 'fog/OpenStackCore'
-require 'fog/OpenStackCore/models/identity/v2/tenant'
+require 'fog/openstackcore'
+require 'fog/openstackcore/models/identity/v2/tenant'
 
 require 'ostruct'
 
