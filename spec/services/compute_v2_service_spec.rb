@@ -1,6 +1,6 @@
 require_relative '../spec_helper'
 
-require 'fog/openstackcommon'
+require 'fog/openstackcore'
 
 describe "services" do
   describe "identity_v2" do
@@ -21,10 +21,10 @@ describe "services" do
 
         describe "with valid credentials", :vcr do
 
-          let(:service) { Fog::OpenStackCommon::ComputeV2.new(credentials_tenant_hash) }
+          let(:service) { Fog::OpenStackCore::ComputeV2.new(credentials_tenant_hash) }
 
           it "returns a service reference" do
-            service.must_be_instance_of Fog::OpenStackCommon::ComputeV2::Real
+            service.must_be_instance_of Fog::OpenStackCore::ComputeV2::Real
           end
 
           # [ :service_catalog, :token, :auth_token, :unscoped_token,

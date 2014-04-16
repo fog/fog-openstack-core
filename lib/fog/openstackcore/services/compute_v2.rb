@@ -1,8 +1,8 @@
-require 'fog/openstackcommon/request_common'
-require 'fog/openstackcommon/service_catalog'
+require 'fog/openstackcore/request_common'
+require 'fog/openstackcore/service_catalog'
 
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
     class ComputeV2 < Fog::Service
 
       requires :openstack_auth_url
@@ -12,7 +12,7 @@ module Fog
 
       ## MODELS
       #
-      model_path 'fog/openstackcommon/models/compute/v2'
+      model_path 'fog/openstackcore/models/compute/v2'
       # model       :server
       # collection  :servers
       # model       :image
@@ -42,7 +42,7 @@ module Fog
 
       ## REQUESTS
       #
-      request_path 'fog/openstackcommon/requests/compute/v2'
+      request_path 'fog/openstackcore/requests/compute/v2'
 
       # Server CRUD
       # request :list_servers
@@ -178,7 +178,7 @@ module Fog
         #             :current_tenant, :current_user
 
         def initialize(options={})
-          @service = Fog::OpenStackCommon::Identity.new(options)
+          @service = Fog::OpenStackCore::Identity.new(options)
         end
 
         def request(params)

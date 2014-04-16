@@ -10,13 +10,8 @@ module Fog
     class ServiceDiscovery
 
       # ToDo - should be able to gather this from classname and remove this
-<<<<<<< HEAD:lib/fog/openstackcommon/service_discovery.rb
-      BASE_PROVIDER = "Fog::OpenStackCommon"
-      VALID_SERVICES = ["identity", "compute"]
-=======
       BASE_PROVIDER = "Fog::OpenStackCore"
-      VALID_SERVICES = ["identity"]
->>>>>>> master:lib/fog/openstackcore/service_discovery.rb
+      VALID_SERVICES = ["identity", "compute"]
       # ToDo - This should be specific to service
       DEFAULT_VERSION = "2"
 

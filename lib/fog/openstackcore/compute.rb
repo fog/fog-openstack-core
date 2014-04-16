@@ -1,7 +1,7 @@
-require 'fog/openstackcommon/service_discovery'
+require 'fog/openstackcore/service_discovery'
 
 module Fog
-  module OpenStackCommon
+  module OpenStackCore
 
     # This is a proxy class for the Compute Service as a whole, irrespective of
     # what version is required.
@@ -23,5 +23,5 @@ module Fog
       end
 
     end # Compute
-  end # OpenStackCommon
+  end # OpenStackCore
 end # Fog
