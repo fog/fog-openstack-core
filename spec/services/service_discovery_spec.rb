@@ -5,7 +5,7 @@ require 'fog/openstackcore/service_discovery'
 $LOAD_PATH << 'spec/fixtures'
 
 describe Fog::OpenStackCore::ServiceDiscovery do
-  describe "::register_service" do
+  describe '::register_service' do
     it 'errors when given a class not in Fog::OpenStackCore' do
       assert_raises(Fog::OpenStackCore::ServiceError) do
         Fog::OpenStackCore::ServiceDiscovery.register_service(String)
@@ -22,7 +22,11 @@ describe Fog::OpenStackCore::ServiceDiscovery do
     end
   end
 
-  describe "::new" do
+  describe '::register_service_path' do
+    it 'makes non-OpenStackCore classes available for discovery'
+  end
+
+  describe '::new' do
     it 'errors out when given an invalid service' do
       assert_raises(Fog::OpenStackCore::ServiceError) do
         Fog::OpenStackCore::ServiceDiscovery.new('foobar')
@@ -41,7 +45,7 @@ describe Fog::OpenStackCore::ServiceDiscovery do
     end
   end
 
-  describe "#call" do
+  describe '#call' do
     before do
       Fog::OpenStackCore::ServiceDiscovery.register_service(Fog::OpenStackCore::Foobar)
     end
