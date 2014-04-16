@@ -1,8 +1,8 @@
 require_relative '../../../spec_helper'
 
-require 'fog/openstackcommon'
-require 'fog/openstackcommon/models/identity/v2/users'
-require 'fog/openstackcommon/models/identity/v2/user'
+require 'fog/openstackcore'
+require 'fog/openstackcore/models/identity/v2/users'
+require 'fog/openstackcore/models/identity/v2/user'
 
 require 'ostruct'
 
@@ -21,7 +21,7 @@ describe "models" do
       }
 
       let(:fake_users_collection) {
-        Fog::OpenStackCommon::IdentityV2::Users.new(options)
+        Fog::OpenStackCore::IdentityV2::Users.new(options)
       }
 
       let(:fake_users_response) {

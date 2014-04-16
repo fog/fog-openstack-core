@@ -1,7 +1,7 @@
 require_relative '../../../spec_helper'
 
-require 'fog/openstackcommon'
-require 'fog/openstackcommon/models/identity/v2/tenants'
+require 'fog/openstackcore'
+require 'fog/openstackcore/models/identity/v2/tenants'
 
 require 'ostruct'
 
@@ -18,7 +18,7 @@ describe "models" do
       }
 
       let(:fake_tenants_collection) {
-        Fog::OpenStackCommon::IdentityV2::Tenants.new(options)
+        Fog::OpenStackCore::IdentityV2::Tenants.new(options)
       }
 
       let(:fake_tenants_response) {
