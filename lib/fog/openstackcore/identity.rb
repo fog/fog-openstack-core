@@ -7,7 +7,8 @@ module Fog
     # what version is required.
 
     class Identity
-
+      ServiceDiscovery.register_service(self)
+      
       def self.new(options, connection_options = {})
         initialize_service(options, connection_options)
       end
