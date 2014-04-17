@@ -14,6 +14,7 @@ module Fog
 
       attr_accessor :service_identifier  # :identity, :compute, etc.
       attr_accessor :options  # passed in (params)
+      attr_accessor :provider
 
       # Registers a class as a Fog::Service to be discoverable through
       # ServiceDiscovery
@@ -24,25 +25,26 @@ module Fog
         @valid_services[registry_name_for(klass)] = klass
       end
 
-      # Unregisters a class from being discoverable.
-      # @param klass [Class] The Service to unregister
-      def self.unregister_service(klass)
-        @valid_services ||= {}
-        @valid_services.delete(registry_name_for(klass))
+      def self.providers
+        @providers ||= {}
       end
 
-      # @return [Hash] The registered Service classes keyed by their
-      # ServiceDiscovery identitier
-      def self.valid_services
-        @valid_services ||= {}
-        @valid_services.dup
+      Provider = Struct.new(:name, :base_provider, :services_path)
+
+      def self.register_provider(name, base_provider, path)
+        providers[name] = Provider.new(name, base_provider, path)
       end
 
+      def self.unregister_provider(name)
+        providers.delete(name)
+      end
+
+      # @params service [String] The name of the service to discover upon. 
       # This is a downcased String, e.g. "identity" or "storage"
       # @param params [Hash] Optional parameters including:
       # * url of service
       # * the version
-      def initialize(service, params = {})
+      def initialize(provider_name, service, params = {})
 
         # ToDo: This is a HACKY first cut to get this working...
         # Order of precedence:
@@ -50,30 +52,44 @@ module Fog
         # - Use the version embedded in the url, if available
         # - Use the latest stable version available in the service catalog
 
+        @provider           = self.class.providers[provider_name]
         @service_identifier = service.to_s
-
-        validate
-        @options = params.dup
+        @options            = params.dup
       end
 
       # @return [Fog::Service] Instance of the appropriate type of service
       def call
-        service_name = service_identifier.capitalize
-        version = options.delete(:version) || DEFAULT_VERSION
-        base_provider = options.delete(:base_provider) || BASE_PROVIDER
-
-        klass_name = "#{base_provider}::#{service_name}V#{version}"
-        klass =
+        klass = 
           begin
-            Fog::OpenStackCore::Common.string_to_class(klass_name)
+            Fog::OpenStackCore::Common.string_to_class(service_class_name)
           rescue NameError
-            require "fog/openstackcore/services/#{service_name}_v#{version}"
-            Fog::OpenStackCore::Common.string_to_class(klass_name)
+            begin
+              require "#{provider.services_path}/#{service_identifier}_v#{version}"
+            rescue LoadError => e
+              raise LoadError, "Failed to find #{service_identifier}_v#{version} for provider #{provider.name} on registered path #{provider.services_path}"
+            end
+
+            Fog::OpenStackCore::Common.string_to_class(service_class_name)
           end
         klass.new(options)
       end
 
       private
+
+      def version
+        if service_identifier == 'identity'
+          options[:version] || DEFAULT_VERSION
+        else
+          options[:version]
+        end
+      end
+      
+      def service_class_name
+        return @class_name if @class_name
+
+        service_name = service_identifier.capitalize
+        @class_name = "#{provider.base_provider}::#{service_name}V#{version}"
+      end
 
       def self.assert_namespace_of(klass)
         scope = klass.to_s.split(/::/)
@@ -89,14 +105,6 @@ module Fog
       def self.registry_name_for(klass)
         class_name_for(klass).downcase
       end
-
-      def validate
-        # raise an error unless valid service name/id passed in
-        unless self.class.valid_services.include?(service_identifier)
-          raise Fog::OpenStackCore::ServiceError
-        end
-      end
-
     end
   end
 end
