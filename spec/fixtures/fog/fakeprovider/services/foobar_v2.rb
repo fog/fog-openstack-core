@@ -1,5 +1,5 @@
 module Fog
-  module OpenStackCore
+  module FakeProvider
     class FoobarV2
       def initialize(opts); end
     end
