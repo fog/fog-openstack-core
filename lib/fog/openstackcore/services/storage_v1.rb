@@ -1,3 +1,5 @@
+require 'fog/openstackcore/request_common'
+
 module Fog
   module OpenStackCore
     class StorageV1 < Fog::Service
@@ -13,14 +15,14 @@ module Fog
       request_path 'fog/openstackcore/requests/storage/v1'
 
       # # Containers
-      # request :head_containers
-      # request :get_container
+      request :head_containers
+      request :get_containers
       # request :delete_container
       # request :get_container
 
       # # Files
       # request :head_object
-      # request :get_object
+      # request :get_objects
       # request :delete_object
       # request :get_object
 
@@ -30,18 +32,48 @@ module Fog
       end
 
       class Real
+        include Fog::OpenStackCore::RequestCommon
+
         attr_reader :token
 
-        def initialize(params)
+        def initialize(options = {})
           identity = Fog::OpenStackCore::ServiceDiscovery.new(
             'openstackcore',
             'identity',
-            params.merge(:version => 2)
+            options.merge(:version => 2)
           ).call
-          @token = identity.auth_token
+
+          @auth_token = identity.auth_token
+          uri = URI.parse(
+            identity.service_catalog.get_endpoint(
+              'swift',
+              options[:openstack_region]
+            )
+          )
+          @path = uri.path
+
+          @service = Fog::Core::Connection.new(
+            URI::Generic.build(
+              :scheme => uri.scheme,
+              :host   => uri.host,
+              :port   => uri.port
+            ).to_s,
+            options[:persistent] || false,
+            options[:connection_options] || {}
+          )
+        end
+
+        def request(params)
+          # TODO: #headers depends on an instance variable set externally. BAD!
+          base_request(@service, params)
+        end
+
+        def request_params(params)
+          super.tap { |new_params|
+            new_params[:path] = @path + new_params[:path]
+          }
         end
       end
-
     end
   end
 end
