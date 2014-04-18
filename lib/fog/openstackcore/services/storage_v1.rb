@@ -33,8 +33,6 @@ module Fog
         attr_reader :token
 
         def initialize(params)
-          require 'pry'
-          binding.pry
           identity = Fog::OpenStackCore::ServiceDiscovery.new(
             'openstackcore',
             'identity',
