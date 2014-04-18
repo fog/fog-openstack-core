@@ -16,15 +16,6 @@ module Fog
       attr_accessor :options  # passed in (params)
       attr_accessor :provider
 
-      # Registers a class as a Fog::Service to be discoverable through
-      # ServiceDiscovery
-      # @param klass [Class] The Service to register
-      def self.register_service(klass)
-        assert_namespace_of klass
-        @valid_services ||= {}
-        @valid_services[registry_name_for(klass)] = klass
-      end
-
       def self.providers
         @providers ||= {}
       end
