@@ -30,7 +30,7 @@ module Fog
         providers.delete(name)
       end
 
-      # @params service [String] The name of the service to discover upon. 
+      # @params service [String] The name of the service to discover upon.
       # This is a downcased String, e.g. "identity" or "storage"
       # @param params [Hash] Optional parameters including:
       # * url of service
@@ -50,7 +50,7 @@ module Fog
 
       # @return [Fog::Service] Instance of the appropriate type of service
       def call
-        klass = 
+        klass =
           begin
             Fog::OpenStackCore::Common.string_to_class(service_class_name)
           rescue NameError
@@ -62,6 +62,7 @@ module Fog
 
             Fog::OpenStackCore::Common.string_to_class(service_class_name)
           end
+        options.delete(:version)
         klass.new(options)
       end
 
@@ -74,7 +75,7 @@ module Fog
           options[:version]
         end
       end
-      
+
       def service_class_name
         return @class_name if @class_name
 
