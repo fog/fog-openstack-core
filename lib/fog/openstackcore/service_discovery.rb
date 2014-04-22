@@ -62,6 +62,7 @@ module Fog
 
             Fog::OpenStackCore::Common.string_to_class(service_class_name)
           end
+        options.delete(:version)
         klass.new(options)
       end
 
