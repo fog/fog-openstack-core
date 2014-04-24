@@ -5,13 +5,11 @@ require 'fog/openstackcore/common'
 
 # IDENTITY
 require 'fog/openstackcore/identity'
-require 'fog/openstackcore/services/identity_v1'
-require 'fog/openstackcore/services/identity_v2'
 
 # COMPUTE
 
 # STORAGE
-
+require 'fog/openstackcore/storage'
 
 # MISC
 require 'multi_json'
