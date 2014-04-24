@@ -15,9 +15,9 @@ module Fog
 
       ## Token Operations
       request :create_token
-      request :check_token
-      request :validate_token
-      request :list_endpoints_for_token
+      #request :check_token
+      #request :validate_token
+      #request :list_endpoints_for_token
 
       # minimal requirement
       class Mock

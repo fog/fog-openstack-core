@@ -1,6 +1,7 @@
 require_relative '../spec_helper'
 
 require 'fog/openstackcore'
+require 'fog/openstackcore/services/identity_v2'
 
 describe "services" do
   describe "identity_v2" do

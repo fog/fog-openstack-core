@@ -1,3 +1,5 @@
+require 'fog/openstackcore'
+
 require 'simplecov'
 SimpleCov.start do
   add_filter "/spec/"
@@ -18,6 +20,6 @@ VCR.configure do |c|
 end
 
 MinitestVcr::Spec.configure!
-Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
+#Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
 
 # VCR.turn_off!(:ignore_cassettes => true)

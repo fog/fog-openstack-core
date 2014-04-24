@@ -1,6 +1,7 @@
 require_relative '../../../spec_helper'
 
 require 'fog/openstackcore'
+require 'fog/openstackcore/services/identity_v2'
 require 'fog/openstackcore/models/identity/v2/user'
 require 'fog/openstackcore/models/identity/v2/ec2_credential'
 require 'fog/openstackcore/models/identity/v2/ec2_credentials'
