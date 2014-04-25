@@ -10,11 +10,19 @@ module Fog
             data = nil
             message = nil
           else
-            data = MultiJson.decode(error.response.body)
-            message = data['message']
-            if message.nil? and !data.values.first.nil?
-              message = data.values.first['message']
-            end
+            data =
+              begin
+                MultiJson.decode(error.response.body)
+                message = data['message']
+                if message.nil? and !data.values.first.nil?
+                  message = data.values.first['message']
+                end
+              rescue MultiJson::ParseError => exception
+                puts "\nERROR: #{error.response.body.to_yaml}"
+                error.response.body
+                # exception.data # => "{invalid json}"
+                # exception.cause # => JSON::ParserError: 795: unexpected token at '{invalid json}'
+              end
           end
 
           new_error = super(error, message)
