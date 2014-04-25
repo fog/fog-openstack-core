@@ -7,21 +7,14 @@ module Fog
     # what version is required.
 
     class Compute
-
-      def initialize(options, connection_options = {})
-        initialize_service(options, connection_options)
+      def self.new(options, connection_options = {})
+        ServiceDiscovery.new(
+          'openstackcore',
+          'compute',
+          options.merge(:version => 2)
+        ).call
       end
-
-      private
-
-      def initialize_service(options, connection_options = {})
-        opts = options.dup  # dup options so no wonky side effects
-        opts.merge!(:connection_options => connection_options)
-
-        service_discovery = ServiceDiscovery.new("compute", opts)
-        service_discovery.call
-      end
-
     end # Compute
+
   end # OpenStackCore
 end # Fog

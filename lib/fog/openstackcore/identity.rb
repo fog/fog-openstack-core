@@ -8,18 +8,12 @@ module Fog
 
     class Identity
       def self.new(options, connection_options = {})
-        initialize_service(options, connection_options)
+        ServiceDiscovery.new(
+          'openstackcore',
+          'identity',
+          options.merge(:connection_options => connection_options)
+        ).call
       end
-
-      private
-
-      def self.initialize_service(options, connection_options = {})
-        opts = options.dup  # dup options so no wonky side effects
-        opts.merge!(:connection_options => connection_options)
-
-        ServiceDiscovery.new('openstackcore', 'identity', opts).call
-      end
-
     end # Identity
   end # OpenStackCore
 end # Fog

@@ -6,16 +6,19 @@ module Fog
     extend Fog::Provider
     include Fog::OpenStackCore::Errors
 
-    ServiceDiscovery.register_provider('openstackcore', 'Fog::OpenStackCore', 'fog/openstackcore/services')
+    ServiceDiscovery.register_provider(
+      'openstackcore',
+      'Fog::OpenStackCore',
+      'fog/openstackcore/services')
 
-    service(:identity,     'Identity')
-    # service(:compute ,      'Compute')
+    service(:identity,      'Identity')
+    service(:compute ,      'Compute')
+    service(:storage,       'Storage')
     # service(:image,         'Image')
     # service(:network,       'Network')
-    service(:storage,       'Storage')
     # service(:volume,        'Volume')
     # service(:metering,      'Metering')
     # service(:orchestration, 'Orchestration')
 
-  end   # OpenStackCore
-end   # FOG
+  end
+end
