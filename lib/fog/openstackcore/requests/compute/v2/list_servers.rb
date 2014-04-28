@@ -31,7 +31,6 @@ module Fog
           params['marker'] = options[:marker] if options[:marker]
           params['status']  = options[:status] if options[:status]
           params['host']  = options[:host] if options[:host]
-          params['format'] = 'json'
 
           request(
             :method   => 'GET',

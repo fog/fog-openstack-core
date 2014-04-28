@@ -1,5 +1,5 @@
-require File.dirname(__FILE__) + '/../../../spec_helper'
-require File.dirname(__FILE__) + '/../../../support/spec_helpers'
+require "#{File.dirname(__FILE__)}/../../../spec_helper"
+require "#{File.dirname(__FILE__)}/../../../support/spec_helpers"
 
 include SpecHelpers
 
@@ -11,19 +11,21 @@ describe "requests" do
     describe "server operations" do
 
       let(:admin_options) { admin_options_hash }
+      let(:identity) { Fog::OpenStackCore::IdentityV2.new(admin_options) }
+
+      let(:tenant_id) {
+        data = identity.get_tenants_by_name(admin_options_hash[:openstack_tenant])
+        data.body['tenant']['id']
+      }
+
       let(:service) { Fog::OpenStackCore::ComputeV2.new(admin_options) }
-      let(:tenant_name) { admin_options['openstack_tenant'] }
 
       describe "#list_servers" do
 
-        let(:list) { service.list_servers(tenant_name) }
-
-        # it "returns proper status", :vcr do
-        #   assert_includes([200, 203], list.status)
-        # end
+        let(:list) { service.list_servers(tenant_id) }
 
         it "returns proper status", :vcr do
-          assert_includes([404], list.status)
+          assert_includes([200, 203], list.status)
         end
 
       end
