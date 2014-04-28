@@ -20,7 +20,13 @@ module Fog
       # request :update_server
       # request :delete_server
 
+      # Flavors
+      request :list_flavors
 
+      # Images
+      request :list_images
+
+      
       class Mock
         def initialize(params); end
       end
