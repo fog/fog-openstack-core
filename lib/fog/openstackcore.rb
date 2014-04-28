@@ -8,7 +8,6 @@ require 'fog/openstackcore/identity'
 
 # COMPUTE
 require 'fog/openstackcore/compute'
-require 'fog/openstackcore/services/compute_v2'
 
 # STORAGE
 require 'fog/openstackcore/storage'
