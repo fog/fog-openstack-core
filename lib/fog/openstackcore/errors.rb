@@ -12,7 +12,7 @@ module Fog
           else
             data =
               begin
-                MultiJson.decode(error.response.body)
+                data = MultiJson.decode(error.response.body)
                 message = data['message']
                 if message.nil? and !data.values.first.nil?
                   message = data.values.first['message']
