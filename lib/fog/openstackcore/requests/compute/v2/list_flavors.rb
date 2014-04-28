@@ -3,12 +3,20 @@ module Fog
     class ComputeV2
       class Real
 
-        def list_flavors
+        def list_flavors(tenant_id, options={})
+
+          params = Hash.new
+          params['changes-since'] = options['changes-since'] if options['changes-since']
+          params['minDisk']  = options[:minDisk] if options[:minDisk]
+          params['minRam']  = options[:minRam] if options[:minRam]
+          params['limit']  = options[:limit] if options[:limit]
+          params['marker'] = options[:marker] if options[:marker]
+
           request(
-            :expects  => [200, 203],
             :method   => 'GET',
-            :path     => '/v2/flavors',
-            :query    => {'format' => 'json'}
+            :expects  => [200, 203],
+            :path     => "/v2/#{tenant_id}/flavors",
+            :query    => params
           )
         end
 
