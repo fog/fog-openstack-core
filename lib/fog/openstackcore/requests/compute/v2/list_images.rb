@@ -3,16 +3,30 @@ module Fog
     class ComputeV2
       class Real
 
-        def list_images(tenant_id, options={})
+        # List images
+        #
+        # ==== Parameters
+        # * options<~Hash>:
+        #   * 'changes-since'<~DateTime> - A time/date stamp for when the image last changed status.
+        #   * 'server'<~URI> - Name of the server in URL format
+        #   * 'name'<~String> - Name of the image as a string
+        #   * 'status'<~ImageStatus> - Value of the status of the image so that you can filter on "ACTIVE" for example
+        #   * 'marker'<~UUID> - UUID of the image at which you want to set a marker
+        #     Only return objects with name greater than this value
+        #   * 'limit'<~Integer> - Upper limit to number of results returned
+        #     Integer value for the limit of values to return.
+        #   * 'type'<~String> - Value of the type of image, such as BASE, SERVER, or ALL.   
+        #
+        # ==== Returns
+        # * images<~ImagesWithOnlyIDsNamesLinks>:
+        #   Image information.
+        # * 'next'<~UUID> - Moves to the next metadata item.
+        # * 'previous'<~UUID> - Moves to the previous metadata item.
 
-          params = Hash.new
-          params['changes-since'] = options['changes-since'] if options['changes-since']
-          params['server']  = options[:server] if options[:server]
-          params['name']  = options[:name] if options[:name]
-          params['status']  = options[:status] if options[:status]
-          params['limit']  = options[:limit] if options[:limit]
-          params['marker'] = options[:marker] if options[:marker]
-          params['type'] = options[:type] if options[:type]
+        def list_images(tenant_id, options={})
+          opts = Fog::OpenStackCore::Common.stringify_keys(options)
+          params = Fog::OpenStackCore::Common.whitelist_keys(opts, 
+            %w{changes-since server name status marker limit type})
 
           request(
             :method   => 'GET',

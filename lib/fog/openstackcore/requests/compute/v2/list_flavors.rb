@@ -3,14 +3,28 @@ module Fog
     class ComputeV2
       class Real
 
-        def list_flavors(tenant_id, options={})
+        # List flavors
+        #
+        # ==== Parameters
+        # * options<~Hash>:
+        #   * 'changes-since'<~DateTime> - A time/date stamp for when the image last changed status.
+        #   * 'minDisk'<~Integer> - Integer value for the minimum disk space in GB so you can filter results.
+        #   * 'minRam'<~Integer> - Integer value for the minimum RAM so you can filter results.
+        #   * 'marker'<~UUID> - UUID of the flavor at which you want to set a marker
+        #     Only return objects with name greater than this value
+        #   * 'limit'<~Integer> - Upper limit to number of results returned
+        #     Integer value for the limit of values to return.
+        #
+        # ==== Returns
+        # * flavors<~FlavorsWithOnlyIDsNamesLinks>:
+        #   Flavors are known combinations of memory, disk space, and number of CPUs.
+        # * 'next'<~UUID> - Moves to the next metadata item.
+        # * 'previous'<~UUID> - Moves to the previous metadata item.
 
-          params = Hash.new
-          params['changes-since'] = options['changes-since'] if options['changes-since']
-          params['minDisk']  = options[:minDisk] if options[:minDisk]
-          params['minRam']  = options[:minRam] if options[:minRam]
-          params['limit']  = options[:limit] if options[:limit]
-          params['marker'] = options[:marker] if options[:marker]
+        def list_flavors(tenant_id, options={})
+          opts = Fog::OpenStackCore::Common.stringify_keys(options)
+          params = Fog::OpenStackCore::Common.whitelist_keys(opts, 
+            %w{changes-since minDisk minRam limit marker})
 
           request(
             :method   => 'GET',

@@ -15,22 +15,20 @@ module Fog
         #     Integer value for the limit of values to return.
         #   * 'marker'<~UUID> - UUID of the server at which you want to set a marker
         #     Only return objects with name greater than this value
-        #   * 'status'<~ServerStatus> - Value of the status of the server so that you can filter on "ACTIVE" for example
+        #   * 'status'<~ServerStatus> - Value of the status of the server so that you can filter 
+        #     on "ACTIVE" for example
         #   * 'host'<~String> - Name of the host as a string.
         #
         # ==== Returns
+        # * servers<~ServersWithOnlyIDsNamesLinks>:
+        #   List of servers.
+        # * 'next'<~UUID> - Moves to the next metadata item.
+        # * 'previous'<~UUID> - Moves to the previous metadata item.
 
         def list_servers(tenant_id, options = {})
-
-          params = Hash.new
-          params['changes-since'] = options['changes-since'] if options['changes-since']
-          params['image']  = options[:image] if options[:image]
-          params['flavor']  = options[:flavor] if options[:flavor]
-          params['name']  = options[:name] if options[:name]
-          params['limit']  = options[:limit] if options[:limit]
-          params['marker'] = options[:marker] if options[:marker]
-          params['status']  = options[:status] if options[:status]
-          params['host']  = options[:host] if options[:host]
+          opts = Fog::OpenStackCore::Common.stringify_keys(options)
+          params = Fog::OpenStackCore::Common.whitelist_keys(
+            opts, %w{changes-since image flavor name limit marker status host})
 
           request(
             :method   => 'GET',
