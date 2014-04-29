@@ -14,11 +14,6 @@ module Fog
 
       # Server CRUD
       request :list_servers
-      # request :list_servers_detail
-      # request :create_server
-      # request :get_server_details
-      # request :update_server
-      # request :delete_server
 
       # Flavors
       request :list_flavors
@@ -34,10 +29,9 @@ module Fog
       class Real
         include Fog::OpenStackCore::RequestCommon
 
-        # attr_reader :service_catalog, :token, :auth_token, :unscoped_token,
-        #             :current_tenant, :current_user
-
         def initialize(options={})
+
+          # Get a reference to the identity service
           identity = Fog::OpenStackCore::ServiceDiscovery.new(
             'openstackcore',
             'identity',
@@ -58,20 +52,22 @@ module Fog
             SC_ERROR
           end
 
+          # Contruct the compute endpoint
           uri = URI.parse(
             identity.service_catalog.get_endpoint(
               'nova',
               options[:openstack_region]
             )
           )
-          @path = uri.path
+          compute_endpoint = URI::Generic.build(
+            :scheme => uri.scheme,
+            :host   => uri.host,
+            :port   => uri.port
+          ).to_s
 
+          # Establish a compute connection
           @service = Fog::Core::Connection.new(
-            URI::Generic.build(
-              :scheme => uri.scheme,
-              :host   => uri.host,
-              :port   => uri.port
-            ).to_s,
+            compute_endpoint,
             options[:persistent] || false,
             options[:connection_options] || {}
           )
@@ -80,12 +76,6 @@ module Fog
         def request(params)
           base_request(@service, params)
         end
-
-        # def admin_request(params)
-        #   # create the admin service connection if necessary
-        #   @admin_service ||= admin_connection(:keystone, @options[:openstack_region].to_sym)
-        #   base_request(@admin_service, params)
-        # end
 
         def reload
           @service.reset
