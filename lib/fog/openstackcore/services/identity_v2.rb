@@ -1,5 +1,6 @@
 require 'fog/openstackcore/request_common'
 require 'fog/openstackcore/service_catalog'
+require 'fog/openstackcore/identity_session'
 
 module Fog
   module OpenStackCore
@@ -120,8 +121,7 @@ module Fog
       class Real
         include Fog::OpenStackCore::RequestCommon
 
-        attr_reader :service_catalog, :token, :auth_token, :unscoped_token,
-                    :current_tenant, :current_user
+        attr_reader :identity_session
 
         def initialize(params={})
           @options = params.clone
@@ -152,7 +152,7 @@ module Fog
         def admin_connection(service_name, region)
 
           # get the admin url
-          url = @service_catalog.get_endpoint(service_name, region, :admin)
+          url = @identity_session.service_catalog.get_endpoint(service_name, region, :admin)
 
           Fog::Core::Connection.new(
             url,
@@ -173,16 +173,8 @@ module Fog
                                @options[:openstack_auth_token] )
 
           access_hash = data.body.delete('access')
-
-          @service_catalog =
-            ServiceCatalog.from_response(self, access_hash.delete("serviceCatalog"))
-
-          @current_tenant = access_hash['token'].delete('tenant')
-          @token = access_hash.delete('token')
-          @current_user = access_hash.delete('user')
-
-          @unscoped_token = nil
-          @auth_token = @token['id']
+          @identity_session ||= 
+            Fog::OpenStackCore::IdentitySession.new(@service, access_hash)
 
           self
         end
@@ -196,15 +188,8 @@ module Fog
                               @options[:openstack_tenant] )
 
           access_hash = data.body.delete('access')
-
-          @service_catalog =
-            ServiceCatalog.from_response(self, access_hash.delete("serviceCatalog"))
-          @current_tenant = access_hash['token'].delete('tenant')
-          @token = access_hash.delete('token')
-          @current_user = access_hash.delete('user')
-
-          @unscoped_token = nil
-          @auth_token = @token['id']
+          @identity_session ||= 
+            Fog::OpenStackCore::IdentitySession.new(@service, access_hash)
 
           self
         end
@@ -216,14 +201,8 @@ module Fog
                               @options[:openstack_api_key])
 
           access_hash = data.body.delete('access')
-
-          @service_catalog = nil
-          @current_tenant = nil
-          @token = access_hash.delete('token')
-          @current_user = access_hash.delete('user')
-
-          @unscoped_token = @token['id']
-          @auth_token = @unscoped_token
+          @identity_session ||= 
+            Fog::OpenStackCore::IdentitySession.new(@service, access_hash)
 
           self
         end
