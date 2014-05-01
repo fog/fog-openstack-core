@@ -15,7 +15,7 @@ module Fog
         #     Only return objects with name greater than this value
         #   * 'limit'<~Integer> - Upper limit to number of results returned
         #     Integer value for the limit of values to return.
-        #   * 'type'<~String> - Value of the type of image, such as BASE, SERVER, or ALL.   
+        #   * 'type'<~String> - Value of the type of image, such as BASE, SERVER, or ALL.
         #
         # ==== Returns
         # * images<~ImagesWithOnlyIDsNamesLinks>:
@@ -24,8 +24,7 @@ module Fog
         # * 'previous'<~UUID> - Moves to the previous metadata item.
 
         def list_images(tenant_id, options={})
-          opts = Fog::OpenStackCore::Common.stringify_keys(options)
-          params = Fog::OpenStackCore::Common.whitelist_keys(opts, 
+          params = Fog::OpenStackCore::Common.whitelist_keys(options, 
             %w{changes-since server name status marker limit type})
 
           request(
