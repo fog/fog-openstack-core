@@ -127,7 +127,7 @@ module Fog
           @options = params.clone
 
           # get an initial connection to Identity on port 5000 to auth
-          @service = Fog::Core::Connection.new(
+          @connection = Fog::Core::Connection.new(
             @options[:openstack_auth_url].to_s,
             @options[:persistent] || false,
             @options[:connection_options] || {}
@@ -137,17 +137,17 @@ module Fog
         end
 
         def request(params)
-          base_request(@service, params)
+          base_request(@connection, params)
         end
 
         def admin_request(params)
           # create the admin service connection if necessary
-          @admin_service ||= admin_connection(:keystone, @options[:openstack_region].to_sym)
-          base_request(@admin_service, params)
+          @admin_connection ||= admin_connection(:keystone, @options[:openstack_region].to_sym)
+          base_request(@admin_connection, params)
         end
 
         def reload
-          @service.reset
+          @connection.reset
         end
 
         private

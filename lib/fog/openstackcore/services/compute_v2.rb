@@ -21,7 +21,7 @@ module Fog
       # Images
       request :list_images
 
-      
+
       class Mock
         def initialize(params); end
       end
@@ -59,26 +59,26 @@ module Fog
               options[:openstack_region]
             )
           )
-          compute_endpoint = URI::Generic.build(
+          base_url = URI::Generic.build(
             :scheme => uri.scheme,
             :host   => uri.host,
             :port   => uri.port
           ).to_s
 
           # Establish a compute connection
-          @service = Fog::Core::Connection.new(
-            compute_endpoint,
+          @connection = Fog::Core::Connection.new(
+            base_url,
             options[:persistent] || false,
             options[:connection_options] || {}
           )
         end
 
         def request(params)
-          base_request(@service, params)
+          base_request(@connection, params)
         end
 
         def reload
-          @service.reset
+          @connection.reset
         end
 
       end

@@ -52,7 +52,7 @@ module Fog
           )
           @path = uri.path
 
-          @service = Fog::Core::Connection.new(
+          @connection = Fog::Core::Connection.new(
             URI::Generic.build(
               :scheme => uri.scheme,
               :host   => uri.host,
@@ -65,7 +65,7 @@ module Fog
 
         def request(params)
           # TODO: #headers depends on an instance variable set externally. BAD!
-          base_request(@service, params)
+          base_request(@connection, params)
         end
 
         def request_params(params)
