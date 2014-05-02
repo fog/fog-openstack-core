@@ -20,7 +20,7 @@ describe "requests" do
         data.body['tenant']['id']
       }
 
-      let(:valid_token_id) { service.auth_token }
+      let(:valid_token_id) { service.identity_session.auth_token }
 
       describe "#create_token", :vcr do
 
@@ -102,7 +102,7 @@ describe "requests" do
 
       describe "#list_endpoints_for_token", :vcr do
 
-        let(:response) { service.list_endpoints_for_token(service.auth_token) }
+        let(:response) { service.list_endpoints_for_token(service.identity_session.auth_token) }
 
         it "returns a hash" do
           response.body.must_be_instance_of Hash

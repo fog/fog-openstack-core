@@ -7,7 +7,7 @@ module SpecHelpers
       :openstack_api_key => "stack",
       :openstack_tenant => "admin",
       :openstack_region => "regionone",
-      # :service_options => {:proxy => 'http://localhost:8888'}
+      # :connection_options => {:proxy => 'http://localhost:8888'}
     }
   end
 
@@ -18,7 +18,7 @@ module SpecHelpers
       :openstack_api_key => "stack",
       :openstack_tenant => "demo",
       :openstack_region => "regionone",
-      # :service_options => {:proxy => 'http://localhost:8888'}
+      # :connection_options => {:proxy => 'http://localhost:8888'}
     }
   end
 
@@ -28,7 +28,17 @@ module SpecHelpers
       :openstack_tenant => "admin",
       :openstack_region => "regionone",
       :openstack_auth_token => nil,
-      # :service_options => {:proxy => 'http://localhost:8888'}
+      # :connection_options => {:proxy => 'http://localhost:8888'}
+    }
+  end
+
+  def non_tenant_options_hash
+    {
+      :openstack_auth_url => "http://devstack.local:5000",
+      :openstack_username => "demo",
+      :openstack_api_key => "stack",
+      :openstack_region => "regionone",
+      # :connection_options => {:proxy => 'http://localhost:8888'}
     }
   end
 
