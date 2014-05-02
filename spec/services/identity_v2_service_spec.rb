@@ -57,7 +57,7 @@ describe "services" do
           # 1 - get a valid (unscoped) auth token
           let(:valid_token) {
             service = Fog::OpenStackCore::IdentityV2.new(credentials_hash)
-            service.auth_token
+            service.identity_session.unscoped_token
           }
 
           # 2 - authenticate based on the valid auth token + tenant
@@ -66,7 +66,7 @@ describe "services" do
             hash[:openstack_auth_token] = valid_token
             svc = Fog::OpenStackCore::IdentityV2.new(hash)
 
-            svc.auth_token.wont_be_nil
+            svc.identity_session.auth_token.wont_be_nil
           end
         end
 
@@ -82,8 +82,11 @@ describe "services" do
             service.must_be_instance_of Fog::OpenStackCore::IdentityV2::Real
           end
 
-          [ :service_catalog, :token, :auth_token, :unscoped_token,
-            :current_tenant, :current_user ].each do |attrib|
+          # [ :service_catalog, :token, :auth_token, :unscoped_token,
+          #   :current_tenant, :current_user ].each do |attrib|
+          #   it { service.must_respond_to attrib }
+          # end
+          [ :identity_session ].each do |attrib|
             it { service.must_respond_to attrib }
           end
 
@@ -159,8 +162,11 @@ describe "services" do
             service.must_be_instance_of Fog::OpenStackCore::IdentityV2::Real
           end
 
-          [ :service_catalog, :token, :auth_token, :unscoped_token,
-            :current_tenant, :current_user ].each do |attrib|
+          # [ :service_catalog, :token, :auth_token, :unscoped_token,
+          #   :current_tenant, :current_user ].each do |attrib|
+          #   it { service.must_respond_to attrib }
+          # end
+          [ :identity_session ].each do |attrib|
             it { service.must_respond_to attrib }
           end
 
