@@ -11,5 +11,8 @@ require 'fog/openstackcore/identity'
 # STORAGE
 require 'fog/openstackcore/storage'
 
+# IMAGE
+require 'fog/openstackcore/image'
+
 # MISC
 require 'multi_json'
