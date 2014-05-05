@@ -31,8 +31,8 @@ describe "services" do
         :openstack_auth_url => "http://devstack.local:5000",
         :openstack_tenant => "admin",
         :openstack_region => "regionone",
-        :openstack_auth_token => nil,
-        # :service_options => {:proxy => 'http://localhost:8888'}
+        :openstack_auth_token => nil
+        # :connection_options => {:proxy => 'http://localhost:8888'}
       }
     }
 
