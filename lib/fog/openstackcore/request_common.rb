@@ -47,7 +47,10 @@ module Fog
           { 'Content-Type' => 'application/json',
             'Accept' => 'application/json'
           }.merge(options[:headers] || {})
-        headers.merge!('X-Auth-Token' => @auth_token) if @auth_token
+
+        if @identity_session && @identity_session.auth_token
+          headers.merge!('X-Auth-Token' => @identity_session.auth_token)
+        end
 
         headers
       end
