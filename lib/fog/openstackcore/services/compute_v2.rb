@@ -37,9 +37,9 @@ module Fog
             'identity',
             options.merge(:version => 2)
           ).call
-          @auth_token = identity.auth_token
 
-          unless identity.service_catalog
+          @identity_session = identity.identity_session
+          unless @identity_session.service_catalog
             raise <<-SC_ERROR
             Unable to retrieve service catalog. Be sure to include a minimum
             of the following in the params hash:
@@ -54,7 +54,7 @@ module Fog
 
           # Contruct the compute endpoint
           uri = URI.parse(
-            identity.service_catalog.get_endpoint(
+            @identity_session.service_catalog.get_endpoint(
               'nova',
               options[:openstack_region]
             )
