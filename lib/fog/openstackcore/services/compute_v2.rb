@@ -48,12 +48,12 @@ module Fog
           ).call
 
           @identity_session = identity.identity_session
-          unless @identity_session.service_catalog
+
           #why arent we doing this?  seems reasonable to want to know that
           #@current_tenant = identity.current_tenant
 
 
-          unless identity.service_catalog
+          unless @identity_session.service_catalog
             raise <<-SC_ERROR
             Unable to retrieve service catalog. Be sure to include a minimum
             of the following in the params hash:
