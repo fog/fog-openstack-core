@@ -24,7 +24,7 @@ describe "requests" do
      let(:identity) { Fog::OpenStackCore::IdentityV2.new(demo_options) }
 
       let(:tenant_id) {
-        data = identity.current_tenant
+        data = identity.identity_session.current_tenant
         data['id']
       }
 
