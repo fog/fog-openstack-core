@@ -21,6 +21,13 @@ module Fog
       # Images
       request :list_images
 
+      #Server Metadata
+      request :show_server_metadata
+      request :show_server_metadata_for_key
+      request :delete_server_metadata_for_key
+      request :create_or_replace_server_metadata
+      request :update_server_metadata
+
 
       class Mock
         def initialize(params); end
@@ -65,6 +72,8 @@ module Fog
             :port   => uri.port
           ).to_s
 
+          @path = uri.path
+
           # Establish a compute connection
           @connection = Fog::Core::Connection.new(
             base_url,
@@ -74,7 +83,14 @@ module Fog
         end
 
         def request(params)
+          # TODO: #headers depends on an instance variable set externally. BAD!
           base_request(@connection, params)
+        end
+
+        def request_params(params)
+          super.tap { |new_params|
+            new_params[:path] = @path + new_params[:path]
+          }
         end
 
         def reload
