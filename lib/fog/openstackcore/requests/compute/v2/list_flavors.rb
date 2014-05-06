@@ -28,7 +28,7 @@ module Fog
           request(
             :method   => 'GET',
             :expects  => [200, 203],
-            :path     => "/v2/#{tenant_id}/flavors",
+            :path     => "/flavors",
             :query    => params
           )
         end
