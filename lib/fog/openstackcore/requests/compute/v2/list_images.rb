@@ -24,13 +24,13 @@ module Fog
         # * 'previous'<~UUID> - Moves to the previous metadata item.
 
         def list_images(tenant_id, options={})
-          params = Fog::OpenStackCore::Common.whitelist_keys(options, 
+          params = Fog::OpenStackCore::Common.whitelist_keys(options,
             %w{changes-since server name status marker limit type})
 
           request(
             :method   => 'GET',
             :expects  => [200, 203],
-            :path     => "/v2/#{tenant_id}/images",
+            :path     => "/images",
             :query    => params
           )
         end
