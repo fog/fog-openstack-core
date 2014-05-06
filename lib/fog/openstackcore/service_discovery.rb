@@ -23,7 +23,7 @@ module Fog
       Provider = Struct.new(:name, :base_provider, :services_path)
 
       def self.register_provider(name, base_provider, path)
-        providers[name] = Provider.new(name, base_provider, path)
+        providers[name.to_sym] = Provider.new(name, base_provider, path)
       end
 
       def self.unregister_provider(name)
@@ -43,7 +43,7 @@ module Fog
         # - Use the version embedded in the url, if available
         # - Use the latest stable version available in the service catalog
 
-        @provider           = self.class.providers[provider_name]
+        @provider           = self.class.providers[provider_name.to_sym]
         @service_identifier = service.to_s
         @options            = params.dup
       end
