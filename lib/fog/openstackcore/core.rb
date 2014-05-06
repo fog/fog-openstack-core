@@ -7,7 +7,7 @@ module Fog
     include Fog::OpenStackCore::Errors
 
     ServiceDiscovery.register_provider(
-      'openstackcore',
+      :openstackcore,
       'Fog::OpenStackCore',
       'fog/openstackcore/services')
 
