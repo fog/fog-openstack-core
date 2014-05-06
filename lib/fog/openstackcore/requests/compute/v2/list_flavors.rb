@@ -21,7 +21,7 @@ module Fog
         # * 'next'<~UUID> - Moves to the next metadata item.
         # * 'previous'<~UUID> - Moves to the previous metadata item.
 
-        def list_flavors(tenant_id, options={})
+        def list_flavors(options={})
           params = Fog::OpenStackCore::Common.whitelist_keys(options,
             %w{changes-since minDisk minRam limit marker})
 

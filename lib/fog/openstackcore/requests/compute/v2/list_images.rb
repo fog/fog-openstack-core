@@ -23,7 +23,7 @@ module Fog
         # * 'next'<~UUID> - Moves to the next metadata item.
         # * 'previous'<~UUID> - Moves to the previous metadata item.
 
-        def list_images(tenant_id, options={})
+        def list_images(options={})
           params = Fog::OpenStackCore::Common.whitelist_keys(options,
             %w{changes-since server name status marker limit type})
 
