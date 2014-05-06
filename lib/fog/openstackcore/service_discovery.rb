@@ -66,8 +66,6 @@ module Fog
         klass.new(options)
       end
 
-
-
       private
 
       def consume_version_key
