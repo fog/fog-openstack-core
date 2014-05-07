@@ -10,7 +10,7 @@ module Fog
 
     service(:identity,     'Identity')
     # service(:compute ,      'Compute')
-    # service(:image,         'Image')
+    service(:image,         'Image')
     # service(:network,       'Network')
     service(:storage,       'Storage')
     # service(:volume,        'Volume')
