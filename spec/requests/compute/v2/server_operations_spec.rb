@@ -30,6 +30,17 @@ describe "requests" do
 
       end
 
+      describe "#create_server" do
+        let(:params) {
+          :name => "test-server",
+          :server => "test-server",
+          :imageRef => "87150bf9-fada-4a1d-873a-51d4980161ce",
+          :flavorRef => 42
+        }
+        result = service.create_server(:params)
+        assert_equal (result.status, 202)
+      end
+
     end
   end
 end
