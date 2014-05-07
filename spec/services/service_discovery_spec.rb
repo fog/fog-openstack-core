@@ -15,8 +15,13 @@ describe Fog::OpenStackCore::ServiceDiscovery do
   end
 
   describe '#call' do
-    it 'instantiates the necessary OSC service' do
+    it 'instantiates the necessary OSC service (strings)' do
       s = Fog::OpenStackCore::ServiceDiscovery.new('openstackcore', 'foobar', :version => 1).call
+      assert_instance_of Fog::OpenStackCore::FoobarV1, s
+    end
+
+    it 'instantiates the necessary OSC service (symbols)' do
+      s = Fog::OpenStackCore::ServiceDiscovery.new(:openstackcore, :foobar, :version => 1).call
       assert_instance_of Fog::OpenStackCore::FoobarV1, s
     end
 
@@ -41,15 +46,9 @@ describe Fog::OpenStackCore::ServiceDiscovery do
       it 'requires files listed in its service_path' do
         Fog::OpenStackCore::ServiceDiscovery.register_provider('fixture', 'Fog::FakeProvider', 'fixtures/fog/fakeprovider/services')
         s = Fog::OpenStackCore::ServiceDiscovery.new('fixture', 'foobar', :version => 2).call
-        assert_instance_of Fog::FakeProvider::FoobarV2, s      
+        assert_instance_of Fog::FakeProvider::FoobarV2, s
         Fog::OpenStackCore::ServiceDiscovery.unregister_provider('fixture')
       end
     end
   end
 end
-
-
-
-
-
-

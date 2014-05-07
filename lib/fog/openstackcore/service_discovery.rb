@@ -23,14 +23,14 @@ module Fog
       Provider = Struct.new(:name, :base_provider, :services_path)
 
       def self.register_provider(name, base_provider, path)
-        providers[name] = Provider.new(name, base_provider, path)
+        providers[name.to_sym] = Provider.new(name, base_provider, path)
       end
 
       def self.unregister_provider(name)
         providers.delete(name)
       end
 
-      # @params service [String] The name of the service to discover upon. 
+      # @params service [String] The name of the service to discover upon.
       # This is a downcased String, e.g. "identity" or "storage"
       # @param params [Hash] Optional parameters including:
       # * url of service
@@ -43,14 +43,14 @@ module Fog
         # - Use the version embedded in the url, if available
         # - Use the latest stable version available in the service catalog
 
-        @provider           = self.class.providers[provider_name]
+        @provider           = self.class.providers[provider_name.to_sym]
         @service_identifier = service.to_s
         @options            = params.dup
       end
 
       # @return [Fog::Service] Instance of the appropriate type of service
       def call
-        klass = 
+        klass =
           begin
             Fog::OpenStackCore::Common.string_to_class(service_class_name)
           rescue NameError
@@ -74,7 +74,7 @@ module Fog
           options[:version]
         end
       end
-      
+
       def service_class_name
         return @class_name if @class_name
 

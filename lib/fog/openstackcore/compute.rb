@@ -3,17 +3,18 @@ require 'fog/openstackcore/service_discovery'
 module Fog
   module OpenStackCore
 
-    # This is a proxy class for the Identity Service as a whole, irrespective of
+    # This is a proxy class for the Compute Service as a whole, irrespective of
     # what version is required.
 
-    class Identity
+    class Compute
       def self.new(options, connection_options = {})
         ServiceDiscovery.new(
           'openstackcore',
-          'identity',
-          options.merge(:connection_options => connection_options)
+          'compute',
+          options.merge(:version => 2)
         ).call
       end
-    end # Identity
+    end # Compute
+
   end # OpenStackCore
 end # Fog

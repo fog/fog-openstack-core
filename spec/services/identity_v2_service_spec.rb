@@ -1,4 +1,4 @@
-require_relative '../spec_helper'
+require File.dirname(__FILE__) + '/../spec_helper'
 
 require 'fog/openstackcore'
 require 'fog/openstackcore/services/identity_v2'
@@ -31,8 +31,8 @@ describe "services" do
         :openstack_auth_url => "http://devstack.local:5000",
         :openstack_tenant => "admin",
         :openstack_region => "regionone",
-        :openstack_auth_token => nil,
-        # :service_options => {:proxy => 'http://localhost:8888'}
+        :openstack_auth_token => nil
+        # :connection_options => {:proxy => 'http://localhost:8888'}
       }
     }
 
