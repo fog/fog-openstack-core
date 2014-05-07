@@ -21,6 +21,13 @@ module Fog
       # Images
       request :list_images
 
+      #Server Metadata
+      request :show_server_metadata
+      request :show_server_metadata_for_key
+      request :delete_server_metadata_for_key
+      request :create_or_replace_server_metadata
+      request :update_server_metadata
+
 
       class Mock
         def initialize(params); end
