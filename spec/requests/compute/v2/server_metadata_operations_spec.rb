@@ -16,8 +16,8 @@ describe "requests" do
           :openstack_username => "demo",
           :openstack_api_key => "stack",
           :openstack_tenant  => "demo",
-          :openstack_region  => "regionone" ,
-          :connection_options => {:proxy => 'http://localhost:8888'}
+          :openstack_region  => "regionone" #,
+          #:connection_options => {:proxy => 'http://localhost:8888'}
         }
 
       }
@@ -32,7 +32,7 @@ describe "requests" do
 
       let(:server) { service.list_servers(tenant_id).body["servers"].first["id"] }
 
-      describe "#show_server_metadata"  do
+      describe "#show_server_metadata(server_metadata)"  do
         let(:meta) { service.show_server_metadata(tenant_id,server) }
 
         it "returns proper status"  do
@@ -45,7 +45,7 @@ describe "requests" do
 
       end
 
-      describe "#create_or_replace_server_metadata" do
+      describe "#create_or_replace_server_metadata(server_metadata)" do
         let(:new_meta) {
           {
             :name => "test name"
@@ -63,7 +63,7 @@ describe "requests" do
 
       end
 
-      describe "#update_server_metadata" do
+      describe "#update_server_metadata(server_metadata)" do
         let(:new_meta) {
           {
             :name => "test name"
@@ -85,9 +85,10 @@ describe "requests" do
           assert(meta_updated.body["metadata"]["name"] == "updated name")
         end
 
+
       end
 
-      describe "#delete_server_metadata_for_key" do
+      describe "#delete_server_metadata_for_key(server_metadata)" do
         let(:new_meta) {
           {
             :name => "test name"
@@ -103,9 +104,18 @@ describe "requests" do
           assert_includes([204], @meta_show.status)
         end
 
+        describe "and you specify an invalid key" do
+          it "throws an exception Fog::OpenStackCore::Errors::NotFound" do
+            assert_raises(Fog::OpenStackCore::Errors::NotFound) {
+              service.delete_server_metadata_for_key(tenant_id, server, "badjuju")
+            }
+
+          end
+        end
+
 
       end
-      describe "#show_server_metadata_for_key" do
+      describe "#show_server_metadata_for_key(server_metadata)" do
         let(:new_meta) {
           {
             :name => "test name"
@@ -124,6 +134,15 @@ describe "requests" do
         it "returns proper updated value" do
           #TODO why 'meta' as the key here... sounds like a bug to me
           assert(@meta_show.body["meta"]["name"] == "test name")
+        end
+
+        describe "and you specify an invalid key" do
+          it "throws an exception Fog::OpenStackCore::Errors::NotFound" do
+            assert_raises(Fog::OpenStackCore::Errors::NotFound) {
+              service.show_server_metadata_for_key(tenant_id, server, "badjuju")
+            }
+
+          end
         end
 
       end

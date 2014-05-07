@@ -5,8 +5,6 @@ module Fog
 
         # Show Server Metadata
         #
-
-
         def show_server_metadata(tenant_id, server_id)
          request(
             :method  => 'GET',
