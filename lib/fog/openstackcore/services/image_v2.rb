@@ -6,7 +6,7 @@ module Fog
       requires :openstack_auth_url,
                :openstack_username,
                :openstack_api_key
-      recognizes :openstack_auth_token
+      recognizes :openstack_auth_token, :openstack_region
 
       request_path 'fog/openstackcore/requests/image/v2'
 
@@ -19,12 +19,13 @@ module Fog
           identity = Fog::OpenStackCore::ServiceDiscovery.new(
             'openstackcore',
             'identity',
-            options.merge(:version => 2)
+            options.merge(:identity_version => 2)
           ).call
+          @identity_session = identity.identity_session
+          @auth_token = @identity_session.auth_token
 
-          @auth_token = identity.auth_token
           uri = URI.parse(
-            identity.service_catalog.get_endpoint(
+            @identity_session.service_catalog.get_endpoint(
               'glance',
               options[:openstack_region]
             )
