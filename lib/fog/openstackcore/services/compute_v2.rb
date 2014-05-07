@@ -79,7 +79,7 @@ module Fog
           # Extract out everything past the port#
           # ie: /v2/<tenant_id>
           path_prefix = uri.path
-          params = {:path_prefix => path_prefix}
+          params   = {:path_prefix => path_prefix}
 
           # Merge connection_options if they exist
           if options[:connection_options]
