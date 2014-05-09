@@ -15,3 +15,10 @@ task :coverage do
   ENV['COVERAGE'] = 'true'
   Rake::Task['test'].execute
 end
+
+desc 'Reset Request Cassettes'
+namespace :vcr do
+  task :reset do
+    `rm -fr spec/cassettes/*`
+  end
+end

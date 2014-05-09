@@ -11,8 +11,7 @@ module Fog
           request(
             :method  => 'GET',
             :expects => [200, 203],
-            :path    => "/servers/#{server_id}/ips",
-            :query   => params
+            :path    => "/servers/#{server_id}/ips"
           )
         end
 

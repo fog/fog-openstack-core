@@ -16,7 +16,7 @@ VCR.configure do |c|
   c.cassette_library_dir = 'spec/cassettes'
   c.hook_into :webmock
   # c.debug_logger = $stdout
-  c.default_cassette_options = { :serialize_with => :json }
+  c.default_cassette_options = { :serialize_with => :json, :record => :new_episodes }
 end
 
 MinitestVcr::Spec.configure!

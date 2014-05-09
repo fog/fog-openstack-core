@@ -21,6 +21,13 @@ module Fog
       # Images
       request :list_images
 
+      #Addressess
+      request :list_addresses
+      request :list_addresses_by_network
+
+      #Networks
+      request :list_networks
+
 
       class Mock
         def initialize(params); end
