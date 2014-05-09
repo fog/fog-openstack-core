@@ -18,8 +18,19 @@ VCR.configure do |c|
   # c.debug_logger = $stdout
   c.default_cassette_options = {
     :match_requests_on => [:method, :path],
-    :serialize_with => :json
+    :serialize_with => :json,
+    :record => :new_episodes
   }
+
+  c.filter_sensitive_data("http://devstack.local:5000") { ENV['OS_AUTH_URL'] }
+  c.filter_sensitive_data("admin") { ENV['OS_ADMIN_USER'] }
+  c.filter_sensitive_data("stack") { ENV['OS_ADMIN_API_KEY'] }
+  c.filter_sensitive_data("admin") { ENV['OS_ADMIN_TENANT'] }
+  c.filter_sensitive_data("admin") { ENV['OS_ADMIN_USER'] }
+
+  c.filter_sensitive_data("demo") { ENV['OS_USER'] }
+  c.filter_sensitive_data("stack") { ENV['OS_API_KEY'] }
+  c.filter_sensitive_data("demo") { ENV['OS_TENANT'] }
 end
 
 MinitestVcr::Spec.configure!

@@ -11,8 +11,7 @@ module Fog
         #     * 'X-Account-Container-Count'<~String> - Count of containers
         #     * 'X-Account-Bytes-Used'<~String> - Bytes used
         def head_containers
-          base_request(
-            @service,
+          request(
             :expects  => 204,
             :method   => 'HEAD',
             :path     => '',
