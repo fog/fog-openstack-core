@@ -1,4 +1,5 @@
 require 'fog/openstackcore/request_common'
+require "fog/json"
 
 module Fog
   module OpenStackCore
@@ -22,6 +23,10 @@ module Fog
       request :list_images
       request :list_image_details
 
+      #Console
+      request :server_action
+      request :get_console_output
+      request :get_vnc_console
 
       class Mock
         def initialize(params); end

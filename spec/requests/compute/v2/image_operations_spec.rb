@@ -65,7 +65,6 @@ describe "requests" do
       describe "#list_images?name" do
         let(:server) { service.list_servers.body["servers"].first["name"] }
 
-        #TODO this doesnt appear to work....
         let(:list) { service.list_images("server" => server) }
 
         it "returns proper status", :vcr do
@@ -76,7 +75,6 @@ describe "requests" do
 
       describe "#list_images?type" do
 
-        #TODO this doesnt appear to work....
         let(:list) { service.list_images("type" => "ALL") }
 
         it "returns proper status", :vcr do
