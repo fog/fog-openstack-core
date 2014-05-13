@@ -85,6 +85,16 @@ describe "requests" do
 
       end
 
+      describe "#list_image_details" do
+        let(:image) { service.list_images.body["images"].first["id"] }
+
+        let(:details) { service.list_image_details(image)}
+
+        it "returns proper status", :vcr do
+          assert_includes([200, 203], details.status)
+        end
+      end
+
 
 
     end

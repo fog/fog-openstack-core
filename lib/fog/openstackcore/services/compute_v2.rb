@@ -20,6 +20,7 @@ module Fog
 
       # Images
       request :list_images
+      request :list_image_details
 
 
       class Mock
