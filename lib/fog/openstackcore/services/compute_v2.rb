@@ -21,6 +21,12 @@ module Fog
       # Images
       request :list_images
 
+      #Security Group
+      request :list_security_groups
+      request :get_security_group
+      #create_security_group
+      #delete_security_group
+
 
       class Mock
         def initialize(params); end

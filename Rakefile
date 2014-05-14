@@ -4,7 +4,7 @@ require 'rake/testtask'
 Rake::TestTask.new do |t|
   t.libs.push 'spec'
   t.pattern = 'spec/**/*_spec.rb'
-  t.warning = true
+  t.warning = false
   t.verbose = true
 end
 
