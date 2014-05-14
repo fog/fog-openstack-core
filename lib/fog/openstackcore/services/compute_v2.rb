@@ -21,6 +21,16 @@ module Fog
       # Images
       request :list_images
 
+      #Server Admin
+      request :add_security_group
+      request :remove_security_group
+      request :add_floating_ip
+      request :reboot_server
+      request :rebuild_server
+
+
+      request :server_action
+
 
       class Mock
         def initialize(params); end
