@@ -24,8 +24,10 @@ module Fog
       #Security Group
       request :list_security_groups
       request :get_security_group
-      #create_security_group
-      #delete_security_group
+      request :create_security_group
+      request :delete_security_group
+      request :create_security_group_rule
+      request :delete_security_group_rule
 
       request :server_action
 

@@ -10,7 +10,7 @@ describe "requests" do
   describe "compute_v2" do
     describe "security group operations" do
 
-      let(:demo_options) { demo_options_hash }
+      let(:demo_options) { demo_options_hash(true) }
 
       let(:service) { Fog::OpenStackCore::ComputeV2.new(demo_options) }
 
@@ -38,7 +38,7 @@ describe "requests" do
       #
       #end
 
-      describe "#get_security_group" do
+      describe "#get_security_group", :vcr do
 
         let(:security_group) { service.list_security_groups.body["security_groups"].first["id"] }
         let(:group) { service.get_security_group(security_group) }
@@ -49,21 +49,44 @@ describe "requests" do
 
       end
 
-      describe "#create_security_group" do
+      describe "#create_security_group",:vcr do
+        let (:group_name) { "#{Time.now.to_i}group"}
+        let(:group) { service.create_security_group(:name => group_name,:description => "test desc") }
 
-
-        it "returns proper status", :vcr do
-          skip("TBD")
+        after do
+          service.delete_security_group(group.body["security_group"]["id"])
         end
 
+        it "returns proper status", :vcr do
+          assert_includes([200], group.status)
+        end
+        describe "#create_security_group_rule" do
+          #
+          let(:rule) { service.create_security_group_rule(group.body["security_group"]["id"], 'tcp',1,65535, "0.0.0.0/0") }
+          after do
+            service.delete_security_group_rule(rule.body["security_group_rule"]["id"])
+          end
+
+          it "returns proper status", :vcr do
+            assert_includes([200], rule.status)
+          end
+        end
       end
 
-      describe "#delete_security_group" do
-
-        let(:security_group) { service.list_security_groups.body["security_groups"].first["id"] }
+      describe "#delete_security_group",:vcr do
+        let (:group_name) { "#{Time.now.to_i}group" }
+        let(:group) { service.create_security_group(:name => group_name, :description => "test desc") }
+        describe "#delete_security_group_rule" do
+          let(:rule) { service.create_security_group_rule(group.body["security_group"]["id"], 'tcp', 1, 65535, "0.0.0.0/0") }
+          let(:delete_rule) { service.delete_security_group_rule(rule.body["security_group_rule"]["id"]) }
+          it "returns proper status", :vcr do
+            assert_includes([202], delete_rule.status)
+         end
+        end
+        let(:delete) { service.delete_security_group(group.body["security_group"]["id"]) }
 
         it "returns proper status", :vcr do
-          skip("TBD")
+          assert_includes([202], delete.status)
         end
 
       end
