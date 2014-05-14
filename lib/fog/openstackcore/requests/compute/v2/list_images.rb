@@ -8,7 +8,7 @@ module Fog
         # ==== Parameters
         # * options<~Hash>:
         #   * 'changes-since'<~DateTime> - A time/date stamp for when the image last changed status.
-        #   * 'server'<~URI> - Name of the server in URL format
+        #   * 'server'<~URI> - UDID of the server that was a snapshot source
         #   * 'name'<~String> - Name of the image as a string
         #   * 'status'<~ImageStatus> - Value of the status of the image so that you can filter on "ACTIVE" for example
         #   * 'marker'<~UUID> - UUID of the image at which you want to set a marker
