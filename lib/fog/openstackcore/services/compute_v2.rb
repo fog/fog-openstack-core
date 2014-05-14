@@ -27,6 +27,8 @@ module Fog
       #create_security_group
       #delete_security_group
 
+      request :server_action
+
 
       class Mock
         def initialize(params); end
