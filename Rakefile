@@ -4,8 +4,8 @@ require 'rake/testtask'
 Rake::TestTask.new do |t|
   t.libs.push 'spec'
   t.pattern = 'spec/**/*_spec.rb'
-  t.warning = true
-  t.verbose = true
+  t.warning = false
+  t.verbose = false
 end
 
 task(default: :test)
@@ -16,11 +16,6 @@ task :coverage do
   Rake::Task['test'].execute
 end
 
-desc 'Runs compute tasks'
-task :compute do
-  $LOAD_PATH.unshift('lib', 'spec')
-  Dir.glob('./spec/**/compute/**/*_spec.rb') { |f| require f }
-end
 
 namespace :test do
   desc 'Run subset of tests, rake test:sub[compute|storage]'
@@ -41,7 +36,7 @@ namespace :vcr do
   desc "delete the cassettes, rake vcr:reset[compute|identity|...]"
   task :reset, :section do |t, args|
     section = args[:section]
-    FileUtils.rm(Dir.glob("./spec/cassettes/**/#{section}**/**/*.json"))
+    FileUtils.rm_rf(Dir.glob("./spec/cassettes/**/#{section}**/**/*.json"))
   end
 end
 

@@ -21,6 +21,9 @@ module Fog
       # Images
       request :list_images
 
+      #Addresses
+      request :list_addresses
+
       #Server Admin
       request :add_security_group
       request :remove_security_group
