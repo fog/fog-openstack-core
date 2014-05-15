@@ -8,7 +8,6 @@ module Fog
         # * 'server_id'<~String> - UUId of server to rebuild
         # * 'image_id'<~String> - UUId of image to use to rebuild server
         # * 'name'<~String> - New name for the rebuilt server
-        # * 'admin_pass'<~String> - Password for the rebuilt server
         # * options<~Hash>:
         #   * 'metadata'<~Hash> - Up to 5 key value pairs containing 255 bytes of info
         #   * 'accessIPv4'<~String> - IPv4 IP address

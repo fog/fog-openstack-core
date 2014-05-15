@@ -35,6 +35,10 @@ module Fog
       request :deallocate_address
       request :disassociate_address
 
+      #Security Groups
+      request :create_security_group
+      request :delete_security_group
+
 
       request :server_action
 

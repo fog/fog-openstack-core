@@ -10,7 +10,7 @@ describe "requests" do
   describe "compute_v2" do
     describe "server admin operations" do
 
-      let(:demo_options) { demo_options_hash(true) }
+      let(:demo_options) { demo_options_hash(false) }
 
       let(:service) { Fog::OpenStackCore::ComputeV2.new(demo_options) }
 
@@ -96,11 +96,77 @@ describe "requests" do
 
       describe '#add_security_group', :vcr do
         before do
-          @allocated_sg = service.add_security_group("mine")
+          name = "#{Time.now.to_i}security_group"
+          @created_sg = service.create_security_group(:name => name, :description => "group for test")
+          assert_includes([200], @created_sg.status)
         end
 
+        let(:security_group) { @created_sg.body["security_group"]["name"] }
+        let(:server) { servers.first["id"] }
+        let(:add) { service.add_security_group(server, security_group) }
+
+
+        after do
+          service.remove_security_group(server,security_group)
+          service.delete_security_group(@created_sg.body["security_group"]["id"])
+        end
+
+        it "returns a proper status" do
+          assert_includes([202], add.status)
+        end
 
       end
+
+      describe '#reboot', :vcr do
+
+        let(:server) { servers.first["id"] }
+
+        let(:reboot) { service.reboot_server(server)}
+
+        it "returns a proper status" do
+          assert_includes([202], reboot.status)
+        end
+
+      end
+
+
+      describe '#rebuild', :vcr do
+
+        #let(:server) { servers.first["id"] }
+        #
+        #let(:rebuild) { service.rebuild_server(server,{:metadata => "abcdef"}) }
+
+        it "returns a proper status" do
+          skip("wait for server details call in process")
+          assert_includes([202], rebuild.status)
+        end
+
+      end
+
+      describe '#add_security_group', :vcr do
+        before do
+          name = "#{Time.now.to_i}security_group"
+          @created_sg = service.create_security_group(:name => name, :description => "group for test")
+          assert_includes([200], @created_sg.status)
+        end
+
+        let(:security_group) { @created_sg.body["security_group"]["name"] }
+        let(:server) { servers.first["id"] }
+        let(:add) { service.add_security_group(server, security_group) }
+
+
+        after do
+          service.remove_security_group(server, security_group)
+          service.delete_security_group(@created_sg.body["security_group"]["id"])
+        end
+
+        it "returns a proper status" do
+          assert_includes([202], add.status)
+        end
+
+      end
+
+
 
 
 
