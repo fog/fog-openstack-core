@@ -24,9 +24,13 @@ module Fog
       #Server Admin
       request :add_security_group
       request :remove_security_group
-      request :add_floating_ip
+      request :associate_address
+      request :list_floating_ips
       request :reboot_server
       request :rebuild_server
+      request :allocate_address
+      request :deallocate_address
+      request :disassociate_address
 
 
       request :server_action

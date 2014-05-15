@@ -17,6 +17,7 @@ module Fog
         #     * 'file'<~Hash>:
         #       * 'contents'<~String> - Contents of file (10kb total of contents)
         #       * 'path'<~String> - Path to file (255 bytes total of path strings)
+
         def rebuild_server(server_id, image_id, name, options={})
 
           body = {'rebuild' => {

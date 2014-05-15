@@ -23,7 +23,7 @@ describe "requests" do
 
       describe "#list_images" do
 
-        let(:list) { service.list_images(tenant_id) }
+        let(:list) { service.list_images }
 
         it "returns proper status", :vcr do
           assert_includes([200, 203], list.status)

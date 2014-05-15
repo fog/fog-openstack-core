@@ -22,7 +22,7 @@ describe "requests" do
 
       describe "#list_servers" do
 
-        let(:list) { service.list_servers(tenant_id) }
+        let(:list) { service.list_servers }
 
         it "returns proper status", :vcr do
           assert_includes([200, 203], list.status)
