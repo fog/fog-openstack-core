@@ -10,17 +10,7 @@ describe "requests" do
   describe "compute_v2" do
     describe "metadata operations", :vcr  do
 
-      let(:demo_options) {
-        {
-          :openstack_auth_url => "http://devstack.local:5000",
-          :openstack_username => "demo",
-          :openstack_api_key => "stack",
-          :openstack_tenant  => "demo",
-          :openstack_region  => "regionone" #,
-          #:connection_options => {:proxy => 'http://localhost:8888'}
-        }
-
-      }
+     let(:demo_options) { demo_options_hash }
      let(:identity) { Fog::OpenStackCore::IdentityV2.new(demo_options) }
 
 
