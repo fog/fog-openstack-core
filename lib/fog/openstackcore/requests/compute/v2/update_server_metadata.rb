@@ -7,7 +7,7 @@ module Fog
         #
 
 
-        def update_server_metadata(tenant_id, server_id, data)
+        def update_server_metadata(server_id, data)
           metadata = {
             :metadata => data
           }

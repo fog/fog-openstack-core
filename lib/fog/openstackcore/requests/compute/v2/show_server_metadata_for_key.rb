@@ -7,7 +7,7 @@ module Fog
         #
 
 
-        def show_server_metadata_for_key(tenant_id, server_id, key)
+        def show_server_metadata_for_key(server_id, key)
           request(
             :method  => 'GET',
             :expects => [200, 203],

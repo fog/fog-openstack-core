@@ -7,7 +7,7 @@ module Fog
         #
 
 
-        def delete_server_metadata_for_key(tenant_id, server_id, key)
+        def delete_server_metadata_for_key(server_id, key)
           request(
             :method  => 'DELETE',
             :expects => [204],

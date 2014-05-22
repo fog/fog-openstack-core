@@ -23,17 +23,13 @@ describe "requests" do
       }
      let(:identity) { Fog::OpenStackCore::IdentityV2.new(demo_options) }
 
-      let(:tenant_id) {
-        data = identity.identity_session.current_tenant
-        data['id']
-      }
 
       let(:service) { Fog::OpenStackCore::ComputeV2.new(demo_options) }
 
       let(:server) { service.list_servers.body["servers"].first["id"] }
 
       describe "#show_server_metadata(server_metadata)"  do
-        let(:meta) { service.show_server_metadata(tenant_id,server) }
+        let(:meta) { service.show_server_metadata(server) }
 
         it "returns proper status"  do
           assert_includes([200, 203], meta.status)
@@ -51,7 +47,7 @@ describe "requests" do
             :name => "test name"
           }
         }
-        let(:meta) { service.create_or_replace_server_metadata(tenant_id, server, new_meta) }
+        let(:meta) { service.create_or_replace_server_metadata(server, new_meta) }
 
         it "returns proper status" do
           assert_includes([200], meta.status)
@@ -74,8 +70,8 @@ describe "requests" do
             :name => "updated name"
           }
         }
-        let(:meta) { service.create_or_replace_server_metadata(tenant_id, server, new_meta) }
-        let(:meta_updated) { service.update_server_metadata(tenant_id, server, new_meta) }
+        let(:meta) { service.create_or_replace_server_metadata(server, new_meta) }
+        let(:meta_updated) { service.update_server_metadata(server, new_meta) }
 
         it "returns proper status" do
           assert_includes([200], meta.status)
@@ -95,8 +91,8 @@ describe "requests" do
           }
         }
         before do
-          service.create_or_replace_server_metadata(tenant_id, server, new_meta)
-          @meta_show = service.delete_server_metadata_for_key(tenant_id, server, "name")
+          service.create_or_replace_server_metadata(server, new_meta)
+          @meta_show = service.delete_server_metadata_for_key(server, "name")
         end
 
 
@@ -107,7 +103,7 @@ describe "requests" do
         describe "and you specify an invalid key" do
           it "throws an exception Fog::OpenStackCore::Errors::NotFound" do
             assert_raises(Fog::OpenStackCore::Errors::NotFound) {
-              service.delete_server_metadata_for_key(tenant_id, server, "badjuju")
+              service.delete_server_metadata_for_key(server, "badjuju")
             }
 
           end
@@ -123,8 +119,8 @@ describe "requests" do
         }
 
         before do
-          service.create_or_replace_server_metadata(tenant_id, server, new_meta)
-          @meta_show = service.show_server_metadata_for_key(tenant_id, server, "name")
+          service.create_or_replace_server_metadata( server, new_meta)
+          @meta_show = service.show_server_metadata_for_key(server, "name")
         end
 
         it "returns proper status" do
@@ -139,7 +135,7 @@ describe "requests" do
         describe "and you specify an invalid key" do
           it "throws an exception Fog::OpenStackCore::Errors::NotFound" do
             assert_raises(Fog::OpenStackCore::Errors::NotFound) {
-              service.show_server_metadata_for_key(tenant_id, server, "badjuju")
+              service.show_server_metadata_for_key(server, "badjuju")
             }
 
           end
