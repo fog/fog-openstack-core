@@ -59,43 +59,38 @@ module Fog
             SC_ERROR
           end
 
-          # Retrieve the compute service endpoint
-          # ie: http://<host>:8774/v2/<tenant_id>
+          # Contruct the compute endpoint
           uri = URI.parse(
             @identity_session.service_catalog.get_endpoint(
               'nova',
               options[:openstack_region]
             )
           )
-
-          # Extract out the base service url
-          # ie: http://<host>:8774
           base_url = URI::Generic.build(
             :scheme => uri.scheme,
             :host   => uri.host,
             :port   => uri.port
           ).to_s
 
-          # Extract out everything past the port#
-          # ie: /v2/<tenant_id>
-          path_prefix = uri.path
-          params   = {:path_prefix => path_prefix}
-
-          # Merge connection_options if they exist
-          if options[:connection_options]
-            params.merge(options[:connection_options])
-          end
+          @path = uri.path
 
           # Establish a compute connection
           @connection = Fog::Core::Connection.new(
             base_url,
             options[:persistent] || false,
-            params || {}
+            options[:connection_options] || {}
           )
         end
 
         def request(params)
+          # TODO: #headers depends on an instance variable set externally. BAD!
           base_request(@connection, params)
+        end
+
+        def request_params(params)
+          super.tap { |new_params|
+            new_params[:path] = @path + new_params[:path]
+          }
         end
 
         def reload

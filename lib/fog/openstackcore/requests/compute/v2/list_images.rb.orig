@@ -27,7 +27,7 @@ module Fog
         def list_images(options={})
 =======
         def list_images(tenant_id, options={})
->>>>>>> initial commit all tests passing
+>>>>>>> 4a87c50d73b93c76c88dd9dd6dfd34e9b3c2458a
           params = Fog::OpenStackCore::Common.whitelist_keys(options,
             %w{changes-since server name status marker limit type})
 
