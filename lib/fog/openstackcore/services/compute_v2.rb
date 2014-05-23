@@ -40,6 +40,10 @@ module Fog
       request :delete_security_group
 
 
+      #Limits
+      request :list_limits
+
+
       request :server_action
 
 
