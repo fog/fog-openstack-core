@@ -21,10 +21,10 @@ module Fog
         #   * buildInProgress (409)
         # @param [UUID] server_id
         # @param [Hash] data:
-        #   * metadata[Hash '<name>' => '<value>']:
+        #   * :metadata [Hash<Key,Value>]:
         # @return [Excon::Response]:
-        #   * body<~Hash>:
-        #     *   'metadata'<~Hash '<name>' => '<value>'>
+        #   * body [Hash]:
+        #     * :metadata [Hash<Key,Value>]
         #
         def update_server_metadata(server_id, data)
           metadata = {

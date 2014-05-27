@@ -25,7 +25,7 @@ module Fog
         # ==== Returns
         # @return [Excon::Response]:
         # * body<~Hash>:
-        #   * 'metadata'<~Hash '<name>' => '<value>'>
+        #   *  :metadata [Hash<Key,Value>]
 
         def show_server_metadata_for_key(server_id, key)
 
