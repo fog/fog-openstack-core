@@ -37,6 +37,17 @@ describe "requests" do
 
       end
 
+      describe "#delete_server" do
+
+        let(:server_id) { "a3d33181-4b0b-479f-bc46-d73e51e16b54" }
+
+        it "deletes a server instance", :vcr do
+          result = service.delete_server(server_id)
+          assert_equal(result.status, 204)
+        end
+
+      end
+
     end
   end
 end
