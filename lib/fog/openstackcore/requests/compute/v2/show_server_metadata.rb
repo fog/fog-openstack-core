@@ -5,6 +5,26 @@ module Fog
 
         # Show Server Metadata
         #
+        # ==== Normal Response Codes
+        #   * 200,203
+        #
+        # ==== Error Response Codes
+        #   * computeFault (400, 500, …)
+        #   * serviceUnavailable (503)
+        #   * badRequest (400)
+        #   * unauthorized (401)
+        #   * forbidden (403)
+        #   * badMethod (405)
+        #   * overLimit (413)
+        #   * itemNotFound (404)
+        #
+        # @param [UUID] server_id
+        #
+        # ==== Returns            s
+        #
+        # @return [Excon::Response]:
+        #   * body<~Hash>:
+        #     * 'metadata'<~Hash>
         def show_server_metadata(server_id)
          request(
             :method  => 'GET',

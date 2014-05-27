@@ -30,7 +30,7 @@ module Fog
         providers.delete(name)
       end
 
-      # @params service [String] The name of the service to discover upon.
+      # @param service [String] The name of the service to discover upon.
       # This is a downcased String, e.g. "identity" or "storage"
       # @param params [Hash] Optional parameters including:
       # * url of service
