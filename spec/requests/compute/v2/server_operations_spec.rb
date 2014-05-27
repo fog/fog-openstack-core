@@ -1,5 +1,5 @@
-require "#{File.dirname(__FILE__)}/../../../spec_helper"
-require "#{File.dirname(__FILE__)}/../../../support/spec_helpers"
+require "#{File.dirname(__FILE__)}/../../../../spec_helper"
+require "#{File.dirname(__FILE__)}/../../../../support/spec_helpers"
 
 include SpecHelpers
 
@@ -10,15 +10,9 @@ describe "requests" do
   describe "compute_v2" do
     describe "server operations" do
 
-      let(:admin_options) { admin_options_hash }
-      let(:identity) { Fog::OpenStackCore::IdentityV2.new(admin_options) }
+      # let(:identity) { Fog::OpenStackCore::IdentityV2.new(non_admin_options_hash) }
 
-      let(:tenant_id) {
-        data = identity.get_tenants_by_name(admin_options_hash[:openstack_tenant])
-        data.body['tenant']['id']
-      }
-
-      let(:service) { Fog::OpenStackCore::ComputeV2.new(admin_options) }
+      let(:service) { Fog::OpenStackCore::ComputeV2.new(non_admin_options_hash) }
 
       describe "#list_servers" do
 
@@ -31,14 +25,16 @@ describe "requests" do
       end
 
       describe "#create_server" do
-        let(:params) {
-          :name => "test-server",
-          :server => "test-server",
-          :imageRef => "87150bf9-fada-4a1d-873a-51d4980161ce",
-          :flavorRef => 42
-        }
-        result = service.create_server(:params)
-        assert_equal (result.status, 202)
+
+        let(:server_name) { "test-server-#{Time.now.to_i}" }
+        let(:flavor_id) { service.list_flavors.body['flavors'].first['id'] }
+        let(:image_id) { service.list_images.body['images'].last['id'] }
+
+        it "launches a new server instance", :vcr do
+          result = service.create_server(server_name, flavor_id, image_id)
+          assert_equal(result.status, 202)
+        end
+
       end
 
     end

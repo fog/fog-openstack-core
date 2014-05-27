@@ -14,6 +14,8 @@ module Fog
 
       # Server CRUD
       request :list_servers
+      request :create_server
+      request :delete_server
 
       # Flavors
       request :list_flavors
@@ -32,10 +34,11 @@ module Fog
         def initialize(options={})
 
           # Get a reference to the identity service
+          identity_options = options.clone
           identity = Fog::OpenStackCore::ServiceDiscovery.new(
             'openstackcore',
             'identity',
-            options.merge(:version => 2)
+            identity_options.merge(:version => 2)
           ).call
 
           @identity_session = identity.identity_session
@@ -76,7 +79,7 @@ module Fog
 
           # Merge connection_options if they exist
           if options[:connection_options]
-            params.merge(options[:connection_options])
+            params.merge!(options[:connection_options])
           end
 
           # Establish a compute connection
