@@ -4,9 +4,14 @@ module Fog
       class Real
 
         # Delete a security group
+        # ==== Normal Response Codes
+        # * 200
+        # ==== Error Response Codes
         #
-        # ==== Parameters
-        # * 'security_group_id'<~String> - UUId of the security group to delete
+        # * unauthorized (401)
+        # * itemNotFound (404)
+        #
+        # @param security_group_id [UUID] UUID of the security group to delete
 
         def delete_security_group(security_group_id)
           request(

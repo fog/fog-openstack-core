@@ -6,7 +6,7 @@ module Fog
         # Get details about a security group
         #
         # ==== Parameters
-        # * 'security_group_id'<~String> - UUId of the security group
+        # * 'security_group_id'<~UUID> - UUId of the security group
         #
         # ==== Returns
         # * response<~Excon::Response>:

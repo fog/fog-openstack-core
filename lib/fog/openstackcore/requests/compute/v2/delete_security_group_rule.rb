@@ -6,8 +6,17 @@ module Fog
 
         # Delete a security group rule
         #
+        # ==== Normal Response Codes
+        #
+        # * 204
+        #
+        # ==== Error Response Codes
+        #
+        # * unauthorized (401)
+        # * itemNotFound (404)
+        #
         # ==== Parameters
-        # * 'security_group_rule_id'<~String> - UUId of the security group rule to delete
+        # @param [UUID] security_group_rule_id UUID of the security group rule to delete
         def delete_security_group_rule(security_group_rule_id)
           request(
             :expects => 202,
