@@ -14,6 +14,8 @@ module Fog
 
       # Server CRUD
       request :list_servers
+      request :create_server
+      request :delete_server
 
       # Flavors
       request :list_flavors
@@ -39,10 +41,11 @@ module Fog
         def initialize(options={})
 
           # Get a reference to the identity service
+          identity_options = options.clone
           identity = Fog::OpenStackCore::ServiceDiscovery.new(
             'openstackcore',
             'identity',
-            options.merge(:version => 2)
+            identity_options.merge(:version => 2)
           ).call
 
           @identity_session = identity.identity_session
@@ -72,25 +75,26 @@ module Fog
             :port   => uri.port
           ).to_s
 
-          @path = uri.path
+          # Extract out everything past the port#
+          # ie: /v2/<tenant_id>
+          path_prefix = uri.path
+          params = {:path_prefix => path_prefix}
+
+          # Merge connection_options if they exist
+          if options[:connection_options]
+            params.merge!(options[:connection_options])
+          end
 
           # Establish a compute connection
           @connection = Fog::Core::Connection.new(
             base_url,
             options[:persistent] || false,
-            options[:connection_options] || {}
+            params || {}
           )
         end
 
         def request(params)
-          # TODO: #headers depends on an instance variable set externally. BAD!
           base_request(@connection, params)
-        end
-
-        def request_params(params)
-          super.tap { |new_params|
-            new_params[:path] = @path + new_params[:path]
-          }
         end
 
         def reload
