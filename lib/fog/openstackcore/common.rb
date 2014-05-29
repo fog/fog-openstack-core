@@ -33,6 +33,7 @@ module Fog
 
       # returns a list of valid keys
       def self.whitelist_keys(hash, valid_keys)
+        return hash if hash.empty?
         valid_hash = self.stringify_keys(hash)
         valid_hash.select {|k,v| valid_keys.include?(k)}
       end
