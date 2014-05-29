@@ -39,10 +39,16 @@ module Fog
         network_type = network_type_key(url_type)
 
         endpoints = get_endpoints(service_name, url_type)
-        raise "Unable to locate endpoint for service #{service_name}" if endpoints.empty?
+        if endpoints.empty?
+          raise "Unable to locate endpoint for service #{service_name}"
+        end
 
         if endpoints.size > 1 && region.nil?
-          raise "There are multiple endpoints available for #{service_name}. Please specify one of the following regions: #{display_service_regions(service_name)}."
+          raise <<-SC_ERROR
+            There are multiple endpoints available for #{service_name}. Please
+            specify one of the following regions:
+            #{display_service_regions(service_name)}.
+            SC_ERROR
         end
 
         # select multiple endpoints
@@ -54,7 +60,10 @@ module Fog
           return endpoints[0][network_type]
         end
 
-        raise "Unknown region :#{region} for service #{service_name}. Please use one of the following regions: #{display_service_regions(service_name)}"
+        raise <<-SC_ERROR
+          Unknown region :#{region} for service #{service_name}. Please use one
+          of the following regions: #{display_service_regions(service_name)}
+          SC_ERROR
       end
 
       def reload
