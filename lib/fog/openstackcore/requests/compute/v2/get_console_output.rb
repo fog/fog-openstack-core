@@ -6,7 +6,7 @@ module Fog
         # Retrieve console output for specified instance
         #
         # ==== Parameters
-        # * 'server_id'<~Stribng> - UUId of instance to get console output from
+        # * 'server_id'<~UUID> - UUId of instance to get console output from
         # * 'num_lines'<~Integer> - Number of lines of console output from the end
         # ==== Returns
         # # * response<~Excon::Response>:

@@ -6,7 +6,7 @@ module Fog
         # Retrieve VNC console for the specified instance
         #
         # ==== Parameters
-        # * 'server_id'<~String> - UUId of instance to get console output from
+        # * 'server_id'<~UUID> - UUId of instance to get console output from
         # ==== Returns
         # # * response<~Excon::Response>:
         #   * body<~Hash>:
