@@ -6,7 +6,7 @@ module Fog
         # Disassociates a floating IP address from an existing server
         #
         # ==== Parameters
-        # * server_id<~Integer> - server id
+        # * server_id<~UUID> - server id
         # * ip_address<~String> - Ip address to dissassociate
         #
 

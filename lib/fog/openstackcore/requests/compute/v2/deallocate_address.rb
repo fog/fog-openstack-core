@@ -3,15 +3,12 @@ module Fog
     class ComputeV2
       class Real
 
-        # Associate a floating IP address with existing server
+        # Deallocates the floating IP address
         #
-        # ==== Parameters
-        # * pool<~Integer> - address pool
-        #
-
+        # @param [UUID] address_id address of address to deallocate
         def deallocate_address(address_id)
             request(
-              :expects => [200, 202],
+              :expects => [202],
               :method => 'DELETE',
               :path   => "os-floating-ips/#{address_id}"
             )

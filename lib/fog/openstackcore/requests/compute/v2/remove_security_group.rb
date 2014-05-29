@@ -8,7 +8,7 @@ module Fog
         # Remove an existing security group from an existing server
         #
         # ==== Parameters
-        # * 'server_id'<~String> - UUId of server
+        # * 'server_id'<~UUID> - UUId of server
         # * 'sg_name'<~String> - Name of security group to remove from the server
         #
         def remove_security_group(server_id, sg_name)

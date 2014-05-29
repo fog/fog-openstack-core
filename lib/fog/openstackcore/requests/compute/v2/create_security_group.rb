@@ -3,13 +3,22 @@ module Fog
     class ComputeV2
       class Real
 
+        #TODO DOCS BAD!!! Example 4.305. Create security group: JSON request is wrong
+        #{
+        #"addSecurityGroup" : {
+        #  "name" : "test"
+        #}
+        #}
+
+
         # Create a security group
         #
         # ==== Parameters
         # * options<~Hash>:
         #   * 'name'<~String> - Name of the security group
         #   * 'description'<~String> - Description of the security group
-
+        # ==== Normal Response Codes
+        #   * 200
         # ==== Returns
         # * response<~Excon::Response>:
         #   * body<~Hash>:
@@ -29,14 +38,6 @@ module Fog
         #       * 'remote_group_id'<~String> - UUId of the remote security group
         #       * 'remote_ip_prefix'<~String> - IP cidr range address i.e. '0.0.0.0/0'
         #       * 'tenant_id'<~String> - Tenant id that owns the security group rule
-
-        #TODO DOCS BAD!!! Example 4.305. Create security group: JSON request is wrong
-        #{
-        #"addSecurityGroup" : {
-        #  "name" : "test"
-        #}
-        #}
-
         def create_security_group(options = {})
 
           data = {'security_group' => {}}

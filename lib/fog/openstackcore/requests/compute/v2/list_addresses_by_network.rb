@@ -3,8 +3,6 @@ module Fog
     class ComputeV2
       class Real
 
-
-
         # List addresses
         #
         # ==== Normal Response Codes
@@ -20,18 +18,20 @@ module Fog
         # * overLimit (413)
         # * itemNotFound (404)
         # * buildInProgress (409)
-        # @param [UUID] server_id identifier for the server
-        # @return <~Excon::Response>:
+        # @param [UUID] server_id id of the server
+        # @param [String] network_label  name of the network
+        # @return <~Excon::Response> :
         #   * body<~Hash>:
-        #     * 'addresses'<~Hash>:
-        #       * 'public'<~Array> -
+        #     * 'network'<~Hash>:
+        #       * 'id'<~String>:
+        #       * 'ip'<~Array>
         #         * 'version'<~Fixnum>
         #         * 'addr'<~String>
-        def list_addresses(server_id)
+        def list_addresses_by_network(server_id,network_label)
           request(
             :method  => 'GET',
             :expects => [200, 203],
-            :path    => "/servers/#{server_id}/ips"
+            :path    => "/servers/#{server_id}/ips/#{network_label}"
           )
         end
 

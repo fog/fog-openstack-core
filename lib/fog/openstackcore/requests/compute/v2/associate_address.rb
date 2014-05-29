@@ -5,8 +5,10 @@ module Fog
 
         # Associate a floating IP address with existing server
         #
+        # ==== Normal Response Codes
+        #   * 202
         # ==== Parameters
-        # * server_id<~Integer> - Id of server to associate IP with
+        # * server_id<~UUID> - Id of server to associate IP with
         # * ip_address<~String> - IP address to associate with the server
         #
         def associate_address(server_id, ip_address)
