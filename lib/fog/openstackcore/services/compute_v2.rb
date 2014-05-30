@@ -41,6 +41,12 @@ module Fog
       request :create_security_group
       request :delete_security_group
 
+      #KeyPairs
+      request :list_keypairs
+      request :get_keypair
+      request :create_keypair
+      request :delete_keypair
+
 
       request :server_action
 
