@@ -14,33 +14,33 @@ describe "requests" do
       let(:identity) { Fog::OpenStackCore::IdentityV2.new(demo_options) }
 
       let(:service) { Fog::OpenStackCore::ComputeV2.new(demo_options) }
-      #assumes there is a server in your ds instance
-      let(:server) { service.list_servers.body["servers"].first["id"] }
+      let(:image) {service.list_images.body["images"].first["id"]}
+      let(:flavor) { service.list_flavors.body["flavors"].first["id"] }
 
-      describe "#list_addresses" do
+      describe "and a server exists" do
 
-        let(:addresses) { service.list_addresses(server) }
 
-        it "returns proper status", :vcr do
-          assert_includes([200, 203], addresses.status)
+
+        describe "#list_addresses" do
+          before do
+            name     =" #{Time.now.to_i}server"
+            @created = service.create_server(name, flavor, image).body["server"]["id"]
+          end
+
+          after do
+            service.delete_server(@created)
+          end
+
+          let(:addresses) { service.list_addresses(@created) }
+
+          it "returns proper status", :vcr do
+            assert_includes([200, 203], addresses.status)
+          end
+
         end
 
-      end
 
-      describe "#list_addresses_by_network" do
-
-        let(:networks) { service.list_networks}
-
-        let(:network_label) {networks.body["networks"].first["label"]}
-
-        let(:addresses) { service.list_addresses_by_network(server, network_label) }
-
-        it "returns proper status", :vcr do
-          assert_includes([200, 203], addresses.status)
-        end
-
-      end
-
+     end
 
 
     end

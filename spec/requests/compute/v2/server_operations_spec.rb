@@ -29,24 +29,27 @@ describe "requests" do
         let(:server_name) { "test-server-#{Time.now.to_i}" }
         let(:flavor_id) { service.list_flavors.body['flavors'].first['id'] }
         let(:image_id) { service.list_images.body['images'].last['id'] }
+        let(:create) { service.create_server(server_name, flavor_id, image_id) }
 
         it "launches a new server instance", :vcr do
-          result = service.create_server(server_name, flavor_id, image_id)
-          assert_equal(result.status, 202)
+          result =
+          assert_equal(create.status, 202)
+        end
+
+        describe "#delete_server" do
+
+          let(:server_id) { create.body["server"]["id"] }
+
+          it "deletes a server instance", :vcr do
+            result = service.delete_server(server_id)
+            assert_equal(result.status, 204)
+          end
+
         end
 
       end
 
-      describe "#delete_server" do
 
-        let(:server_id) { "a3d33181-4b0b-479f-bc46-d73e51e16b54" }
-
-        it "deletes a server instance", :vcr do
-          result = service.delete_server(server_id)
-          assert_equal(result.status, 204)
-        end
-
-      end
 
     end
   end

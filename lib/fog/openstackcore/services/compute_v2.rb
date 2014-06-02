@@ -25,7 +25,6 @@ module Fog
 
       #Addressess
       request :list_addresses
-      request :list_addresses_by_network
 
       #Networks
       request :list_networks
