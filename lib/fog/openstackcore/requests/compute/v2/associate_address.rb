@@ -12,7 +12,7 @@ module Fog
         # * ip_address<~String> - IP address to associate with the server
         #
         def associate_address(server_id, ip_address)
-          body = {'addFloatingIp' => {'server' => server_id, 'address' => ip_address}}
+          body = {'addFloatingIp' => { 'address' => ip_address }}
           server_action(server_id, body)
         end
 
