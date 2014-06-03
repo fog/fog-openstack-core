@@ -14,36 +14,47 @@ describe "requests" do
 
       let(:identity) { Fog::OpenStackCore::IdentityV2.new(demo_options) }
 
-      let(:tenant_id) {
-        data = identity.get_tenants_by_name(admin_options_hash[:openstack_tenant])
-        data.body['tenant']['id']
-      }
-
       let(:service) { Fog::OpenStackCore::ComputeV2.new(demo_options) }
 
-      describe "#get_console_output" do
-
-        let(:server) { service.list_servers.body["servers"].first["id"] }
-
-        let(:console) { service.get_console_output(server) }
-
-        it "returns proper status", :vcr do
-          assert_includes([200], console.status)
+      describe "with a server" do
+        before do
+          flavor = service.list_flavors.body["flavors"].first["id"]
+          image = service.list_images.body["images"].first["id"]
+          name = "{Time.now.to_i}server"
+          @create = service.create_server(name,flavor,image).body["server"]["id"]
         end
 
-      end
-
-      describe "#get_vnc_console" do
-
-        let(:server) { service.list_servers.body["servers"].first["id"] }
-
-        let(:console) { service.get_vnc_console(server) }
-
-        it "returns proper status", :vcr do
-          assert_includes([200], console.status)
+        after do
+         service.delete_server(@create)
         end
 
+
+        describe "#get_console_output" do
+
+          let(:server) { @create }
+
+          it "returns proper status", :vcr do
+            assert_raises(Fog::OpenStackCore::Conflict, "Server was ready" ) do
+              service.get_console_output(server)
+            end
+          end
+
+        end
+
+        describe "#get_vnc_console" do
+
+          let(:server) { @create }
+
+          it "returns proper status", :vcr do
+            assert_raises(Fog::OpenStackCore::Conflict, "Server was ready") do
+              service.get_vnc_console(server)
+            end
+          end
+
+        end
       end
+
+
     end
   end
 end
