@@ -23,10 +23,12 @@ describe "requests" do
         describe "with a unique name" do
 
           it "returns success" do
+            skip("not testing admin functions")
             result.status.must_equal 200
           end
 
           it "returns valid data" do
+            skip("not testing admin functions")
             result.body['role'].wont_be_nil
           end
 
@@ -38,6 +40,7 @@ describe "requests" do
 
         describe "when the role exists" do
           it "gets the role", :vcr do
+            skip("not testing admin functions")
             temp_role = service.create_role("azahabada#{Time.now.to_i}")
             result = service.get_role(temp_role.body['role']['id'])
             [200, 204].must_include result.status
@@ -46,6 +49,7 @@ describe "requests" do
 
         describe "when the role doesnt exist" do
           it "returns not found error", :vcr do
+            skip("not testing admin functions")
             proc {
               service.get_role("nonexistentrole12345")
             }.must_raise Fog::OpenStackCore::Errors::NotFound
@@ -58,6 +62,7 @@ describe "requests" do
 
         describe "when the role exists" do
           it "deletes the role", :vcr do
+            skip("not testing admin functions")
             temp_role = service.create_role("azahabada#{Time.now.to_i}")
             result = service.delete_role(temp_role.body['role']['id'])
             [200, 204].must_include result.status
@@ -66,6 +71,7 @@ describe "requests" do
 
         describe "when the role doesnt exist" do
           it "returns not found error", :vcr do
+            skip("not testing admin functions")
             proc {
               service.delete_role("nonexistentrole12345")
             }.must_raise Fog::OpenStackCore::Errors::NotFound

@@ -54,4 +54,8 @@ module SpecHelpers
     {:proxy => "http://#{host}:#{port}"}
   end
 
+  def compute_v2_service(proxy = false)
+    @service ||= Fog::OpenStackCore::ComputeV2.new(demo_options_hash(proxy))
+  end
+
 end

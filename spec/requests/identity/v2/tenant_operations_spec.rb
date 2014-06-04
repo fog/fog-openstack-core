@@ -20,6 +20,7 @@ describe "requests" do
         describe "when a unique name specified", :vcr do
 
           let(:result) {
+            skip("not testing admin functions")
             service.create_tenant({'name' => "azahabada#{Time.now.to_i}"})
           }
 
@@ -35,6 +36,7 @@ describe "requests" do
         describe "when the name is missing" do
 
           it "raises an exception", :vcr do
+            skip("not testing admin functions")
             proc {
               service.create_tenant({})
             }.must_raise Fog::OpenStackCore::Errors::BadRequest
@@ -45,6 +47,7 @@ describe "requests" do
         describe "without name - with description" do
 
           it "raises an exception", :vcr do
+            skip("not testing admin functions")
             proc {
               service.create_tenant({'name' => nil, 'description' => "azahabada#{Time.now.to_i}"})
             }.must_raise Fog::OpenStackCore::Errors::BadRequest
@@ -56,6 +59,7 @@ describe "requests" do
 
           it "raises an exception", :vcr do
             proc {
+              skip("not testing admin functions")
               service.create_tenant(nil)
             }.must_raise Fog::OpenStackCore::Errors::BadRequest
           end
@@ -68,6 +72,7 @@ describe "requests" do
         describe "when the tenant exists" do
 
           it "update name succeeds", :vcr do
+            skip("not testing admin functions")
             tenant = service.create_tenant({'name' => "azahabada#{Time.now.to_i}"})
             name = {'name' => "new-name#{Time.now.to_i}"}
 
@@ -76,6 +81,7 @@ describe "requests" do
           end
 
           it "update description succeeds", :vcr do
+            skip("not testing admin functions")
             tenant = service.create_tenant({'name' => "azahabada#{Time.now.to_i}"})
             description = {'description' => "new-description#{Time.now.to_i}"}
 
@@ -84,6 +90,7 @@ describe "requests" do
           end
 
           it "update enabled succeeds", :vcr do
+            skip("not testing admin functions")
             tenant = service.create_tenant({'name' => "azahabada#{Time.now.to_i}"})
             enabled = {'enabled' => false}
 
@@ -94,6 +101,7 @@ describe "requests" do
 
         describe "when the tenant doesnt exist" do
           it "returns not found error", :vcr do
+            skip("not testing admin functions")
             name = {'name' => "new-name#{Time.now.to_i}"}
             proc {
               service.update_tenant('bogus-tenant-id', name)
@@ -105,6 +113,7 @@ describe "requests" do
       describe "#delete_tenant" do
 
         it "when tenand id specified", :vcr do
+          skip("not testing admin functions")
           tenant = service.create_tenant({'name' => "azahabada#{Time.now.to_i}"})
           result = service.delete_tenant(tenant.body['tenant']['id'])
           [200, 204].must_include result.status
@@ -232,7 +241,10 @@ describe "requests" do
 
       describe "#add_role_to_user_on_tenant" do
 
-        let(:role_response) { service.create_role("azahabada#{Time.now.to_i}") }
+        let(:role_response) {
+          skip("not testing admin functions")
+          service.create_role("azahabada#{Time.now.to_i}")
+        }
 
         it "when valid tenant, user, and role specified", :vcr do
           tenant_id = service.list_tenants.body['tenants'].first['id']
@@ -247,7 +259,10 @@ describe "requests" do
 
       describe "#delete_role_from_user_on_tenant" do
 
-        let(:role_response) { service.create_role("azahabada#{Time.now.to_i}") }
+        let(:role_response) {
+          skip("not testing admin functions")
+          service.create_role("azahabada#{Time.now.to_i}")
+        }
 
         it "when valid tenant, user, and role specified", :vcr do
           tenant_id = service.list_tenants.body['tenants'].first['id']
