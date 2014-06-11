@@ -11,7 +11,7 @@ require 'fog/openstackcore/services/identity_v2'
 describe "requests" do
   describe "compute_v2" do
     describe "metadata operations", :vcr do
-      let(:service){ compute_v2_service }
+      let(:service){ compute_v2_service(true) }
 
       Minitest.after_run do
         self.after_run

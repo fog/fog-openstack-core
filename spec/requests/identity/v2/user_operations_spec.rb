@@ -18,7 +18,6 @@ describe "requests" do
         let(:list) { service.list_users }
 
         it "returns proper status", :vcr do
-          skip("not testing admin functions")
           assert_includes([200, 204], list.status)
         end
       end
@@ -26,7 +25,6 @@ describe "requests" do
       describe "#create_user", :vcr do
 
         it "when correct params specified" do
-          skip("not testing admin functions")
           name = "jsmith#{Time.now.to_i}"
           password = "password!"
           tenant_id = service.list_tenants.body['tenants'].first['id']
@@ -35,6 +33,7 @@ describe "requests" do
 
           result = service.create_user(name, password, email, tenant_id, enabled)
           assert_includes([200, 201], result.status)
+          service.delete_user(result.body["user"]["id"])
         end
 
       end
@@ -42,7 +41,6 @@ describe "requests" do
       describe "#update_user", :vcr do
 
         before do
-          skip("not testing admin functions")
           name = "jsmith#{Time.now.to_i}"
           password = "password!"
           tenant_id = service.list_tenants.body['tenants'].first['id']
@@ -50,30 +48,31 @@ describe "requests" do
           enabled = true
           result = service.create_user(name, password, email, tenant_id, enabled)
           @user_id = result.body['user']['id']
+
+        end
+
+        after do
+          service.delete_user(@user_id)
         end
 
         describe "when updating" do
 
           it "name" do
-            skip("not testing admin functions")
             result = service.update_user(@user_id, { 'name' => "bob#{Time.now.to_i}"})
             result.status.must_equal 200
           end
 
           it "username" do
-            skip("not testing admin functions")
             result = service.update_user(@user_id, { 'username' => "bob#{Time.now.to_i}"})
             result.status.must_equal 200
           end
 
           it "enabled" do
-            skip("not testing admin functions")
             result = service.update_user(@user_id, { 'enabled' => false })
             result.status.must_equal 200
           end
 
           it "email" do
-            skip("not testing admin functions")
             result = service.update_user(@user_id, { 'email' => "larry-#{Time.now.to_i}@acme.com"})
             result.status.must_equal 200
           end
@@ -83,7 +82,6 @@ describe "requests" do
         describe "readonly attribs" do
 
           it "when updating tenant_id" do
-            skip("not testing admin functions")
             proc {
               service.update_user(@user_id, { 'tenant_id' => "dummy-tenantId"})
             }.must_raise Fog::OpenStackCore::Errors::NotFound
@@ -100,7 +98,6 @@ describe "requests" do
       describe "#get_user_by_name" do
 
         it "when valid username specified", :vcr do
-          skip("not testing admin functions")
           user_list = service.list_users
           valid_user_name = user_list.body['users'].first["username"]
           result = service.get_user_by_name(valid_user_name)
@@ -108,7 +105,6 @@ describe "requests" do
         end
 
         it "when invalid username specified", :vcr do
-          skip("not testing admin functions")
           proc {
             service.get_user_by_name("nonexistentuser12345")
           }.must_raise Fog::OpenStackCore::Errors::NotFound
@@ -119,7 +115,6 @@ describe "requests" do
       describe "#get_user_by_id" do
 
         it "when valid user id specifid", :vcr do
-          skip("not testing admin functions")
           valid_user_id = service.list_users.body['users'].first["id"]
           result = service.get_user_by_id(valid_user_id)
           result.status.must_equal 200
@@ -135,7 +130,6 @@ describe "requests" do
 
       describe "#delete_user" do
         before do
-          skip("not testing admin functions")
           name = "jsmith#{Time.now.to_i}"
           password = "password!"
           tenant_id = service.list_tenants.body['tenants'].first['id']
@@ -146,7 +140,6 @@ describe "requests" do
         end
 
         it "when valid user id specified", :vcr do
-          skip("not testing admin functions")
           result = service.delete_user(@user_id)
           result.status.must_equal 204
         end
@@ -155,30 +148,32 @@ describe "requests" do
           proc {
             service.delete_user("1234567890")
           }.must_raise Fog::OpenStackCore::Errors::NotFound
+          service.delete_user(@user_id)
         end
       end
 
       describe "#enable_user" do
         before do
-          skip("not testing admin functions")
           name = "jsmith#{Time.now.to_i}"
           password = "password!"
           tenant_id = service.list_tenants.body['tenants'].first['id']
           email = "jsmith#{Time.now.to_i}@acme.com"
           enabled = false
           result = service.create_user(name, password, email, tenant_id, enabled)
-          @user_id = result.body['user']['id']
+          @enable_user_id = result.body['user']['id']
+        end
+
+        after do
+          service.delete_user(@enable_user_id)
         end
 
         it "when valid user id specified", :vcr do
-          skip("not testing admin functions")
-          result = service.enable_user(@user_id, true)
+          result = service.enable_user(@enable_user_id, true)
           [200, 204].must_include result.status
         end
 
         it "when valid user id specified", :vcr do
-          skip("not testing admin functions")
-          result = service.enable_user(@user_id, false)
+          result = service.enable_user(@enable_user_id, false)
           [200, 204].must_include result.status
         end
 
