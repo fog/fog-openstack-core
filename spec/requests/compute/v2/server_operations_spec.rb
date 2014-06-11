@@ -40,7 +40,7 @@ describe "requests" do
 
         describe "#delete_server" do
 
-          let(:server_id) { create_server.body["server"][:id] }
+          let(:server_id) { create_server.body["server"]['id'] }
 
           it "deletes a server instance", :vcr do
             result = service.delete_server(server_id)
