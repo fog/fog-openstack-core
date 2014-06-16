@@ -18,19 +18,23 @@ describe "requests" do
       end
 
       def self.after_run
-        VCR.use_cassette('delete') do
-          compute_v2_service.delete_server($created_server) if $created_server
+        VCR.use_cassette('requests/compute_v2/metadata_operations/server_delete') do
+          compute_v2_service.delete_server(TestContext.nova_server) if TestContext.nova_server
+          TestContext.reset_context
         end
       end
 
 
       def self.created_server
-        $created_server ||= begin
-                              #only fires once
+        #cache the nova instance so it isnt continually being created
+        TestContext.nova_server do
+          #only fires once
 
           flavors  = compute_v2_service.list_flavors
           images   = compute_v2_service.list_images
-          server   = compute_v2_service.create_server("#{Time.now.to_i}server", flavors.body["flavors"].first["id"], images.body["images"].first["id"]).body["server"]["id"]
+          server   = compute_v2_service.create_server("#{Time.now.to_i}server",
+                                                      flavors.body["flavors"].first["id"],
+                                                      images.body["images"].first["id"]).body["server"]["id"]
           #loop until ready
           begin
             tries = 7
@@ -51,7 +55,6 @@ describe "requests" do
               end
             end
           end
-
           server
         end
       end
@@ -60,8 +63,8 @@ describe "requests" do
         #return the active servers
         puts "checking active state of server #{server_id}"
         response   = compute_v2_service.list_servers(:status => "ACTIVE")
-        active_ids = response.body["servers"].map { |s| s["id"] }
-        unless active_ids.select { |item| item == server_id }.empty?
+        active_ids = response.body["servers"].find { |s| s["id"] }
+        if active_ids
           return true
         end
         false

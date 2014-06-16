@@ -23,3 +23,22 @@ MinitestVcr::Spec.configure!
 Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
 
 # VCR.turn_off!(:ignore_cassettes => true)
+
+class TestContext
+ class << self
+   #@param server_builder proc which
+   def nova_server(reset = false)
+      if reset
+        @nova_server = yield
+        return @nova_server
+      end
+      @nova_server ||=  yield
+   end
+
+   def reset_context
+     @nova_server = nil
+   end
+
+
+ end
+end
