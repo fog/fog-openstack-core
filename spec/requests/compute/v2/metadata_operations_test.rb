@@ -11,7 +11,7 @@ require 'fog/openstackcore/services/identity_v2'
 describe "requests" do
   describe "compute_v2" do
     describe "metadata operations", :vcr do
-      let(:service){ compute_v2_service(true) }
+      let(:service){ compute_v2_service }
 
       Minitest.after_run do
         self.after_run
@@ -19,7 +19,8 @@ describe "requests" do
 
       def self.after_run
         VCR.use_cassette('requests/compute_v2/metadata_operations/server_delete') do
-          compute_v2_service.delete_server(TestContext.nova_server) if TestContext.nova_server
+          puts "cleaning up after server #{self.created_server}"
+          compute_v2_service.delete_server(self.created_server) if TestContext.nova_server
           TestContext.reset_context
         end
       end
@@ -63,8 +64,8 @@ describe "requests" do
         #return the active servers
         puts "checking active state of server #{server_id}"
         response   = compute_v2_service.list_servers(:status => "ACTIVE")
-        active_ids = response.body["servers"].find { |s| s["id"] }
-        if active_ids
+        active_ids = response.body["servers"].map { |s| s["id"] }
+        unless active_ids.select { |item| item == server_id }.empty?
           return true
         end
         false

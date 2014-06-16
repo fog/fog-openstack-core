@@ -9,17 +9,31 @@ describe TestContext do
       end
     end
 
-    it  "should be a singleton " do
+    describe "after being created" do
+      it "should not be created again " do
 
-      mock = MiniTest::Mock.new
-      mock.expect(:new,true)
+        mock = MiniTest::Mock.new
+        mock.expect(:new, true)
 
-      result_2 = TestContext.nova_server do
-        mock.new
+        result_2 = TestContext.nova_server do
+          mock.new
+        end
+
+        util_verify_not_called(mock, :new, true)
       end
 
-      util_verify_not_called(mock, :new,true)
+      it "should allow resetting context" do
+        TestContext.reset_context
+        mock = MiniTest::Mock.new
+        mock.expect(:new, true)
+        TestContext.nova_server do
+          mock.new
+        end
+        mock.verify
+      end
+
     end
+
 
     it "should allow non block calls" do
       result3 = TestContext.nova_server
@@ -35,15 +49,7 @@ describe TestContext do
       mock.verify
     end
 
-    it "should allow resetting context" do
-      TestContext.reset_context
-      mock = MiniTest::Mock.new
-      mock.expect(:new, true)
-      TestContext.nova_server do
-        mock.new
-      end
-      mock.verify
-    end
+
 
 
   end

@@ -32,7 +32,8 @@ class TestContext
         @nova_server = yield
         return @nova_server
       end
-      @nova_server ||=  yield
+      return @nova_server if @nova_server
+      @nova_server =  yield
    end
 
    def reset_context
