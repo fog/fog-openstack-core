@@ -3,12 +3,12 @@ module SpecHelpers
 
   def admin_options_hash()
     {
-      :openstack_auth_url => ENV['OS_AUTH_URL'] || "http://15.126.201.211:5000",
+      :openstack_auth_url => ENV['OS_AUTH_URL'] || "http://devstack.local:5000",
       :openstack_username => ENV['OS_ADMIN_USER'] || "admin",
       :openstack_api_key => ENV['OS_ADMIN_API_KEY'] || "stack",
       :openstack_tenant =>  ENV['OS_ADMIN_TENANT'] || "admin",
       :openstack_region => ENV['OS_REGION'] || "RegionOne"
-      #"{:connection_options => {:proxy => 'http://localhost:8888'}}"
+      #:connection_options => {:proxy => 'http://localhost:8888'}
     }
   end
 
@@ -16,7 +16,7 @@ module SpecHelpers
 
   def non_admin_options_hash
     {
-      :openstack_auth_url => ENV['OS_AUTH_URL'] || "http://15.126.201.211:5000",
+      :openstack_auth_url => ENV['OS_AUTH_URL'] || "http://devstack.local:5000",
       :openstack_username => ENV['OS_USER'] || "demo",
       :openstack_api_key => ENV['OS_API_KEY'] || "stack",
       :openstack_tenant =>  ENV['OS_TENANT'] || "demo",
@@ -27,7 +27,7 @@ module SpecHelpers
 
   def token_options_hash
     {
-      :openstack_auth_url => ENV['OS_AUTH_URL'] || "http://15.126.201.211:5000",
+      :openstack_auth_url => ENV['OS_AUTH_URL'] || "http://devstack.local:5000",
       :openstack_tenant =>  ENV['OS_ADMIN_TENANT'] || "admin",
       :openstack_region => ENV['OS_REGION'] || "RegionOne",
       :openstack_auth_token => nil
@@ -37,7 +37,7 @@ module SpecHelpers
 
   def non_tenant_options_hash
     {
-      :openstack_auth_url => ENV['OS_AUTH_URL'] ||"http://15.126.201.211:5000",
+      :openstack_auth_url => ENV['OS_AUTH_URL'] || "http://devstack.local:5000",
       :openstack_username => ENV['OS_USER'] || "demo",
       :openstack_api_key => ENV['OS_API_KEY'] || "stack",
       :openstack_region => ENV['OS_REGION'] || "RegionOne"

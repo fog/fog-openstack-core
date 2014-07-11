@@ -10,15 +10,9 @@ describe "requests" do
   describe "compute_v2" do
     describe "flavor operations" do
 
-      let(:admin_options) { admin_options_hash }
+      let(:non_admin_options) { non_admin_options_hash }
 
-      let(:identity) { Fog::OpenStackCore::IdentityV2.new(admin_options) }
-
-      let(:tenant_id) {
-        data = identity.get_tenants_by_name(admin_options_hash[:openstack_tenant])
-        data.body['tenant']['id']
-      }
-      let(:service) { Fog::OpenStackCore::ComputeV2.new(admin_options) }
+      let(:service) { Fog::OpenStackCore::ComputeV2.new(non_admin_options) }
 
       describe "#list_flavors" do
 
