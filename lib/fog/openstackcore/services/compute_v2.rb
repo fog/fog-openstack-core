@@ -14,11 +14,6 @@ module Fog
 
       # Server CRUD
       request :list_servers
-      request :create_server
-      request :delete_server
-
-      # Flavors
-      request :list_flavors
 
       # Images
       request :list_images

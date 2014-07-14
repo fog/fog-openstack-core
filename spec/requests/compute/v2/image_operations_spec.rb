@@ -14,11 +14,6 @@ describe "requests" do
 
       let(:identity) { Fog::OpenStackCore::IdentityV2.new(demo_options) }
 
-      let(:tenant_id) {
-        data = identity.get_tenants_by_name(admin_options_hash[:openstack_tenant])
-        data.body['tenant']['id']
-      }
-
       let(:service) { Fog::OpenStackCore::ComputeV2.new(demo_options) }
 
       describe "#list_images" do
