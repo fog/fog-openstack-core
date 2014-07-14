@@ -59,7 +59,6 @@ describe "requests" do
             describe "#associate_address", :vcr do
               #needs a server and an address
               before do
-
                 @floater = @allocated.body["floating_ip"]["ip"]
                 @associate = service.associate_address(@server, @floater)
               end
