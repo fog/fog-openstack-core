@@ -26,10 +26,6 @@ module Fog
       #Addressess
       request :list_addresses
 
-      #Networks
-      request :list_networks
-
-
       class Mock
         def initialize(params); end
       end
