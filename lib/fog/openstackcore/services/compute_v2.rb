@@ -12,17 +12,6 @@ module Fog
 
       request_path 'fog/openstackcore/requests/compute/v2'
 
-      # Server CRUD
-      request :list_servers
-      request :create_server
-      request :delete_server
-
-      # Flavors
-      request :list_flavors
-
-      # Images
-      request :list_images
-
       #Security Group
       request :list_security_groups
       request :get_security_group
