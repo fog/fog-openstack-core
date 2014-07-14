@@ -23,7 +23,6 @@ module Fog
 
       # Images
       request :list_images
-      request :list_image_details
 
       #Console
       request :server_action

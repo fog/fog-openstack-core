@@ -34,6 +34,7 @@ describe "requests" do
           let(:server) { @create }
 
           it "returns proper status", :vcr do
+            #TODO put in stateful code
             assert_raises(Fog::OpenStackCore::Conflict, "Server was ready" ) do
               service.get_console_output(server)
             end
@@ -46,6 +47,7 @@ describe "requests" do
           let(:server) { @create }
 
           it "returns proper status", :vcr do
+            #TODO put in stateful code
             assert_raises(Fog::OpenStackCore::Conflict, "Server was ready") do
               service.get_vnc_console(server)
             end
