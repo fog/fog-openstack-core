@@ -12,36 +12,6 @@ module Fog
 
       request_path 'fog/openstackcore/requests/compute/v2'
 
-      # Server CRUD
-      request :list_servers
-      request :create_server
-      request :delete_server
-
-      # Flavors
-      request :list_flavors
-
-      # Images
-      request :list_images
-
-      #Addresses
-      request :list_addresses
-
-      #Server Admin
-      request :add_security_group
-      request :remove_security_group
-      request :associate_address
-      request :list_floating_ips
-      request :reboot_server
-      request :rebuild_server
-      request :allocate_address
-      request :deallocate_address
-      request :disassociate_address
-
-      #Security Groups
-      request :create_security_group
-      request :delete_security_group
-
-
       #Limits
       request :list_limits
 
