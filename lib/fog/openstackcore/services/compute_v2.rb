@@ -12,6 +12,13 @@ module Fog
 
       request_path 'fog/openstackcore/requests/compute/v2'
 
+      #Security Group
+      request :list_security_groups
+      request :get_security_group
+      request :create_security_group
+      request :delete_security_group
+      request :create_security_group_rule
+      request :delete_security_group_rule
       # Server CRUD
       request :list_servers
       #Limits
