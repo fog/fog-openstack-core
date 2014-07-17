@@ -12,17 +12,12 @@ module Fog
 
       request_path 'fog/openstackcore/requests/compute/v2'
 
-      #KeyPairs
-      request :list_keypairs
-      request :get_keypair
-      request :create_keypair
-      request :delete_keypair
+      #Limits
+      request :list_limits
 
 
       request :server_action
 
-      #Addressess
-      request :list_addresses
 
       class Mock
         def initialize(params); end
