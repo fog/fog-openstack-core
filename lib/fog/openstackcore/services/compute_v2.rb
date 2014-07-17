@@ -14,10 +14,14 @@ module Fog
 
       # Server CRUD
       request :list_servers
+      #Limits
+      request :list_limits
 
       # Images
       request :list_images
       request :list_image_details
+
+      request :server_action
 
 
       class Mock

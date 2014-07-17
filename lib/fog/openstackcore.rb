@@ -14,3 +14,4 @@ require 'fog/openstackcore/storage'
 
 # MISC
 require 'multi_json'
+require 'fog/json'
