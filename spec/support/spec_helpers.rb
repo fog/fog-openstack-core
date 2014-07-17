@@ -42,4 +42,16 @@ module SpecHelpers
     }
   end
 
+  def demo_options_hash(proxy = false)
+    creds = non_admin_options_hash
+    if proxy
+      creds.merge!(:connection_options => proxy_options)
+    end
+    creds
+  end
+
+  def proxy_options(host="localhost", port="8888")
+    {:proxy => "http://#{host}:#{port}"}
+  end
+
 end

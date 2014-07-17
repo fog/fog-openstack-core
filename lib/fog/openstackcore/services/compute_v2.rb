@@ -23,6 +23,8 @@ module Fog
       # Images
       request :list_images
 
+      #Addressess
+      request :list_addresses
 
       class Mock
         def initialize(params); end
