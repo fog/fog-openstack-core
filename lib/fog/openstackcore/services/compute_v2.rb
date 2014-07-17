@@ -21,6 +21,8 @@ module Fog
 
       request :server_action
 
+      #Addressess
+      request :list_addresses
 
       class Mock
         def initialize(params); end
