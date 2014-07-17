@@ -28,8 +28,10 @@ module Fog
       request :list_images
       request :list_image_details
 
-      request :server_action
+      #Addresses
+      request :list_addresses
 
+      request :server_action
 
       class Mock
         def initialize(params); end
