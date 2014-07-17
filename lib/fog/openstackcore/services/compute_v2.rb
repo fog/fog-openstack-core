@@ -12,16 +12,14 @@ module Fog
 
       request_path 'fog/openstackcore/requests/compute/v2'
 
-      # Server CRUD
-      request :list_servers
-      request :create_server
-      request :delete_server
+      #KeyPairs
+      request :list_keypairs
+      request :get_keypair
+      request :create_keypair
+      request :delete_keypair
 
-      # Flavors
-      request :list_flavors
 
-      # Images
-      request :list_images
+      request :server_action
 
       #Addressess
       request :list_addresses
