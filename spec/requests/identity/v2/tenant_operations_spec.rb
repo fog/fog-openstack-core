@@ -18,9 +18,9 @@ describe "requests" do
       describe "#create_tenant" do
 
         describe "when a unique name specified", :vcr do
-
+          let(:tenant_name) { "azahabada#{Time.now.to_i}"}
           let(:result) {
-            service.create_tenant({'name' => "azahabada#{Time.now.to_i}"})
+            service.create_tenant({'name' => tenant_name})
           }
 
           it "returns the proper status" do
@@ -29,6 +29,10 @@ describe "requests" do
 
           it "returns valid tenant" do
             result.body['tenant'].wont_be_nil
+          end
+
+          after do
+            service.delete_tenant(result.body["tenant"]["id"])
           end
         end
 
@@ -66,9 +70,13 @@ describe "requests" do
 
       describe "#update_tenant" do
         describe "when the tenant exists" do
+          let(:tenant_name) { "azahabada#{Time.now.to_i}" }
+          let (:tenant) { service.create_tenant({'name' => tenant_name})}
+          after do
+            service.delete_tenant(tenant.body["tenant"]["id"])
+          end
 
           it "update name succeeds", :vcr do
-            tenant = service.create_tenant({'name' => "azahabada#{Time.now.to_i}"})
             name = {'name' => "new-name#{Time.now.to_i}"}
 
             result = service.update_tenant(tenant.body['tenant']['id'], name)
@@ -76,7 +84,6 @@ describe "requests" do
           end
 
           it "update description succeeds", :vcr do
-            tenant = service.create_tenant({'name' => "azahabada#{Time.now.to_i}"})
             description = {'description' => "new-description#{Time.now.to_i}"}
 
             result = service.update_tenant(tenant.body['tenant']['id'], description)
@@ -84,7 +91,6 @@ describe "requests" do
           end
 
           it "update enabled succeeds", :vcr do
-            tenant = service.create_tenant({'name' => "azahabada#{Time.now.to_i}"})
             enabled = {'enabled' => false}
 
             result = service.update_tenant(tenant.body['tenant']['id'], enabled)
@@ -231,23 +237,32 @@ describe "requests" do
       end
 
       describe "#add_role_to_user_on_tenant" do
+        let(:role_name) { "azahabada#{Time.now.to_i}"}
 
-        let(:role_response) { service.create_role("azahabada#{Time.now.to_i}") }
+        before do
+           @role_response = service.create_role(role_name)
+        end
 
         it "when valid tenant, user, and role specified", :vcr do
           tenant_id = service.list_tenants.body['tenants'].first['id']
           user_id = service.list_users.body['users'].first['id']
-          role_id = role_response[:body]['role']['id']
+          role_id = @role_response[:body]['role']['id']
 
           result = service.add_role_to_user_on_tenant(tenant_id, user_id, role_id)
           [200, 201].must_include result.status
+        end
+
+        after do
+          service.delete_role(@role_response[:body]['role']['id'])
         end
 
       end
 
       describe "#delete_role_from_user_on_tenant" do
 
-        let(:role_response) { service.create_role("azahabada#{Time.now.to_i}") }
+        let(:role_response) {
+          service.create_role("azahabada#{Time.now.to_i}")
+        }
 
         it "when valid tenant, user, and role specified", :vcr do
           tenant_id = service.list_tenants.body['tenants'].first['id']
