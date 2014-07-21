@@ -11,7 +11,9 @@ require 'fog/openstackcore/services/identity_v2'
 describe "requests" do
   describe "compute_v2" do
     describe "metadata operations", :vcr do
-      let(:service){ compute_v2_service }
+      let(:demo_options) { demo_options_hash }
+
+      let(:service) { Fog::OpenStackCore::ComputeV2.new(demo_options) }
 
       Minitest.after_run do
         self.after_run
@@ -20,7 +22,7 @@ describe "requests" do
       def self.after_run
         VCR.use_cassette('requests/compute_v2/metadata_operations/server_delete') do
           puts "cleaning up after server #{self.created_server}"
-          compute_v2_service.delete_server(self.created_server) if TestContext.nova_server
+          TestContext.service.delete_server(self.created_server) if TestContext.nova_server
           TestContext.reset_context
         end
       end
@@ -30,10 +32,12 @@ describe "requests" do
         #cache the nova instance so it isnt continually being created
         TestContext.nova_server do
           #only fires once
-
-          flavors  = compute_v2_service.list_flavors
-          images   = compute_v2_service.list_images
-          server   = compute_v2_service.create_server("#{Time.now.to_i}server",
+          TestContext.service do
+            Fog::OpenStackCore::ComputeV2.new(demo_options_hash)
+          end
+          flavors  = TestContext.service.list_flavors
+          images   = TestContext.service.list_images
+          server   = TestContext.service.create_server("#{Time.now.to_i}server",
                                                       flavors.body["flavors"].first["id"],
                                                       images.body["images"].first["id"]).body["server"]["id"]
           #loop until ready
@@ -63,7 +67,7 @@ describe "requests" do
       def self.query_active(server_id)
         #return the active servers
         puts "checking active state of server #{server_id}"
-        response   = compute_v2_service.list_servers(:status => "ACTIVE")
+        response   = TestContext.service.list_servers(:status => "ACTIVE")
         active_ids = response.body["servers"].map { |s| s["id"] }
         unless active_ids.select { |item| item == server_id }.empty?
           return true
