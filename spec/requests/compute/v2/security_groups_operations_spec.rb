@@ -10,7 +10,7 @@ describe "requests" do
   describe "compute_v2" do
     describe "security group operations" do
 
-      let(:demo_options) { demo_options_hash(true) }
+      let(:demo_options) { demo_options_hash }
 
       let(:service) { Fog::OpenStackCore::ComputeV2.new(demo_options) }
 

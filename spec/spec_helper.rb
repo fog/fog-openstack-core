@@ -36,6 +36,11 @@ class TestContext
       @nova_server = yield
     end
 
+    def service
+      return @service if @service
+      @service = yield
+    end
+
     def reset_context
       @nova_server = nil
     end

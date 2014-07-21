@@ -19,8 +19,21 @@ module Fog
       request :delete_security_group
       request :create_security_group_rule
       request :delete_security_group_rule
+
       # Server CRUD
       request :list_servers
+      request :create_server
+      request :delete_server
+
+      #Flavors
+      request :list_flavors
+
+      #Keypairs
+      request :create_keypair
+      request :delete_keypair
+      request :list_keypairs
+      request :get_keypair
+
       #Limits
       request :list_limits
 
@@ -30,7 +43,6 @@ module Fog
 
       #Addresses
       request :list_addresses
-
       request :server_action
 
       class Mock
