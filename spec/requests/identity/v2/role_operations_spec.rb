@@ -18,16 +18,22 @@ describe "requests" do
 
       describe "#create_role", :vcr do
 
-        let(:result) { service.create_role("azahabada#{Time.now.to_i}") }
+        before do
+          @result = service.create_role("azahabada#{Time.now.to_i}")
+        end
+
+        after do
+          service.delete_role(@result.body["role"]["id"])
+        end
 
         describe "with a unique name" do
 
           it "returns success" do
-            result.status.must_equal 200
+            @result.status.must_equal 200
           end
 
           it "returns valid data" do
-            result.body['role'].wont_be_nil
+            @result.body['role'].wont_be_nil
           end
 
         end
@@ -41,6 +47,7 @@ describe "requests" do
             temp_role = service.create_role("azahabada#{Time.now.to_i}")
             result = service.get_role(temp_role.body['role']['id'])
             [200, 204].must_include result.status
+            service.delete_role(temp_role.body["role"]["id"])
           end
         end
 
@@ -66,6 +73,7 @@ describe "requests" do
 
         describe "when the role doesnt exist" do
           it "returns not found error", :vcr do
+            skip("not testing admin functions")
             proc {
               service.delete_role("nonexistentrole12345")
             }.must_raise Fog::OpenStackCore::Errors::NotFound

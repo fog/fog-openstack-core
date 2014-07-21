@@ -41,6 +41,7 @@ module Fog
       # Images
       request :list_images
 
+<<<<<<< HEAD
       #Server Metadata
       request :show_server_metadata
       request :show_server_metadata_for_key
@@ -48,6 +49,7 @@ module Fog
       request :create_or_replace_server_metadata
       request :update_server_metadata
 
+=======
       #Console
       request :server_action
       request :get_console_output
@@ -55,7 +57,7 @@ module Fog
       #Addresses
       request :list_addresses
       request :server_action
-
+>>>>>>> master
 
       class Mock
         def initialize(params); end

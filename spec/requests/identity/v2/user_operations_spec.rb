@@ -33,6 +33,7 @@ describe "requests" do
 
           result = service.create_user(name, password, email, tenant_id, enabled)
           assert_includes([200, 201], result.status)
+          service.delete_user(result.body["user"]["id"])
         end
 
       end
@@ -47,6 +48,11 @@ describe "requests" do
           enabled = true
           result = service.create_user(name, password, email, tenant_id, enabled)
           @user_id = result.body['user']['id']
+
+        end
+
+        after do
+          service.delete_user(@user_id)
         end
 
         describe "when updating" do
@@ -142,6 +148,7 @@ describe "requests" do
           proc {
             service.delete_user("1234567890")
           }.must_raise Fog::OpenStackCore::Errors::NotFound
+          service.delete_user(@user_id)
         end
       end
 
@@ -153,16 +160,20 @@ describe "requests" do
           email = "jsmith#{Time.now.to_i}@acme.com"
           enabled = false
           result = service.create_user(name, password, email, tenant_id, enabled)
-          @user_id = result.body['user']['id']
+          @enable_user_id = result.body['user']['id']
+        end
+
+        after do
+          service.delete_user(@enable_user_id)
         end
 
         it "when valid user id specified", :vcr do
-          result = service.enable_user(@user_id, true)
+          result = service.enable_user(@enable_user_id, true)
           [200, 204].must_include result.status
         end
 
         it "when valid user id specified", :vcr do
-          result = service.enable_user(@user_id, false)
+          result = service.enable_user(@enable_user_id, false)
           [200, 204].must_include result.status
         end
 
