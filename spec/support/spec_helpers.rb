@@ -7,7 +7,7 @@ module SpecHelpers
       :openstack_api_key => ENV['OS_ADMIN_API_KEY'] || "stack",
       :openstack_tenant =>  ENV['OS_ADMIN_TENANT'] || "admin",
       :openstack_region => ENV['OS_REGION'] || "regionone"
-      # :connection_options => {:proxy => 'http://localhost:8888'}
+      #:connection_options => {:proxy => 'http://localhost:8888'}
     }
   end
 
