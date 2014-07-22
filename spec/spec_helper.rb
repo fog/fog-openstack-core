@@ -46,5 +46,36 @@ class TestContext
     end
 
 
+
   end
 end
+
+def wait_for_server(service, server)
+  #loop until ready
+  begin
+    tries = 7
+    begin
+      if  service.get_server_details(server).body["server"]["status"] == "ACTIVE"
+        puts "Server is UP!"
+      else
+        raise "Server Not Active Yet"
+      end
+    rescue Exception => e
+      tries -= 1
+      puts "Server Not Ready"
+      if tries > 0
+        sleep(10)
+        retry
+      else
+        exit(1)
+      end
+    end
+  end
+end
+
+def locate_bootable_image(service)
+  images = service.list_images
+  image_filtered = images.body["images"].collect { |img| [img["id"], img["name"]] }
+  image_id       = image_filtered.select { |img| img[1] =~ /\Acirros/ }.first[0]
+end
+

@@ -36,43 +36,13 @@ describe "requests" do
             Fog::OpenStackCore::ComputeV2.new(demo_options_hash)
           end
           flavors = TestContext.service.list_flavors
-          images  = TestContext.service.list_images
-          server  = TestContext.service.create_server("#{Time.now.to_i}server",
-                                                      flavors.body["flavors"].first["id"],
-                                                      images.body["images"].first["id"]).body["server"]["id"]
-          #loop until ready
-          begin
-            tries = 7
-            begin
-              if self.query_active(server)
-                puts "Server is UP!"
-              else
-                raise "Server Not Active Yet"
-              end
-            rescue Exception => e
-              tries -= 1
-              puts "Server Not Ready"
-              if tries > 0
-                sleep(10)
-                retry
-              else
-                exit(1)
-              end
-            end
-          end
+          image_id = locate_bootable_image(TestContext.service)
+          server   = TestContext.service.create_server("#{Time.now.to_i}server",
+                                                       flavors.body["flavors"].first["id"],
+                                                       image_id).body["server"]["id"]
+          wait_for_server(TestContext.service, server)
           server
         end
-      end
-
-      def self.query_active(server_id)
-        #return the active servers
-        puts "checking active state of server #{server_id}"
-        response   = TestContext.service.list_servers(:status => "ACTIVE")
-        active_ids = response.body["servers"].map { |s| s["id"] }
-        unless active_ids.select { |item| item == server_id }.empty?
-          return true
-        end
-        false
       end
 
       let(:server) {

@@ -20,11 +20,14 @@ module Fog
       request :delete_security_group
       request :create_security_group_rule
       request :delete_security_group_rule
+      request :add_security_group
+      request :remove_security_group
 
       # Server CRUD
       request :list_servers
       request :create_server
       request :delete_server
+      request :get_server_details
 
       #Flavors
       request :list_flavors
@@ -52,9 +55,22 @@ module Fog
       request :server_action
       request :get_console_output
       request :get_vnc_console
+
+
       #Addresses
       request :list_addresses
+      request :allocate_address
+      request :deallocate_address
+      request :associate_address
+      request :list_floating_ips
+      request :disassociate_address
+
       request :server_action
+
+
+      #Server Admin
+      request :reboot_server
+      request :rebuild_server
 
 
       class Mock

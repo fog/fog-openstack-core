@@ -11,9 +11,6 @@ require 'fog/openstackcore/services/identity_v2'
 describe "requests" do
   describe "compute_v2" do
     describe "metadata operations", :vcr do
-      let(:demo_options) { demo_options_hash }
-
-      let(:service) { Fog::OpenStackCore::ComputeV2.new(demo_options) }
 
       Minitest.after_run do
         self.after_run
@@ -27,57 +24,38 @@ describe "requests" do
         end
       end
 
-
       def self.created_server
         #cache the nova instance so it isnt continually being created
-        TestContext.nova_server do
-          #only fires once
-          TestContext.service do
-            Fog::OpenStackCore::ComputeV2.new(demo_options_hash)
-          end
-          flavors  = TestContext.service.list_flavors
-          images   = TestContext.service.list_images
-          server   = TestContext.service.create_server("#{Time.now.to_i}server",
-                                                      flavors.body["flavors"].first["id"],
-                                                      images.body["images"].first["id"]).body["server"]["id"]
-          #loop until ready
-          begin
-            tries = 7
-            begin
-              if self.query_active(server)
-                puts "Server is UP!"
-              else
-                raise "Server Not Active Yet"
-              end
-            rescue Exception => e
-              tries -= 1
-              puts "Server Not Ready"
-              if tries > 0
-                sleep(10)
-                retry
-              else
-                exit(1)
-              end
-            end
-          end
-          server
-        end
-      end
+        semaphore = Mutex.new
 
-      def self.query_active(server_id)
-        #return the active servers
-        puts "checking active state of server #{server_id}"
-        response   = TestContext.service.list_servers(:status => "ACTIVE")
-        active_ids = response.body["servers"].map { |s| s["id"] }
-        unless active_ids.select { |item| item == server_id }.empty?
-          return true
-        end
-        false
+        semaphore.synchronize {
+          TestContext.nova_server do
+            #only fires once
+            TestContext.service do
+              Fog::OpenStackCore::ComputeV2.new(demo_options_hash)
+            end
+            flavors = TestContext.service.list_flavors
+            image_id = locate_bootable_image(TestContext.service)
+            server   = TestContext.service.create_server("#{Time.now.to_i}server",
+                                                         flavors.body["flavors"].first["id"],
+                                                         image_id).body["server"]["id"]
+            #loop until ready
+            wait_for_server(TestContext.service, server)
+            server
+          end
+
+        }
+
       end
 
       let(:server) {
         self.class.created_server
       }
+
+
+      let(:service) { TestContext.service }
+
+
       it "exists" do
         refute_nil(server)
       end

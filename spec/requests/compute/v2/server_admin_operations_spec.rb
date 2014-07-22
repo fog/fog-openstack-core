@@ -10,18 +10,13 @@ describe "requests" do
   describe "compute_v2" do
     describe "server admin operations" do
 
-      #TODO make stateful
-
-      let(:demo_options) { demo_options_hash(false) }
-      let(:service) { Fog::OpenStackCore::ComputeV2.new(demo_options) }
-      let(:servers) { service.list_servers.body["servers"] }
 
       Minitest.after_run do
         self.after_run
       end
 
       def self.after_run
-        VCR.use_cassette('requests/compute_v2/admin_operations/server_delete') do
+        VCR.use_cassette('requests/compute_v2/server_admin_operations/server_delete') do
           puts "cleaning up after server #{self.created_server}"
           TestContext.service.delete_server(self.created_server) if TestContext.nova_server
           TestContext.reset_context
@@ -30,58 +25,37 @@ describe "requests" do
 
       def self.created_server
         #cache the nova instance so it isnt continually being created
-        TestContext.nova_server do
-          #only fires once
-          TestContext.service do
-            Fog::OpenStackCore::ComputeV2.new(demo_options_hash)
-          end
-          flavors = TestContext.service.list_flavors
-          images  = TestContext.service.list_images
-          server  = TestContext.service.create_server("#{Time.now.to_i}server",
-                                                      flavors.body["flavors"].first["id"],
-                                                      images.body["images"].first["id"]).body["server"]["id"]
-          #loop until ready
-          begin
-            tries = 7
-            begin
-              if self.query_active(server)
-                puts "Server is UP!"
-              else
-                raise "Server Not Active Yet"
-              end
-            rescue Exception => e
-              tries -= 1
-              puts "Server Not Ready"
-              if tries > 0
-                sleep(10)
-                retry
-              else
-                exit(1)
-              end
+        semaphore = Mutex.new
+        semaphore.synchronize {
+          TestContext.nova_server do
+            #only fires once
+            TestContext.service do
+              Fog::OpenStackCore::ComputeV2.new(demo_options_hash(true))
             end
+            flavors        = TestContext.service.list_flavors
+            image_id = locate_bootable_image(TestContext.service)
+            server   = TestContext.service.create_server("#{Time.now.to_i}server",
+                                                         flavors.body["flavors"].first["id"],
+                                                         image_id).body["server"]["id"]
+            #loop until ready
+            wait_for_server(TestContext.service,server)
+            server
           end
-          server
-        end
-      end
-
-      def self.query_active(server_id)
-        #return the active servers
-        puts "checking active state of server #{server_id}"
-        response   = TestContext.service.list_servers(:status => "ACTIVE")
-        active_ids = response.body["servers"].map { |s| s["id"] }
-        unless active_ids.select { |item| item == server_id }.empty?
-          return true
-        end
-        false
+        }
       end
 
       let(:server) {
         self.class.created_server
       }
+
+      let(:service) {
+        TestContext.service
+      }
+
+      let(:servers) { service.list_servers.body["servers"] }
       it "exists", :vcr do
         refute_nil(server)
       end
-
 
       describe "and you have a server" do
 
@@ -89,8 +63,8 @@ describe "requests" do
         let(:image_id) { service.list_images.body['images'].last['id'] }
         let(:create) { service.create_server(server_name, flavor_id, image_id) }
 
-
         describe '#allocate_floating_ips', :vcr do
+
           before do
             @allocated = service.allocate_address
           end
@@ -119,10 +93,9 @@ describe "requests" do
           describe "#associate_address", :vcr do
             #needs a server and an address
             before do
-              @floater = @allocated.body["floating_ip"]["ip"]
+              @floater   = @allocated.body["floating_ip"]["ip"]
               @associate = service.associate_address(server, @floater)
             end
-
 
             it "returns proper status" do
               assert_includes([202], @associate.status)
@@ -142,7 +115,6 @@ describe "requests" do
 
             end
 
-
           end
 
           after do
@@ -153,7 +125,7 @@ describe "requests" do
         describe '#deallocate_floating_ips', :vcr do
           before do
             @allocated2 = service.allocate_address
-            @dealloc = service.deallocate_address(@allocated2.body["floating_ip"]["id"])
+            @dealloc    = service.deallocate_address(@allocated2.body["floating_ip"]["id"])
           end
 
           it "returns a proper status" do
@@ -164,13 +136,12 @@ describe "requests" do
 
         describe '#add_security_group', :vcr do
           before do
-            name = "#{Time.now.to_i}security_group"
+            name        = "#{Time.now.to_i}security_group"
             @created_sg = service.create_security_group(:name => name, :description => "group for test")
             assert_includes([200], @created_sg.status)
           end
 
           let(:security_group) { @created_sg.body["security_group"]["name"] }
-          let(:server) { servers.first["id"] }
           let(:add) { service.add_security_group(server, security_group) }
 
 
@@ -179,7 +150,7 @@ describe "requests" do
             service.delete_security_group(@created_sg.body["security_group"]["id"])
           end
 
-          it "returns a proper status" do
+          it "returns a proper status for add" do
             assert_includes([202], add.status)
           end
 
@@ -196,19 +167,22 @@ describe "requests" do
 
 
         describe '#rebuild', :vcr do
-
-          let(:rebuild) { service.rebuild_server(server,{:metadata => "abcdef"}) }
+          let(:image_id) { service.list_images.body['images'].last['id'] }
 
           it "returns a proper status" do
-            skip("wait for server details call in process")
-            assert_includes([202], rebuild.status)
+
+           wait_for_server(service,server)
+
+           rebuild = service.rebuild_server(server, image_id, "my-rebuilt", {:metadata => "abcdef"})
+
+           assert_includes([202], rebuild.status)
           end
 
         end
 
         describe '#add_security_group', :vcr do
           before do
-            name = "#{Time.now.to_i}security_group"
+            name        = "#{Time.now.to_i}security_group"
             @created_sg = service.create_security_group(:name => name, :description => "group for test")
             assert_includes([200], @created_sg.status)
           end

@@ -23,7 +23,7 @@ describe "requests" do
       end
 
       describe "#create_keypairs" do
-        let(:create) { service.create_keypair("#{Time.now().to_i}keypair") }
+        let(:create) { service.create_keypair("#{Time.now().to_i}keypair-create") }
         it "should return the proper status" do
           assert_includes([200], list.status)
         end
@@ -38,7 +38,7 @@ describe "requests" do
       end
 
       describe "#get_keypair" do
-        let(:create) { service.create_keypair("#{Time.now().to_i}keypair") }
+        let(:create) { service.create_keypair("#{Time.now().to_i}keypair-get") }
         let(:get) { service.get_keypair(create.body["keypair"]["name"]) }
         it "should return the proper status" do
           assert_includes([200], get.status)
