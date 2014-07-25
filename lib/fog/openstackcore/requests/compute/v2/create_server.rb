@@ -108,10 +108,10 @@ module Fog
           }
 
           # assign security_groups on create if necessary
-          security_groups = options.delete('security_groups')
+          security_groups = params.delete('security_groups')
           if security_groups
             data['server']['security_groups'] = []
-            options['security_groups'].each do |sg|
+            security_groups.each do |sg|
               data['server']['security_groups'] << {
                 'name' => sg
               }
@@ -119,10 +119,10 @@ module Fog
           end
 
           # add capability to specify a network id while creating a server
-          networks = options.delete('networks')
+          networks = params.delete('networks')
           if networks
             data['server']['networks'] = []
-            options['networks'].each do |net_id|
+            networks.each do |net_id|
               data['server']['networks'] << {
                 'uuid' => net_id
               }
@@ -130,10 +130,10 @@ module Fog
           end
 
           # post create script(s) to run
-          personality = options.delete('personality')
+          personality = params.delete('personality')
           if personality
             data['server']['personality'] = []
-            options['personality'].each do |file|
+            personality.each do |file|
               data['server']['personality'] << {
                 'contents'  => Base64.encode64(file['contents']),
                 'path'      => file['path']
@@ -142,8 +142,8 @@ module Fog
           end
 
           # pick up any options not explicitly handled
-          options.select{|o| options[o]}.each do |key|
-            data['server'][key] = options[key]
+          params.each do |key,value|
+            data['server'][key] = value
           end
 
           request(

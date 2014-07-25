@@ -6,11 +6,9 @@
 module Fog
   module OpenStackCore
     class ServiceDiscovery
-      # ToDo - should be able to gather this from classname and remove this
-      BASE_PROVIDER = "Fog::OpenStackCore"
+       BASE_PROVIDER = "Fog::OpenStackCore"
 
-      # ToDo - This should be specific to service
-      DEFAULT_VERSION = "2"
+       DEFAULT_VERSION = "2"
 
       attr_accessor :service_identifier  # :identity, :compute, etc.
       attr_accessor :options  # passed in (params)
@@ -37,8 +35,7 @@ module Fog
       # * the version
       def initialize(provider_name, service, params = {})
 
-        # ToDo: This is a HACKY first cut to get this working...
-        # Order of precedence:
+         # Order of precedence:
         # - Use the version parameter, if available
         # - Use the version embedded in the url, if available
         # - Use the latest stable version available in the service catalog
@@ -83,9 +80,11 @@ module Fog
       def service_class_name
         return @class_name if @class_name
 
-        service_name = service_identifier.capitalize
+        service_name = Fog::OpenStackCore::Common.camel_case(service_identifier)
         @class_name = "#{provider.base_provider}::#{service_name}V#{version}"
       end
+
+
 
       def self.assert_namespace_of(klass)
         scope = klass.to_s.split(/::/)

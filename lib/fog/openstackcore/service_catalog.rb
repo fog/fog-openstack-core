@@ -18,12 +18,22 @@ module Fog
       end
 
       def get_endpoints(service_name, url_type=:public)
-        h = catalog.find {|service| service["name"] == service_name.to_s}
-        # puts "H --> #{h.to_yaml}"
-        return {} unless h
-        key = network_type_key(url_type)
-        h["endpoints"].select {|e| e[key]}
+        ep = get_endpoints_for_name(service_name,url_type)
+        unless ep
+          ep = get_endpoints_for_type(service_name,url_type)
+        end
+        ep
       end
+
+      def get_endpoints_for_name(service_name, url_type=:public)
+        get_endpoints_for_attribute(service_name,"name",url_type)
+      end
+
+      def get_endpoints_for_type(service_type, url_type=:public)
+        get_endpoints_for_attribute(service_type, "type", url_type)
+      end
+
+
 
       def display_service_regions(service_name, url_type=:public)
         endpoints = get_endpoints(service_name, url_type)
@@ -92,6 +102,14 @@ module Fog
       def region_key(region)
         return region.to_s.upcase if region.is_a? Symbol
         (region.nil? || region.empty?) ? "GLOBAL" : region.to_s.upcase
+      end
+
+      def get_endpoints_for_attribute(service_identifier, search_attribute="name", url_type=:public)
+        h = catalog.find { |service| service[search_attribute] == service_identifier.to_s }
+        # puts "H --> #{h.to_yaml}"
+        return {} unless h
+        key = network_type_key(url_type)
+        h["endpoints"].select { |e| e[key] }
       end
 
     end # ServiceCatalog

@@ -1,0 +1,20 @@
+require 'fog/openstackcore/service_discovery'
+
+module Fog
+  module OpenStackCore
+
+    # This is a proxy class for the <%=Fog::OpenStackCore::Common.camel_case(name)%> Service as a whole, irrespective of
+    # what version is required.
+
+    class <%=Fog::OpenStackCore::Common.camel_case(name)%>
+      def self.new(options, connection_options = {})
+        ServiceDiscovery.new(
+          'openstackcore',
+          '<%=os_service_name_or_type%>',
+          options.merge(:version => <%=options[:version]%>)
+        ).call
+      end
+    end # <%=Fog::OpenStackCore::Common.camel_case(name)%>
+
+  end # OpenStackCore
+end # Fog

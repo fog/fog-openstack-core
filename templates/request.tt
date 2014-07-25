@@ -1,0 +1,35 @@
+module Fog
+  module OpenStackCore
+    class <%=Fog::OpenStackCore::Common.camel_case(service_name)%>V<%=options[:version]%>
+        class Real
+            # Frabulates the widget
+            # Lorem Ipsum
+            #
+            # ==== Parameters
+            #
+            # ==== Returns
+
+            #TODO fill in parameters
+            #TODO fill in returns
+            #TODO fill in expects
+            #TODO fill in method
+            #TODO fill in path
+
+            def <%=request_name%>()
+              response = request(
+                :expects => 200,
+                :method  => 'GET',
+                :path    => ""
+              )
+               response
+            end
+
+        end
+
+        class Mock
+
+        end
+    end
+  end
+end
+

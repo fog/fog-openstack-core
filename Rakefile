@@ -22,7 +22,8 @@ namespace :test do
   task :sub,:section do |t,args|
     section = args[:section]
     $LOAD_PATH.unshift('lib', 'spec')
-    Dir.glob("./spec/**/#{section}/**/*_spec.rb") { |f| require f }
+     Dir.glob("./spec/**/#{section}/**/*_spec.rb") { |f| require f }
+     Dir.glob("./spec/services/#{section}*_spec.rb") { |f| require f }
   end
 end
 

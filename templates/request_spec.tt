@@ -1,0 +1,27 @@
+require "#{File.dirname(__FILE__)}/../../../spec_helper"
+require "#{File.dirname(__FILE__)}/../../../support/spec_helpers"
+
+include SpecHelpers
+
+require 'fog/openstackcore'
+require 'fog/openstackcore/services/<%=service_name%>_v<%=options[:version]%>'
+
+describe "requests" do
+  describe "<%=service_name%>_v<%=options[:version]%>", :vcr do
+
+    let(:demo_options) { demo_options_hash }
+
+    let(:service) { Fog::OpenStackCore::<%=Fog::OpenStackCore::Common.camel_case(service_name)%>V<%=options[:version]%>.new(demo_options) }
+
+
+    describe "#<%=request_name%>" do
+      let(:request) { service.<%=request_name%> }
+
+      it "returns proper status", :vcr do
+        assert_includes([200], request.status)
+      end
+    end
+
+
+  end
+end

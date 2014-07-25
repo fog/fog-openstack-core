@@ -38,6 +38,13 @@ module Fog
         valid_hash.select {|k,v| valid_keys.include?(k)}
       end
 
+      #camel case a string
+      #block_storage => BlockStorage
+      def self.camel_case(base_string)
+        return base_string if base_string !~ /_/ && base_string =~ /[A-Z]+.*/
+        base_string.split('_').map { |e| e.capitalize }.join
+      end
+
     end # Common
   end # OpenStackCore
 end # Fog
