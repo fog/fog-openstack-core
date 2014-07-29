@@ -16,14 +16,14 @@ class NewRequest < Thor::Group
     version = options[:version]
     template('templates/request.tt', "./../lib/fog/openstackcore/requests/#{service_name}/v#{version}/#{request_name}.rb")
     insert_into_file "./../lib/fog/openstackcore/services/#{service_name}_v#{version}.rb", :after => "request_path 'fog/openstackcore/requests/#{service_name}/v#{version}'\n" do
-      "\n\t\t\t\trequest :#{request_name}"
+      "\n\t\t\trequest :#{request_name}"
     end
 
   end
 
   def new_request_test
     version = options[:version]
-    template('templates/request_spec.tt', "./../spec/requests#{service_name}/v#{version}/#{request_name}_spec.rb")
+    template('templates/request_spec.tt', "./../spec/requests/#{service_name}/v#{version}/#{request_name}_spec.rb")
   end
 
 

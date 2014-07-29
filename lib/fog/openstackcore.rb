@@ -4,6 +4,7 @@ require 'fog/openstackcore/core'
 require 'fog/openstackcore/common'
 
 
+
 # IDENTITY
 require 'fog/openstackcore/identity'
 

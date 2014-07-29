@@ -13,6 +13,13 @@ module Fog
 
       request_path 'fog/openstackcore/requests/block_storage/v2'
 
+			request :get_volume_details
+      request :create_snapshot
+      request :delete_snapshot
+      request :delete_volume
+      request :get_snapshot_details
+      request :list_snapshots
+      request :list_snapshots_detail
       request :list_volumes
       request :create_volume
       request :delete_volume

@@ -73,6 +73,29 @@ def wait_for_server(service, server)
   end
 end
 
+def wait_for_volume(service, volume)
+  #loop until ready
+  begin
+    tries = 7
+    begin
+      if  service.get_volume_details(volume).body["volume"]["status"] == "available"
+        puts "Volume is available!"
+      else
+        raise "Volume Not available Yet"
+      end
+    rescue Exception => e
+      tries -= 1
+      puts "Volume Not Ready"
+      if tries > 0
+        sleep(10)
+        retry
+      else
+        exit(1)
+      end
+    end
+  end
+end
+
 def locate_bootable_image(service)
   images = service.list_images
   image_filtered = images.body["images"].collect { |img| [img["id"], img["name"]] }
