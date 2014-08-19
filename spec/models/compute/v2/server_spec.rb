@@ -50,8 +50,10 @@ describe "models" do
       TestContext.service
     }
 
-    it "#create", :vcr do
-      refute_nil(server)
+    describe "#create", :vcr do
+      it "succeeds" do
+        refute_nil(server)
+      end
     end
 
     describe "#console_output(10)" do
