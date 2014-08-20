@@ -11,7 +11,13 @@ module Fog
                  :openstack_auth_token, :persistent,
                  :openstack_tenant, :openstack_region
 
+      model_path 'fog/openstackcore/models/compute/v2'
+      model :server
+      collection :servers
+
       request_path 'fog/openstackcore/requests/compute/v2'
+
+
 
       #Security Group
       request :list_security_groups

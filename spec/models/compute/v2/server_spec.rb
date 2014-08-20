@@ -14,7 +14,7 @@ describe "models" do
     end
 
     def self.after_run
-      VCR.use_cassette('models/compute_v2server_delete') do
+      VCR.use_cassette('models/compute_v2_server_delete') do
         puts "cleaning up after server #{self.created_server}"
         TestContext.service.delete_server(self.created_server) if TestContext.nova_server
         TestContext.reset_context
@@ -23,22 +23,24 @@ describe "models" do
 
     def self.created_server
       #cache the nova instance so it isnt continually being created
-      TestContext.nova_server do
-        #only fires once
-        TestContext.service do
-          Fog::OpenStackCore::ComputeV2.new(demo_options_hash)
+      VCR.use_cassette('models/compute_v2_keystone_token') do
+        TestContext.nova_server do
+          #only fires once
+          TestContext.service do
+            Fog::OpenStackCore::ComputeV2.new(demo_options_hash)
+          end
+          flavors  = TestContext.service.list_flavors
+          image_id = locate_bootable_image(TestContext.service)
+          server   = TestContext.service.create_server("#{Time.now.to_i}server",
+                                                       flavors.body["flavors"].first["id"],
+                                                       image_id).body["server"]["id"]
+          server   = TestContext.service.servers.create(:name     => "#{Time.now.to_i}server",
+                                                        :flavor_id   => flavors.body["flavors"].first["id"],
+                                                        :image_id => image_id)
+          #loop until ready
+          server.wait_for { ready? }
+          server
         end
-        flavors  = TestContext.service.list_flavors
-        image_id = locate_bootable_image(TestContext.service)
-        server   = TestContext.service.create_server("#{Time.now.to_i}server",
-                                                     flavors.body["flavors"].first["id"],
-                                                     image_id).body["server"]["id"]
-        server = TestContext.service.servers.create( :name => "#{Time.now.to_i}server",
-                                                     :flavor => flavors.body["flavors"].first["id"],
-                                                     :image_id => image_id)
-        #loop until ready
-        server.wait_for { ready? }
-        server
       end
     end
 

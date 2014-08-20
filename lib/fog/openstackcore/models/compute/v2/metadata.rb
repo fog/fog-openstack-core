@@ -1,8 +1,8 @@
 require 'fog/core/collection'
-require 'fog/hp/models/compute_v2/meta_parent'
-require 'fog/hp/models/compute_v2/meta'
-require 'fog/hp/models/compute_v2/image'
-require 'fog/hp/models/compute_v2/server'
+require 'fog/openstackcore/models/compute/v2/meta_parent'
+require 'fog/openstackcore/models/compute/v2/meta'
+require 'fog/openstackcore/models/compute/v2/image'
+require 'fog/openstackcore/models/compute/v2/server'
 
 module Fog
   module OpenStackCore

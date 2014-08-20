@@ -1,9 +1,9 @@
 require 'fog/compute/models/server'
-require 'fog/hp/models/compute_v2/metadata'
+require 'fog/openstackcore/models/compute/v2/metadata'
 
 module Fog
-    module OpenStackCore
-      class ComputeV2
+  module OpenStackCore
+    class ComputeV2
       class Server < Fog::Compute::Server
 
         identity :id
@@ -43,19 +43,19 @@ module Fog
 
         def initialize(attributes = {})
           # assign these attributes first to prevent race condition with new_record?
-          self.min_count = attributes.delete(:min_count)
-          self.max_count = attributes.delete(:max_count)
+          self.min_count            = attributes.delete(:min_count)
+          self.max_count            = attributes.delete(:max_count)
           self.block_device_mapping = attributes.delete(:block_device_mapping)
-          self.networks  = attributes.delete(:networks)
+          self.networks             = attributes.delete(:networks)
           super
         end
 
         def metadata
           @metadata ||= begin
-            Fog::Compute::HPV2::Metadata.new({
-                                               :service => service,
-                                               :parent => self
-                                             })
+            Fog::OpenStackCore::ComputeV2::Metadata.new({
+                                                          :service => service,
+                                                          :parent  => self
+                                                        })
           end
         end
 
@@ -211,7 +211,7 @@ module Fog
           response = service.create_image(id, name, metadata)
           begin
             image_id = response.headers["Location"].match(/\/([^\/]+$)/)[1]
-            Fog::Compute::HPV2::Image.new(:collection => service.images, :service => service, :id => image_id)
+            Fog::OpenStackCore::ComputeV2::Image.new(:collection => service.images, :service => service, :id => image_id)
           rescue
             nil
           end
@@ -219,10 +219,10 @@ module Fog
 
         def volume_attachments
           @volume_attachments ||= begin
-            Fog::Compute::HPV2::VolumeAttachments.new({
-                                                        :service => service,
-                                                        :server => self
-                                                      })
+            Fog::OpenStackCore::ComputeV2::VolumeAttachments.new({
+                                                                   :service => service,
+                                                                   :server  => self
+                                                                 })
           end
         end
 
