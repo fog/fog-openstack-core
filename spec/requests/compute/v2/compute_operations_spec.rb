@@ -14,7 +14,7 @@ describe "requests" do
     end
 
     def self.after_run
-      VCR.use_cassette('requests/compute_v2server_delete') do
+      VCR.use_cassette('requests/compute_v2/server_delete') do
         puts "cleaning up after server #{self.created_server}"
         TestContext.service.delete_server(self.created_server) if TestContext.nova_server
         TestContext.reset_context

@@ -12,6 +12,8 @@ require 'minitest-vcr'
 require 'webmock'
 require 'vcr'
 
+Excon.defaults[:ssl_verify_peer] = false
+
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/cassettes'
   c.hook_into :webmock
@@ -23,6 +25,9 @@ MinitestVcr::Spec.configure!
 Minitest::Reporters.use! [Minitest::Reporters::SpecReporter.new]
 
 # VCR.turn_off!(:ignore_cassettes => true)
+
+HOSTNAME     = `hostname`.chomp
+RANDOM_CHARS = [('a'..'z')].map { |i| i.to_a }.flatten
 
 class TestContext
   class << self
@@ -77,5 +82,10 @@ def locate_bootable_image(service)
   images = service.list_images
   image_filtered = images.body["images"].collect { |img| [img["id"], img["name"]] }
   image_id       = image_filtered.select { |img| img[1] =~ /\Acirros/ }.first[0]
+end
+
+# Generate a unique resource name
+def resource_name(seed=random_string(5))
+  'fog_' << HOSTNAME << '_' << Time.now.to_i.to_s << '_' << seed.to_s
 end
 

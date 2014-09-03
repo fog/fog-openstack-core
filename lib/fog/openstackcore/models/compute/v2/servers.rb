@@ -1,5 +1,5 @@
 require 'fog/core/collection'
-require 'fog/hp/models/compute_v2/server'
+require 'fog/openstackcore/models/compute/v2/server'
 
 module Fog
   module OpenStackCore

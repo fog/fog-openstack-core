@@ -49,6 +49,7 @@ module Fog
 
       # Images
       request :list_images
+      request :create_image
 
       #Server Metadata
       request :show_server_metadata

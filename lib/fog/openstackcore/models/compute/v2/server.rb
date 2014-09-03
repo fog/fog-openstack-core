@@ -74,9 +74,9 @@ module Fog
           service.get_console_output(id, num_lines)
         end
 
-        def vnc_console_url(type='novnc')
+        def vnc_console_url
           requires :id
-          if resp = service.get_vnc_console(id, type).body
+          if resp = service.get_vnc_console(id).body
             resp['console']['url']
           else
             nil
