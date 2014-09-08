@@ -76,8 +76,6 @@ describe "models" do
     describe "#create_image('fogimgfromserver')" do
       it "succeeds" do
         proc { server.create_image('fogimgfromserver') }.must_output(nil, nil)
-
-
       end
 
       after do
@@ -94,17 +92,30 @@ describe "models" do
       end
     end
 
-    describe "#add_security_group('default')" do
-      it "succeeds" do
-        skip "TBD"
+    describe "security_groups" do
+
+      before do
+        @sg_name = resource_name("security_group")
+        @sg = service.create_security_group({ :name => @sg_name, :description => "my test sg" }).body["security_group"]["id"]
+      end
+
+      after do
+        service.delete_security_group(@sg)
+      end
+
+      describe "#add_security_group(#{@sg_name})" do
+        it "succeeds" do
+          proc { server.add_security_group(@sg_name) }.must_output(nil, nil)
+        end
+      end
+
+      describe "#remove_security_group(#{@sg_name})" do
+        it "succeeds" do
+          proc { server.remove_security_group(@sg) }.must_output(nil, nil)
+        end
       end
     end
 
-    describe '#remove_security_group("default")' do
-      it "succeeds" do
-        skip "TBD"
-      end
-    end
 
   end
 end
